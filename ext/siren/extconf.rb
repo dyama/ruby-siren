@@ -1,10 +1,12 @@
+require 'pp'
 require "mkmf"
+require 'pathname'
 
 dir = "ext/siren"
 siren_incdir   = "#{dir}/inc"
 siren_incpaths = []
 siren_incpaths << siren_incdir
-siren_incpaths << Dir.glob("#{siren_incdir}/*/").map{|f| f.relative_path_from(dir)}
+siren_incpaths << Dir.glob("#{siren_incdir}/*/").map.to_a
 
 # Open CASCADE Technology configuration
 # Check http://dev.opencascade.org/doc/refman/html/index.html
@@ -53,8 +55,12 @@ $CPPFLAGS = [occt_incpaths, siren_incpaths].flatten.map{|d| " -I#{d}"}.join
 $LDFLAGS  = [occt_libpaths].flatten.map{|d| " -L#{d}"}.join
 $LDFLAGS += [occt_libs, thirdparty_libs].flatten.map{|d| " -l#{d}"}.join
 
-# $objs << Dir.glob("#{dir}/src/*.{c,cpp}").map { |f| objfile(f.relative_path_from(dir).pathmap("#{build_dir}/%X")) }
-# $objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map { |f| objfile(f.relative_path_from(dir).pathmap("#{build_dir}/%X")) }
+$objs = []
+$objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }
+$objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }
+$objs.flatten!
+
+pp $objs
 
 create_makefile("siren/siren")
 
