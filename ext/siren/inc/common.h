@@ -1,7 +1,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include "mruby.h"
+#include "ruby.h"
 #include "shape.h"
 
 #include <gp_Vec.hxx>

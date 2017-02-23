@@ -1,4 +1,3 @@
-require 'pp'
 require "mkmf"
 require 'pathname'
 
@@ -46,21 +45,23 @@ occt_libs = [
 ]
 
 # for Compiler
-$CFLAGS   = "-Wno-unused-function -Wno-unused-variable -Wno-unknown-pragmas -std=c++11"
-
-# for Preprocessor
-$CPPFLAGS = [occt_incpaths, siren_incpaths].flatten.map{|d| " -I#{d}"}.join
+$CFLAGS   += " -Wno-unused-function -Wno-unused-variable -Wno-unknown-pragmas"
+$CPPFLAGS += " " + [occt_incpaths, siren_incpaths].flatten.map{|d| " -I#{d}"}.join
+$CXXFLAGS += " -std=gnu++11"
 
 # for Linker
 $LDFLAGS  = [occt_libpaths].flatten.map{|d| " -L#{d}"}.join
 $LDFLAGS += [occt_libs, thirdparty_libs].flatten.map{|d| " -l#{d}"}.join
 
+$srcs = []
+$srcs << Dir.glob("#{dir}/src/*.{c,cpp}")
+$srcs << Dir.glob("#{dir}/src/*/*.{c,cpp}")
+$srcs.flatten!
+
 $objs = []
 $objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }
 $objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }
 $objs.flatten!
-
-pp $objs
 
 create_makefile("siren/siren")
 
