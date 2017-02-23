@@ -1,27 +1,27 @@
 #include "topalgo.h"
 
-bool siren_topalgo_install( struct RClass* mod_siren)
+bool siren_topalgo_install( struct RClass* sr_mSiren)
 {
   // Class method
-  rb_define_class_method(mod_siren, "copy",       siren_topalgo_copy,       MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_class_method(mod_siren, "line",       siren_topalgo_line,       MRB_ARGS_OPT(2));
-  rb_define_class_method(mod_siren, "infline",    siren_topalgo_infline,    MRB_ARGS_OPT(2));
-  rb_define_class_method(mod_siren, "polyline",   siren_topalgo_polyline,   MRB_ARGS_REQ(1));
-  rb_define_class_method(mod_siren, "interpolate",siren_topalgo_interpolate,MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_class_method(mod_siren, "arc",        siren_topalgo_arc,        MRB_ARGS_REQ(6));
-  rb_define_class_method(mod_siren, "arc3p",      siren_topalgo_arc3p,      MRB_ARGS_REQ(3));
-  rb_define_class_method(mod_siren, "circle",     siren_topalgo_circle,     MRB_ARGS_REQ(3));
-  rb_define_class_method(mod_siren, "circle3p",   siren_topalgo_circle3p,   MRB_ARGS_REQ(3));
+  rb_define_class_method(sr_mSiren, "copy",       siren_topalgo_copy,       MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  rb_define_class_method(sr_mSiren, "line",       siren_topalgo_line,       MRB_ARGS_OPT(2));
+  rb_define_class_method(sr_mSiren, "infline",    siren_topalgo_infline,    MRB_ARGS_OPT(2));
+  rb_define_class_method(sr_mSiren, "polyline",   siren_topalgo_polyline,   MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "interpolate",siren_topalgo_interpolate,MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  rb_define_class_method(sr_mSiren, "arc",        siren_topalgo_arc,        MRB_ARGS_REQ(6));
+  rb_define_class_method(sr_mSiren, "arc3p",      siren_topalgo_arc3p,      MRB_ARGS_REQ(3));
+  rb_define_class_method(sr_mSiren, "circle",     siren_topalgo_circle,     MRB_ARGS_REQ(3));
+  rb_define_class_method(sr_mSiren, "circle3p",   siren_topalgo_circle3p,   MRB_ARGS_REQ(3));
   // For mix-in
-  rb_define_method      (mod_siren, "copy",       siren_topalgo_copy,       MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_method      (mod_siren, "line",       siren_topalgo_line,       MRB_ARGS_REQ(2));
-  rb_define_method      (mod_siren, "infline",    siren_topalgo_infline,    MRB_ARGS_REQ(2));
-  rb_define_method      (mod_siren, "polyline",   siren_topalgo_polyline,   MRB_ARGS_REQ(1));
-  rb_define_method      (mod_siren, "interpolate",siren_topalgo_interpolate,MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_method      (mod_siren, "arc",        siren_topalgo_arc,        MRB_ARGS_REQ(6));
-  rb_define_method      (mod_siren, "arc3p",      siren_topalgo_arc3p,      MRB_ARGS_REQ(3));
-  rb_define_method      (mod_siren, "circle",     siren_topalgo_circle,     MRB_ARGS_REQ(3));
-  rb_define_method      (mod_siren, "circle3p",   siren_topalgo_circle3p,   MRB_ARGS_REQ(3));
+  rb_define_method      (sr_mSiren, "copy",       siren_topalgo_copy,       MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  rb_define_method      (sr_mSiren, "line",       siren_topalgo_line,       MRB_ARGS_REQ(2));
+  rb_define_method      (sr_mSiren, "infline",    siren_topalgo_infline,    MRB_ARGS_REQ(2));
+  rb_define_method      (sr_mSiren, "polyline",   siren_topalgo_polyline,   MRB_ARGS_REQ(1));
+  rb_define_method      (sr_mSiren, "interpolate",siren_topalgo_interpolate,MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  rb_define_method      (sr_mSiren, "arc",        siren_topalgo_arc,        MRB_ARGS_REQ(6));
+  rb_define_method      (sr_mSiren, "arc3p",      siren_topalgo_arc3p,      MRB_ARGS_REQ(3));
+  rb_define_method      (sr_mSiren, "circle",     siren_topalgo_circle,     MRB_ARGS_REQ(3));
+  rb_define_method      (sr_mSiren, "circle3p",   siren_topalgo_circle3p,   MRB_ARGS_REQ(3));
 
   struct RClass* cls_shape = siren_shape_rclass();
   rb_define_method(cls_shape, "cog",    siren_topalgo_cog,    MRB_ARGS_NONE());
@@ -34,7 +34,7 @@ VALUE siren_topalgo_copy( VALUE self)
 {
   VALUE target;
   VALUE copy_geom = (_bool)Standard_True;
-  int argc = rb_get_args("o|b", &target, &copy_geom);
+  int argc = rb_scan_args("o|b", &target, &copy_geom);
   TopoDS_Shape* src = siren_shape_get(target);
   TopoDS_Shape res = BRepBuilderAPI_Copy(*src, (Standard_Boolean)copy_geom);
   return siren_shape_new(res);
@@ -43,7 +43,7 @@ VALUE siren_topalgo_copy( VALUE self)
 VALUE siren_topalgo_line( VALUE self)
 {
   VALUE sp, tp;
-  int argc = rb_get_args("|AA", &sp, &tp);
+  int argc = rb_scan_args("|AA", &sp, &tp);
   gp_Pnt S(0., 0., 0.);
   gp_Pnt T(1., 1., 1.);
   if (argc > 0) {
@@ -64,7 +64,7 @@ VALUE siren_topalgo_line( VALUE self)
 VALUE siren_topalgo_infline( VALUE self)
 {
   VALUE orig, dir;
-  int argc = rb_get_args("|AA", &orig, &dir);
+  int argc = rb_scan_args("|AA", &orig, &dir);
   gp_Pnt p(0., 0., 0.);
   gp_Dir d(1., 0., 0.);
   if (argc > 0) {
@@ -80,7 +80,7 @@ VALUE siren_topalgo_infline( VALUE self)
 VALUE siren_topalgo_polyline( VALUE self)
 {
   VALUE ary;
-  int argc = rb_get_args("A", &ary);
+  int argc = rb_scan_args("A", &ary);
   BRepBuilderAPI_MakePolygon poly;
   for (int i = 0; i < rb_ary_len(ary); i++) {
     poly.Add(siren_ary_to_pnt(rb_ary_ref(ary, i)));
@@ -92,7 +92,7 @@ VALUE siren_topalgo_polyline( VALUE self)
 VALUE siren_topalgo_interpolate( VALUE self)
 {
   VALUE pts, vecs;
-  int argc = rb_get_args("A|A", &pts, &vecs);
+  int argc = rb_scan_args("A|A", &pts, &vecs);
 
   int psize = rb_ary_len(pts);
   opencascade::handle<TColgp_HArray1OfPnt> pary = new TColgp_HArray1OfPnt(1, psize);
@@ -147,7 +147,7 @@ VALUE siren_topalgo_arc( VALUE self)
 {
   VALUE orig, dir, vx;
   VALUE r, start_ang, term_ang;
-  int argc = rb_get_args("AAAfff", &orig, &dir, &vx, &r, &start_ang, &term_ang);
+  int argc = rb_scan_args("AAAfff", &orig, &dir, &vx, &r, &start_ang, &term_ang);
   gp_Circ circle = gp_Circ(gp_Ax2(siren_ary_to_pnt(orig), siren_ary_to_dir(dir), siren_ary_to_dir(vx)), r);
   opencascade::handle<Geom_TrimmedCurve> gc = GC_MakeArcOfCircle(circle, start_ang, term_ang, Standard_True);
   if (gc.IsNull()) {
@@ -163,7 +163,7 @@ VALUE siren_topalgo_arc( VALUE self)
 VALUE siren_topalgo_arc3p( VALUE self)
 {
   VALUE p1, p2, p3;
-  int argc = rb_get_args("AAA", &p1, &p2, &p3);
+  int argc = rb_scan_args("AAA", &p1, &p2, &p3);
   opencascade::handle<Geom_TrimmedCurve> gc = GC_MakeArcOfCircle(
       siren_ary_to_pnt(p1),
       siren_ary_to_pnt(p2),
@@ -182,7 +182,7 @@ VALUE siren_topalgo_circle( VALUE self)
 {
   VALUE orig, dir;
   VALUE r;
-  int argc = rb_get_args("AAf", &orig, &dir, &r);
+  int argc = rb_scan_args("AAf", &orig, &dir, &r);
   opencascade::handle<Geom_Circle> gc = GC_MakeCircle(
       siren_ary_to_pnt(orig),
       siren_ary_to_dir(dir),
@@ -200,7 +200,7 @@ VALUE siren_topalgo_circle( VALUE self)
 VALUE siren_topalgo_circle3p( VALUE self)
 {
   VALUE p1, p2, p3;
-  int argc = rb_get_args("AAA", &p1, &p2, &p3);
+  int argc = rb_scan_args("AAA", &p1, &p2, &p3);
   opencascade::handle<Geom_Circle> gc = GC_MakeCircle(
       siren_ary_to_pnt(p1),
       siren_ary_to_pnt(p2),

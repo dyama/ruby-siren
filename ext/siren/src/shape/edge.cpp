@@ -4,9 +4,9 @@ VALUE siren_edge_new( const TopoDS_Shape* src)
 {
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Edge")));
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Edge")));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -22,10 +22,10 @@ TopoDS_Edge siren_edge_get( VALUE self)
   return edge;
 }
 
-bool siren_edge_install( struct RClass* mod_siren)
+bool siren_edge_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_edge = rb_define_class_under(mod_siren, "Edge", cls_shape);
+  struct RClass* cls_edge = rb_define_class_under(sr_mSiren, "Edge", cls_shape);
   MRB_SET_INSTANCE_TT(cls_edge, MRB_TT_DATA);
   rb_define_method(cls_edge, "initialize", siren_edge_init,      MRB_ARGS_NONE());
   rb_define_method(cls_edge, "sp",         siren_edge_sp,        MRB_ARGS_NONE());
@@ -48,7 +48,7 @@ VALUE siren_edge_init( VALUE self)
 {
   VALUE curve;
   VALUE sp = 0.0, tp = 1.0;
-  int argc = rb_get_args("o|ff", &curve, &sp, &tp);
+  int argc = rb_scan_args("o|ff", &curve, &sp, &tp);
   opencascade::handle<Geom_Curve>* phgcurve
     = static_cast<opencascade::handle<Geom_Curve>*>(DATA_PTR(curve));
   TopoDS_Shape edge;
@@ -70,7 +70,7 @@ VALUE siren_edge_init( VALUE self)
       rb_raise(E_RUNTIME_ERROR, "Failed to make Edge from the Curve.");
     }
   }
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = edge; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
@@ -80,8 +80,8 @@ VALUE siren_edge_init( VALUE self)
 
 struct RClass* siren_edge_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Edge")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Edge")));
 }
 
 VALUE siren_edge_sp( VALUE self)
@@ -102,7 +102,7 @@ VALUE siren_edge_to_pts( VALUE self)
 {
   VALUE deflect = 1.0e-7;
   VALUE lintol = 1.0e-7;
-  int argc = rb_get_args("|ff", &deflect, &lintol);
+  int argc = rb_scan_args("|ff", &deflect, &lintol);
   TopoDS_Edge edge = siren_edge_get(self);
   BRepAdaptor_Curve adaptor(edge);
   double first_param, last_param;
@@ -139,7 +139,7 @@ VALUE siren_edge_param( VALUE self)
 {
   VALUE xyz;
   VALUE tol = 1.0e-7;
-  int argc = rb_get_args("A|f", &xyz, &tol);
+  int argc = rb_scan_args("A|f", &xyz, &tol);
 
   TopoDS_Edge edge = siren_edge_get(self);
 
@@ -160,7 +160,7 @@ VALUE siren_edge_param( VALUE self)
 VALUE siren_edge_to_xyz( VALUE self)
 {
   VALUE param;
-  int argc = rb_get_args("f", &param);
+  int argc = rb_scan_args("f", &param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -171,7 +171,7 @@ VALUE siren_edge_to_xyz( VALUE self)
 VALUE siren_edge_curvature( VALUE self)
 {
   VALUE param;
-  int argc = rb_get_args("f", &param);
+  int argc = rb_scan_args("f", &param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -182,7 +182,7 @@ VALUE siren_edge_curvature( VALUE self)
 VALUE siren_edge_tangent( VALUE self)
 {
   VALUE param;
-  int argc = rb_get_args("f", &param);
+  int argc = rb_scan_args("f", &param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -207,9 +207,9 @@ VALUE siren_edge_curve( VALUE self)
   // // set property
   // Standard_Real first, last;
   // handle<Geom_Curve> hgcurve = BRep_Tool::Curve(edge, first, last);
-  // rb_obj_iv_set(rb_obj_value(cls_edge), VALUEern_lit("@curve"), siren_curve_new(&hgcurve));
+  // rb_obj_iv_set(rb_obj_value(cls_edge), rb_intern_lit("@curve"), siren_curve_new(&hgcurve));
   // // get property
-  // return rb_iv_get(self, VALUEern_lit("@curve"));
+  // return rb_iv_get(self, rb_intern_lit("@curve"));
   Standard_Real first, last;
   handle<Geom_Curve> hgcurve = BRep_Tool::Curve(edge, first, last);
   return siren_curve_new(&hgcurve);
@@ -218,7 +218,7 @@ VALUE siren_edge_curve( VALUE self)
 VALUE siren_edge_extrema( VALUE self)
 {
   VALUE other;
-  int argc = rb_get_args("o", &other);
+  int argc = rb_scan_args("o", &other);
   TopoDS_Edge e2 = siren_edge_get(other);
   if (e2.IsNull()) {
     rb_raise(E_ARGUMENT_ERROR, "Specified shape type is not edge.");
@@ -244,7 +244,7 @@ VALUE siren_edge_extrema( VALUE self)
 VALUE siren_edge_split( VALUE self)
 {
   VALUE param;
-  int argc = rb_get_args("f", &param);
+  int argc = rb_scan_args("f", &param);
   Standard_Real first, last;
   TopoDS_Edge e = siren_edge_get(self);
   handle<Geom_Curve> gc  = BRep_Tool::Curve(e, first, last);
@@ -260,7 +260,7 @@ VALUE siren_edge_split( VALUE self)
 VALUE siren_edge_trim( VALUE self)
 {
   VALUE first2, last2;
-  int argc = rb_get_args("ff", &first2, &last2);
+  int argc = rb_scan_args("ff", &first2, &last2);
   if (first2 == last2) {
     rb_raise(E_ARGUMENT_ERROR, "Specified parameter has same value.");
   }
@@ -291,6 +291,6 @@ VALUE siren_edge_length( VALUE self)
 
 VALUE siren_edge_obj()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Edge"));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Edge"));
 }

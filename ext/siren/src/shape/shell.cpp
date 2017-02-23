@@ -4,9 +4,9 @@ VALUE siren_shell_new( const TopoDS_Shape* src)
 {
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Shell")));
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Shell")));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -22,10 +22,10 @@ TopoDS_Shell siren_shell_get( VALUE self)
   return shell;
 }
 
-bool siren_shell_install( struct RClass* mod_siren)
+bool siren_shell_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_shell = rb_define_class_under(mod_siren, "Shell", cls_shape);
+  struct RClass* cls_shell = rb_define_class_under(sr_mSiren, "Shell", cls_shape);
   MRB_SET_INSTANCE_TT(cls_shell, MRB_TT_DATA);
   rb_define_method(cls_shell, "initialize", siren_shape_init,  MRB_ARGS_NONE());
 
@@ -37,21 +37,21 @@ bool siren_shell_install( struct RClass* mod_siren)
 
 struct RClass* siren_shell_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Shell")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Shell")));
 }
 
 VALUE siren_shell_obj()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Shell"));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Shell"));
 }
 
 VALUE siren_shell_make( VALUE self)
 {
   VALUE ary;
   VALUE tol;
-  int argc = rb_get_args("A|f", &ary, &tol);
+  int argc = rb_scan_args("A|f", &ary, &tol);
   BRepBuilderAPI_Sewing sewer;
   sewer.Init();
   if (argc == 2 && tol >= 0) {

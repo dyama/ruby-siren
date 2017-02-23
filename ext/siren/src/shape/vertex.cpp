@@ -4,9 +4,9 @@ VALUE siren_vertex_new( const TopoDS_Shape* src)
 {
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Vertex")));
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Vertex")));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -22,10 +22,10 @@ TopoDS_Vertex siren_vertex_get( VALUE self)
   return vertex;
 }
 
-bool siren_vertex_install( struct RClass* mod_siren)
+bool siren_vertex_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_vertex = rb_define_class_under(mod_siren, "Vertex", cls_shape);
+  struct RClass* cls_vertex = rb_define_class_under(sr_mSiren, "Vertex", cls_shape);
   MRB_SET_INSTANCE_TT(cls_vertex, MRB_TT_DATA);
   rb_define_method(cls_vertex, "initialize", siren_vertex_init, MRB_ARGS_NONE());
   rb_define_method(cls_vertex, "xyz",        siren_vertex_xyz,  MRB_ARGS_NONE());
@@ -36,15 +36,15 @@ bool siren_vertex_install( struct RClass* mod_siren)
 
 struct RClass* siren_vertex_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Vertex")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Vertex")));
 }
 
 VALUE siren_vertex_init( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_get_args("*", &a, &len);
+  int argc = rb_scan_args("*", &a, &len);
 
   Standard_Real x = 0.0, y = 0.0, z = 0.0;
   if (len > 0 && rb_array_p(a[0])) {
@@ -73,7 +73,7 @@ VALUE siren_vertex_init( VALUE self)
   }
   TopoDS_Vertex v = BRepBuilderAPI_MakeVertex(gp_Pnt(x, y, z));
 
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = v; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
@@ -96,7 +96,7 @@ VALUE siren_vertex_to_v( VALUE self)
 
 VALUE siren_vertex_obj()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Vertex"));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Vertex"));
 }
 

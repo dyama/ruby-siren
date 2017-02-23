@@ -11,21 +11,21 @@ BRepFill_Filling* siren_filler_get(VALUE obj)
 #endif
 }
 
-bool siren_filler_install(VALUE mod_siren)
+bool siren_filler_install()
 {
-  VALUE cls_filler = rb_define_class_under(mod_siren, "Filler", rb_cObject);
+  sr_cFiller = rb_define_class_under(sr_mSiren, "Filler", rb_cObject);
 #if 0
-  MRB_SET_INSTANCE_TT(cls_filler, MRB_TT_DATA);
+  MRB_SET_INSTANCE_TT(sr_cFiller, MRB_TT_DATA);
 #endif
-  rb_define_method(cls_filler, "initialize", siren_filler_init,      -1);
-  rb_define_method(cls_filler, "add_bound",  siren_filler_add_bound, 2);
-  rb_define_method(cls_filler, "add",        siren_filler_add,       2);
-  rb_define_method(cls_filler, "build",      siren_filler_build,     0);
-  rb_define_method(cls_filler, "done?",      siren_filler_is_done,   0);
-  rb_define_method(cls_filler, "face",       siren_filler_face,      0);
-  rb_define_method(cls_filler, "g0error",    siren_filler_g0error,   1);
-  rb_define_method(cls_filler, "g1error",    siren_filler_g1error,   1);
-  rb_define_method(cls_filler, "g2error",    siren_filler_g2error,   1);
+  rb_define_method(sr_cFiller, "initialize", siren_filler_init,      -1);
+  rb_define_method(sr_cFiller, "add_bound",  siren_filler_add_bound, 2);
+  rb_define_method(sr_cFiller, "add",        siren_filler_add,       2);
+  rb_define_method(sr_cFiller, "build",      siren_filler_build,     0);
+  rb_define_method(sr_cFiller, "done?",      siren_filler_is_done,   0);
+  rb_define_method(sr_cFiller, "face",       siren_filler_face,      0);
+  rb_define_method(sr_cFiller, "g0error",    siren_filler_g0error,   1);
+  rb_define_method(sr_cFiller, "g1error",    siren_filler_g1error,   1);
+  rb_define_method(sr_cFiller, "g2error",    siren_filler_g2error,   1);
   return true;
 }
 
@@ -36,7 +36,7 @@ siren_filler_init(int argc, VALUE* argv, VALUE self)
   VALUE anisotropie;
   VALUE tol2d, tol3d, tolang, tolcurv;
   VALUE maxdeg, maxsegs;
-  // int argc = rb_get_args("|iiibffffii",
+  // int argc = rb_scan_args("|iiibffffii",
   //     &degree, &nbptsoncur, &nbiter, &anisotropie,
   //     &tol2d, &tol3d, &tolang, &tolcurv, &maxdeg, &maxsegs);
   rb_scan_args(argc, argv, "19",
@@ -44,7 +44,7 @@ siren_filler_init(int argc, VALUE* argv, VALUE self)
       &tol2d, &tol3d, &tolang, &tolcurv, &maxdeg, &maxsegs);
 
 #if 0
-  void* p = rb_malloc(sizeof(BRepFill_Filling));
+  void* p = ruby_xmalloc(sizeof(BRepFill_Filling));
 #else
   void* p = ruby_xmalloc(sizeof(BRepFill_Filling));
 #endif
@@ -108,7 +108,7 @@ VALUE siren_filler_add_bound(VALUE self, VALUE edge, VALUE order)
 #if 0
   VALUE edge;
   VALUE order;
-  int argc = rb_get_args("oi", &edge, &order);
+  int argc = rb_scan_args("oi", &edge, &order);
 #endif
   TopoDS_Shape* s = siren_shape_get(edge);
   TopoDS_Edge e = TopoDS::Edge(*s);
@@ -122,7 +122,7 @@ VALUE siren_filler_add(VALUE self, VALUE obj, VALUE order)
 #if 0
   VALUE obj;
   VALUE order;
-  int argc = rb_get_args("o|i", &obj, &order);
+  int argc = rb_scan_args("o|i", &obj, &order);
   if (argc == 2) {
 #endif
   if (order != Qnil) {
@@ -160,7 +160,7 @@ VALUE siren_filler_g0error(VALUE self, VALUE index)
 {
 #if 0
   VALUE index;
-  int argc = rb_get_args("|i", &index);
+  int argc = rb_scan_args("|i", &index);
 #endif
   Standard_Real value;
   if (index != Qnil) {
@@ -176,7 +176,7 @@ VALUE siren_filler_g1error(VALUE self, VALUE index)
 {
 #if 0
   VALUE index;
-  int argc = rb_get_args("|i", &index);
+  int argc = rb_scan_args("|i", &index);
 #endif
   Standard_Real value;
   if (index != Qnil) {
@@ -192,7 +192,7 @@ VALUE siren_filler_g2error(VALUE self, VALUE index)
 {
 #if 0
   VALUE index;
-  int argc = rb_get_args("|i", &index);
+  int argc = rb_scan_args("|i", &index);
 #endif
   Standard_Real value;
   if (index != Qnil) {

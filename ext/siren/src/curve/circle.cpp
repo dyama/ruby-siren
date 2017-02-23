@@ -2,10 +2,10 @@
 
 VALUE siren_circle_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
+  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Circle")));
-  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Circle")));
+  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -22,10 +22,10 @@ handle<Geom_Circle> siren_circle_get( VALUE self)
   return circle;
 }
 
-bool siren_circle_install( struct RClass* mod_siren)
+bool siren_circle_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_circle = rb_define_class_under(mod_siren, "Circle", rb_cObject);
+  struct RClass* cls_circle = rb_define_class_under(sr_mSiren, "Circle", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_circle, MRB_TT_DATA);
   rb_define_method(cls_circle, "initialize", siren_curve_init, MRB_ARGS_NONE());
 
@@ -54,7 +54,7 @@ VALUE siren_circle_radius( VALUE self)
 VALUE siren_circle_radius_set( VALUE self)
 {
   VALUE r;
-  int argc = rb_get_args("f", &r);
+  int argc = rb_scan_args("f", &r);
   siren_circle_get(self)->SetRadius(r);
   return Qnil;
 }
@@ -68,7 +68,7 @@ VALUE siren_circle_center( VALUE self)
 VALUE siren_circle_center_set( VALUE self)
 {
   VALUE pos;
-  int argc = rb_get_args("A", &pos);
+  int argc = rb_scan_args("A", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -102,7 +102,7 @@ VALUE siren_circle_normal( VALUE self)
 VALUE siren_circle_normal_set( VALUE self)
 {
   VALUE norm;
-  int argc = rb_get_args("A", &norm);
+  int argc = rb_scan_args("A", &norm);
   gp_Dir dir = siren_ary_to_dir(norm);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -123,7 +123,7 @@ VALUE siren_circle_dir( VALUE self)
 VALUE siren_circle_dir_set( VALUE self)
 {
   VALUE val;
-  int argc = rb_get_args("A", &val);
+  int argc = rb_scan_args("A", &val);
   gp_Dir dir = siren_ary_to_dir(val);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -138,7 +138,7 @@ VALUE siren_circle_dir_set( VALUE self)
 VALUE siren_circle_dist( VALUE self)
 {
   VALUE pos;
-  int argc = rb_get_args("A", &pos);
+  int argc = rb_scan_args("A", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -148,7 +148,7 @@ VALUE siren_circle_dist( VALUE self)
 VALUE siren_circle_distdist( VALUE self)
 {
   VALUE pos;
-  int argc = rb_get_args("A", &pos);
+  int argc = rb_scan_args("A", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -159,7 +159,7 @@ VALUE siren_circle_contain( VALUE self)
 {
   VALUE pos;
   VALUE lintol = 1.0e-7;
-  int argc = rb_get_args("A|f", &pos, &lintol);
+  int argc = rb_scan_args("A|f", &pos, &lintol);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();

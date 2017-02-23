@@ -6,10 +6,10 @@
 
 VALUE siren_bscurve_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
+  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("BSCurve")));
-  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("BSCurve")));
+  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -27,10 +27,10 @@ handle<Geom_BSplineCurve> siren_bscurve_get( VALUE self)
   return bscurve;
 }
 
-bool siren_bscurve_install( struct RClass* mod_siren)
+bool siren_bscurve_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_bscurve = rb_define_class_under(mod_siren, "BSCurve", cls_curve);
+  struct RClass* cls_bscurve = rb_define_class_under(sr_mSiren, "BSCurve", cls_curve);
   MRB_SET_INSTANCE_TT(cls_bscurve, MRB_TT_DATA);
   rb_define_method(cls_bscurve, "initialize", siren_bscurve_init,    MRB_ARGS_REQ(4) | MRB_ARGS_OPT(1));
   rb_define_method(cls_bscurve, "degree",     siren_bscurve_degree,  MRB_ARGS_NONE());
@@ -45,7 +45,7 @@ VALUE siren_bscurve_init( VALUE self)
 {
   VALUE d;
   VALUE ks, ms, ps, ws;
-  int argc = rb_get_args("iAAA|A", &d, &ks, &ms, &ps, &ws);
+  int argc = rb_scan_args("iAAA|A", &d, &ks, &ms, &ps, &ws);
 
   int plen = rb_ary_len(ps);
 
@@ -78,7 +78,7 @@ VALUE siren_bscurve_init( VALUE self)
 
   // initialize において self は既に rb_instance_alloc されているので、
   // DATA_PTR と DATA_TYPE のみを設定する
-  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
+  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = curve;
   DATA_PTR(self) = hgcurve;

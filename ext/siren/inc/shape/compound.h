@@ -8,7 +8,7 @@
 #include <BRep_Builder.hxx>
 
 static rb_data_type_t siren_compound_type = { "Compound", siren_shape_final };
-bool siren_compound_install( struct RClass* mod_siren);
+bool siren_compound_install( struct RClass* sr_mSiren);
 TopoDS_Compound siren_compound_get( VALUE self);
 VALUE siren_compound_new( const TopoDS_Shape* src);
 VALUE siren_compound_obj();

@@ -2,14 +2,14 @@
 
 #ifdef SIREN_ENABLE_IGES
 
-bool siren_iges_install( struct RClass* mod_siren)
+bool siren_iges_install( struct RClass* sr_mSiren)
 {
   // Class method
-  rb_define_class_method(mod_siren, "save_iges", siren_iges_save, MRB_ARGS_REQ(2));
-  rb_define_class_method(mod_siren, "load_iges", siren_iges_load, MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "save_iges", siren_iges_save, MRB_ARGS_REQ(2));
+  rb_define_class_method(sr_mSiren, "load_iges", siren_iges_load, MRB_ARGS_REQ(1));
   // For mix-in
-  rb_define_method      (mod_siren, "save_iges", siren_iges_save, MRB_ARGS_REQ(2));
-  rb_define_method      (mod_siren, "load_iges", siren_iges_load, MRB_ARGS_REQ(1));
+  rb_define_method      (sr_mSiren, "save_iges", siren_iges_save, MRB_ARGS_REQ(2));
+  rb_define_method      (sr_mSiren, "load_iges", siren_iges_load, MRB_ARGS_REQ(1));
   return true;
 }
 
@@ -17,7 +17,7 @@ VALUE siren_iges_save( VALUE self)
 {
   VALUE target;
   VALUE path;
-  int argc = rb_get_args("oS", &target, &path);
+  int argc = rb_scan_args("oS", &target, &path);
 
   IGESControl_Controller::Init();
 //  IGESControl_Writer writer(Interface_Static::CVal("XSTEP.iges.unit"),
@@ -39,7 +39,7 @@ VALUE siren_iges_load( VALUE self)
 {
   VALUE path;
   VALUE as_ary = FALSE;
-  int argc = rb_get_args("S|b", &path, &as_ary);
+  int argc = rb_scan_args("S|b", &path, &as_ary);
 
   IGESControl_Reader iges_reader;
   int stat = iges_reader.ReadFile((Standard_CString)RSTRING_PTR(path));

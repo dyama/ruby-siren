@@ -7,10 +7,10 @@
 
 VALUE siren_offsetcurve_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
+  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("OffsetCurve")));
-  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("OffsetCurve")));
+  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -27,10 +27,10 @@ handle<Geom_OffsetCurve> siren_offsetcurve_get( VALUE self)
   return offsetcurve;
 }
 
-bool siren_offsetcurve_install( struct RClass* mod_siren)
+bool siren_offsetcurve_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_offsetcurve = rb_define_class_under(mod_siren, "offsetcurve", cls_curve);
+  struct RClass* cls_offsetcurve = rb_define_class_under(sr_mSiren, "offsetcurve", cls_curve);
   MRB_SET_INSTANCE_TT(cls_offsetcurve, MRB_TT_DATA);
   rb_define_method(cls_offsetcurve, "initialize", siren_curve_init, MRB_ARGS_NONE());
   return true;

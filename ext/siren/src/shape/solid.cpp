@@ -4,9 +4,9 @@ VALUE siren_solid_new( const TopoDS_Shape* src)
 {
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Solid")));
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Solid")));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -22,10 +22,10 @@ TopoDS_Solid siren_solid_get( VALUE self)
   return solid;
 }
 
-bool siren_solid_install( struct RClass* mod_siren)
+bool siren_solid_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_solid = rb_define_class_under(mod_siren, "Solid", cls_shape);
+  struct RClass* cls_solid = rb_define_class_under(sr_mSiren, "Solid", cls_shape);
   MRB_SET_INSTANCE_TT(cls_solid, MRB_TT_DATA);
   rb_define_method(cls_solid, "initialize", siren_solid_init, MRB_ARGS_NONE());
 
@@ -47,21 +47,21 @@ bool siren_solid_install( struct RClass* mod_siren)
 
 struct RClass* siren_solid_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Solid")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Solid")));
 }
 
 VALUE siren_solid_obj()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Solid"));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Solid"));
 }
 
 VALUE siren_solid_init( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_get_args("*", &a, &len);
+  int argc = rb_scan_args("*", &a, &len);
   if (len == 0) {
     rb_raise(E_ARGUMENT_ERROR, "No shapes specified.");
   }
@@ -77,7 +77,7 @@ VALUE siren_solid_init( VALUE self)
   if (shape.IsNull()) {
     rb_raise(E_RUNTIME_ERROR, "Failed to make a Solid.");
   }
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = shape; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
@@ -88,7 +88,7 @@ VALUE siren_solid_init( VALUE self)
 VALUE siren_solid_box( VALUE self)
 {
   VALUE size, pos;
-  int argc = rb_get_args("|AA", &size, &pos);
+  int argc = rb_scan_args("|AA", &size, &pos);
 
   Standard_Real sx, sy, sz;
   if (argc >= 1) {
@@ -118,7 +118,7 @@ VALUE siren_solid_box( VALUE self)
 VALUE siren_solid_box2p( VALUE self)
 {
   VALUE p1, p2;
-  int argc = rb_get_args("|AA", &p1, &p2);
+  int argc = rb_scan_args("|AA", &p1, &p2);
 
   Standard_Real x1 = 0.0, y1 = 0.0, z1 = 0.0;
   Standard_Real x2 = 1.0, y2 = 1.0, z2 = 1.0;
@@ -140,7 +140,7 @@ VALUE siren_solid_box2p( VALUE self)
 VALUE siren_solid_boxax( VALUE self)
 {
   VALUE size, pos, dir;
-  int argc = rb_get_args("AAA", &size, &pos, &dir);
+  int argc = rb_scan_args("AAA", &size, &pos, &dir);
 
   Standard_Real sx, sy, sz;
   siren_ary_to_xyz(size, sx, sy, sz);
@@ -161,7 +161,7 @@ VALUE siren_solid_sphere( VALUE self)
 {
   VALUE r = 1.0;
   VALUE pos;
-  int argc = rb_get_args("|fA", &r, &pos);
+  int argc = rb_scan_args("|fA", &r, &pos);
 
   gp_Pnt op;
   if (argc == 2) {
@@ -186,7 +186,7 @@ VALUE siren_solid_cylinder( VALUE self)
 {
   VALUE pos, norm;
   VALUE r, h, a;
-  int argc = rb_get_args("AAfff", &pos, &norm, &r, &h, &a);
+  int argc = rb_scan_args("AAfff", &pos, &norm, &r, &h, &a);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
@@ -199,7 +199,7 @@ VALUE siren_solid_cone( VALUE self)
 {
   VALUE pos, norm;
   VALUE r1, r2, h, ang;
-  int argc = rb_get_args("AAffff", &pos, &norm, &r1, &r2, &h, &ang);
+  int argc = rb_scan_args("AAffff", &pos, &norm, &r1, &r2, &h, &ang);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
@@ -211,7 +211,7 @@ VALUE siren_solid_torus( VALUE self)
 {
   VALUE r1, r2, ang;
   VALUE pos, norm;
-  int argc = rb_get_args("AAfff", &pos, &norm, &r1, &r2, &ang);
+  int argc = rb_scan_args("AAfff", &pos, &norm, &r1, &r2, &ang);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
@@ -222,7 +222,7 @@ VALUE siren_solid_torus( VALUE self)
 VALUE siren_solid_halfspace( VALUE self)
 {
   VALUE surf, refpnt;
-  int argc = rb_get_args("oA", &surf, &refpnt);
+  int argc = rb_scan_args("oA", &surf, &refpnt);
   TopoDS_Shape* shape = siren_shape_get(surf);
   if (shape == nullptr || shape->IsNull()) {
     rb_raise(E_ARGUMENT_ERROR, "Specified shape is incorrect.");
@@ -262,7 +262,7 @@ VALUE siren_solid_revolution( VALUE self)
 VALUE siren_solid_wedge( VALUE self)
 {
   VALUE dx = 1.0, dy = 1.0, dz = 1.0, x = 0.5, z = 0.5, X = 0.5, Z = 0.5;
-  int argc = rb_get_args("|fffffff", &dx, &dy, &dz, &x, &z, &X, &Z);
+  int argc = rb_scan_args("|fffffff", &dx, &dy, &dz, &x, &z, &X, &Z);
   try {
     BRepPrimAPI_MakeWedge api(dx, dy, dz, x, z, X, Z);
     TopoDS_Shape s = api.Shape();

@@ -32,6 +32,8 @@
 
 using namespace opencascade;
 
+VALUE sr_mSiren;
+
 #include "common.h"
 
 #endif

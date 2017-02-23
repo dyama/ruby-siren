@@ -6,9 +6,9 @@ VALUE siren_chunk_new( const TopoDS_Shape* src)
 {
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Chunk")));
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Chunk")));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -24,10 +24,10 @@ TopoDS_CompSolid siren_chunk_get( VALUE self)
   return chunk;
 }
 
-bool siren_chunk_install( struct RClass* mod_siren)
+bool siren_chunk_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_chunk = rb_define_class_under(mod_siren, "Chunk", cls_shape);
+  struct RClass* cls_chunk = rb_define_class_under(sr_mSiren, "Chunk", cls_shape);
   MRB_SET_INSTANCE_TT(cls_chunk, MRB_TT_DATA);
   rb_define_method(cls_chunk, "initialize", siren_chunk_init,   MRB_ARGS_NONE());
   rb_define_method(cls_chunk, "to_solid",  siren_chunk_to_solid, MRB_ARGS_NONE());
@@ -36,21 +36,21 @@ bool siren_chunk_install( struct RClass* mod_siren)
 
 struct RClass* siren_chunk_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Chunk")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Chunk")));
 }
 
 VALUE siren_chunk_obj()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Chunk"));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Chunk"));
 }
 
 VALUE siren_chunk_init( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_get_args("*", &a, &len);
+  int argc = rb_scan_args("*", &a, &len);
 
   TopoDS_CompSolid cs;
   TopoDS_Builder builder;
@@ -69,7 +69,7 @@ VALUE siren_chunk_init( VALUE self)
     }
   }
 
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = cs; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);

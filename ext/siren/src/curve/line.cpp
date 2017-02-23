@@ -7,10 +7,10 @@
 
 VALUE siren_line_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
+  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Line")));
-  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Line")));
+  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -27,10 +27,10 @@ handle<Geom_Line> siren_line_get( VALUE self)
   return line;
 }
 
-bool siren_line_install( struct RClass* mod_siren)
+bool siren_line_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_line = rb_define_class_under(mod_siren, "Line", cls_curve);
+  struct RClass* cls_line = rb_define_class_under(sr_mSiren, "Line", cls_curve);
   MRB_SET_INSTANCE_TT(cls_line, MRB_TT_DATA);
   rb_define_method(cls_line, "initialize", siren_curve_init, MRB_ARGS_NONE());
 
@@ -40,8 +40,8 @@ bool siren_line_install( struct RClass* mod_siren)
 
 struct RClass* siren_line_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Line")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Line")));
 }
 
 VALUE siren_line_dir( VALUE self)

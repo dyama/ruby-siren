@@ -6,7 +6,7 @@
 #include <Geom_OffsetCurve.hxx>
 
 static rb_data_type_t siren_offsetcurve_type = { "OffsetCurve", siren_curve_final };
-bool siren_offsetcurve_install( struct RClass* mod_siren);
+bool siren_offsetcurve_install( struct RClass* sr_mSiren);
 handle<Geom_OffsetCurve> siren_offsetcurve_get( VALUE self);
 VALUE siren_offsetcurve_new( const handle<Geom_Curve>* curve);
 

@@ -8,7 +8,7 @@
 #include <BRepBuilderAPI_MakeVertex.hxx>
 
 static rb_data_type_t siren_vertex_type = { "Vertex", siren_shape_final };
-bool siren_vertex_install( struct RClass* mod_siren);
+bool siren_vertex_install( struct RClass* sr_mSiren);
 TopoDS_Vertex siren_vertex_get( VALUE self);
 VALUE siren_vertex_new( const TopoDS_Shape* src);
 VALUE siren_vertex_obj();

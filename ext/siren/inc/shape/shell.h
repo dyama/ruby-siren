@@ -8,7 +8,7 @@
 #include <BRepBuilderAPI_Sewing.hxx>
 
 static rb_data_type_t siren_shell_type = { "Shell", siren_shape_final };
-bool siren_shell_install( struct RClass* mod_siren);
+bool siren_shell_install( struct RClass* sr_mSiren);
 TopoDS_Shell siren_shell_get( VALUE self);
 VALUE siren_shell_new( const TopoDS_Shape* src);
 VALUE siren_shell_obj();

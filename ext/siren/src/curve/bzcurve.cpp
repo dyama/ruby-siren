@@ -6,10 +6,10 @@
 
 VALUE siren_bzcurve_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
+  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("BzCurve")));
-  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("BzCurve")));
+  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -26,10 +26,10 @@ handle<Geom_BezierCurve> siren_bzcurve_get( VALUE self)
   return bzcurve;
 }
 
-bool siren_bzcurve_install( struct RClass* mod_siren)
+bool siren_bzcurve_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_bzcurve = rb_define_class_under(mod_siren, "BzCurve", cls_curve);
+  struct RClass* cls_bzcurve = rb_define_class_under(sr_mSiren, "BzCurve", cls_curve);
   MRB_SET_INSTANCE_TT(cls_bzcurve, MRB_TT_DATA);
   rb_define_method(cls_bzcurve, "initialize", siren_bzcurve_init,   MRB_ARGS_NONE());
   // rb_define_method(cls_bzcurve, "degree",     siren_bzcurve_degree, MRB_ARGS_NONE());
@@ -39,7 +39,7 @@ bool siren_bzcurve_install( struct RClass* mod_siren)
 VALUE siren_bzcurve_init( VALUE self)
 {
   VALUE ps, ws;
-  int argc = rb_get_args("A|A", &ps, &ws);
+  int argc = rb_scan_args("A|A", &ps, &ws);
   bool has_weight = argc == 2;
   int plen = rb_ary_len(ps);
   TColgp_Array1OfPnt poles(1, plen);
@@ -65,7 +65,7 @@ VALUE siren_bzcurve_init( VALUE self)
   catch (...) {
     rb_raise(E_ARGUMENT_ERROR, "Failed to make a BzCurve.");
   }
-  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
+  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = curve;
   DATA_PTR(self) = hgcurve;

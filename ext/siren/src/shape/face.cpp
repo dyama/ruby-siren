@@ -4,9 +4,9 @@ VALUE siren_face_new( const TopoDS_Shape* src)
 {
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Face")));
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Face")));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -22,10 +22,10 @@ TopoDS_Face siren_face_get( VALUE self)
   return face;
 }
 
-bool siren_face_install( struct RClass* mod_siren)
+bool siren_face_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_face = rb_define_class_under(mod_siren, "Face", cls_shape);
+  struct RClass* cls_face = rb_define_class_under(sr_mSiren, "Face", cls_shape);
   MRB_SET_INSTANCE_TT(cls_face, MRB_TT_DATA);
   rb_define_method(cls_face, "initialize", siren_shape_init,     MRB_ARGS_NONE());
   rb_define_method(cls_face, "normal",     siren_face_normal,    MRB_ARGS_NONE());
@@ -45,8 +45,8 @@ bool siren_face_install( struct RClass* mod_siren)
 
 struct RClass* siren_face_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Face")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Face")));
 }
 
 VALUE siren_face_normal( VALUE self)
@@ -92,7 +92,7 @@ VALUE siren_face_to_bezier( VALUE self)
 VALUE siren_face_split( VALUE self)
 {
   VALUE obj;
-  int argc = rb_get_args("o", &obj);
+  int argc = rb_scan_args("o", &obj);
 
   TopoDS_Face face = siren_face_get(self);
   BRepFeat_SplitShape splitter(face);
@@ -126,7 +126,7 @@ VALUE siren_face_split( VALUE self)
 VALUE siren_face_triangle( VALUE self)
 {
   VALUE deflection, angle;
-  int argc = rb_get_args("ff", &deflection, &angle);
+  int argc = rb_scan_args("ff", &deflection, &angle);
 
   VALUE result = rb_ary_new();
 
@@ -199,15 +199,15 @@ VALUE siren_face_triangle( VALUE self)
 
 VALUE siren_face_obj()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Face"));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Face"));
 }
 
 VALUE siren_face_plane( VALUE self)
 {
   VALUE pos, norm, vx;
   VALUE umin, umax, vmin, vmax;
-  int argc = rb_get_args("AAAffff", &pos, &norm, &vx, &umin, &umax, &vmin, &vmax);
+  int argc = rb_scan_args("AAAffff", &pos, &norm, &vx, &umin, &umax, &vmin, &vmax);
   try {
     gp_Pln _pln(siren_ary_to_ax2(pos, norm, vx));
     BRepBuilderAPI_MakeFace face(_pln, umin, umax, vmin, vmax);
@@ -224,7 +224,7 @@ VALUE siren_face_face( VALUE self)
 {
   VALUE wire;
   VALUE force_plane;
-  int argc = rb_get_args("ob", &wire, &force_plane);
+  int argc = rb_scan_args("ob", &wire, &force_plane);
   TopoDS_Shape* s = siren_shape_get(wire);
   TopoDS_Wire w = TopoDS::Wire(*s);
   if (w.IsNull()) {
@@ -237,7 +237,7 @@ VALUE siren_face_face( VALUE self)
 VALUE siren_face_infplane( VALUE self)
 {
   VALUE orig, dir;
-  int argc = rb_get_args("AA", &orig, &dir);
+  int argc = rb_scan_args("AA", &orig, &dir);
   gp_Pln pln(siren_ary_to_pnt(orig), siren_ary_to_dir(dir));
   TopoDS_Face face = BRepBuilderAPI_MakeFace(pln);
   return siren_shape_new(face);
@@ -247,7 +247,7 @@ VALUE siren_face_polygon( VALUE self)
 {
   VALUE pts;
   VALUE force_plane = (_bool)Standard_True;
-  int argc = rb_get_args("A|b", &pts, &force_plane);
+  int argc = rb_scan_args("A|b", &pts, &force_plane);
 
   BRepBuilderAPI_MakePolygon mp;
 
@@ -269,7 +269,7 @@ VALUE siren_face_polygon( VALUE self)
 VALUE siren_face_bzsurf( VALUE self)
 {
   VALUE ptary, wtary;
-  int argc = rb_get_args("A|A", &ptary, &wtary);
+  int argc = rb_scan_args("A|A", &ptary, &wtary);
 
   int rlen = rb_ary_len(ptary);
   int clen = rb_ary_len(rb_ary_ref(ptary, 0));
@@ -309,7 +309,7 @@ VALUE siren_face_bssurf( VALUE self)
   VALUE _ar_ukm, _ar_vkm;
   VALUE _pol;
   VALUE _wire;
-  int argc = rb_get_args("iAiAA|o", &_udeg, &_ar_ukm, &_vdeg, &_ar_vkm, &_pol, &_wire);
+  int argc = rb_scan_args("iAiAA|o", &_udeg, &_ar_ukm, &_vdeg, &_ar_vkm, &_pol, &_wire);
 
   bool has_contour = argc == 6;
 

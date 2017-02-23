@@ -4,7 +4,7 @@ VALUE siren_heal_outerwire(VALUE self, VALUE tol)
 {
 #if 0
   VALUE tol = 1.0e-1;
-  int argc = rb_get_args("|f", &tol);
+  int argc = rb_scan_args("|f", &tol);
 #else
   if (tol == Qnil) {
     tol = 1.0e-1;

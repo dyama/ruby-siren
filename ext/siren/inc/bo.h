@@ -11,7 +11,7 @@
 
 #include <BRepProj_Projection.hxx>
 
-bool siren_bo_install( struct RClass* mod_siren);
+bool siren_bo_install( struct RClass* sr_mSiren);
 VALUE siren_bo_common   ( VALUE self);
 VALUE siren_bo_fuse     ( VALUE self);
 VALUE siren_bo_cut      ( VALUE self);

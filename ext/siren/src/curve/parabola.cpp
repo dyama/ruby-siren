@@ -7,10 +7,10 @@
 
 VALUE siren_parabola_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
+  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Parabola")));
-  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Parabola")));
+  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -27,10 +27,10 @@ handle<Geom_Parabola> siren_parabola_get( VALUE self)
   return parabola;
 }
 
-bool siren_parabola_install( struct RClass* mod_siren)
+bool siren_parabola_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_parabola = rb_define_class_under(mod_siren, "Parabola", cls_curve);
+  struct RClass* cls_parabola = rb_define_class_under(sr_mSiren, "Parabola", cls_curve);
   MRB_SET_INSTANCE_TT(cls_parabola, MRB_TT_DATA);
   rb_define_method(cls_parabola, "initialize", siren_curve_init, MRB_ARGS_NONE());
   return true;

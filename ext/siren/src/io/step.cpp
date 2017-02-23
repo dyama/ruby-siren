@@ -2,14 +2,14 @@
 
 #ifdef SIREN_ENABLE_STEP
 
-bool siren_step_install( struct RClass* mod_siren)
+bool siren_step_install( struct RClass* sr_mSiren)
 {
   // Class method
-  rb_define_class_method(mod_siren, "save_step",  siren_step_save, MRB_ARGS_REQ(2));
-  rb_define_class_method(mod_siren, "load_step",  siren_step_load, MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "save_step",  siren_step_save, MRB_ARGS_REQ(2));
+  rb_define_class_method(sr_mSiren, "load_step",  siren_step_load, MRB_ARGS_REQ(1));
   // For mix-in
-  rb_define_method      (mod_siren, "save_step",  siren_step_save, MRB_ARGS_REQ(2));
-  rb_define_method      (mod_siren, "load_step",  siren_step_load, MRB_ARGS_REQ(1));
+  rb_define_method      (sr_mSiren, "save_step",  siren_step_save, MRB_ARGS_REQ(2));
+  rb_define_method      (sr_mSiren, "load_step",  siren_step_load, MRB_ARGS_REQ(1));
   return true;
 }
 
@@ -17,7 +17,7 @@ VALUE siren_step_save( VALUE self)
 {
   VALUE s;
   VALUE path;
-  int argc = rb_get_args("oS", &s, &path);
+  int argc = rb_scan_args("oS", &s, &path);
   TopoDS_Shape* shape = siren_shape_get(s);
   STEPControl_Writer writer;
   if (writer.Transfer(*shape, STEPControl_AsIs, Standard_True) != IFSelect_RetDone) {
@@ -32,7 +32,7 @@ VALUE siren_step_save( VALUE self)
 VALUE siren_step_load( VALUE self)
 {
   VALUE path;
-  int argc = rb_get_args("S", &path);
+  int argc = rb_scan_args("S", &path);
   STEPControl_Reader reader;
   if (!reader.ReadFile((Standard_CString)RSTRING_PTR(path))) {
      rb_raisef(E_ARGUMENT_ERROR, "Failed to load STEP from %S.", path);

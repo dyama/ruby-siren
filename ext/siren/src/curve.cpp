@@ -8,7 +8,7 @@
 VALUE siren_curve_new( const opencascade::handle<Geom_Curve>* curve)
 {
   GeomAbs_CurveType type = siren_curve_geomtype_native(*curve);
-  struct RClass* mod_siren = rb_module_get("Siren");
+  struct RClass* sr_mSiren = rb_module_get("Siren");
   switch (type) {
     case GeomAbs_Line:         return siren_line_new(curve); break;
     case GeomAbs_Circle:       return siren_circle_new(curve); break;
@@ -22,7 +22,7 @@ VALUE siren_curve_new( const opencascade::handle<Geom_Curve>* curve)
   }
   // rIght?
   VALUE obj = rb_instance_alloc(rb_obj_value(siren_curve_rclass()));
-  void* p = rb_malloc(sizeof(opencascade::handle<Geom_Curve>));
+  void* p = ruby_xmalloc(sizeof(opencascade::handle<Geom_Curve>));
   opencascade::handle<Geom_Curve>* hgcurve = new(p) opencascade::handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -30,21 +30,21 @@ VALUE siren_curve_new( const opencascade::handle<Geom_Curve>* curve)
   return obj;
 }
 
-bool siren_curve_install( struct RClass* mod_siren)
+bool siren_curve_install( struct RClass* sr_mSiren)
 {
-  struct RClass* cls_curve = rb_define_class_under(mod_siren, "Curve", rb_cObject);
+  struct RClass* cls_curve = rb_define_class_under(sr_mSiren, "Curve", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_curve, MRB_TT_DATA);
   rb_define_method(cls_curve, "initialize", siren_curve_init,     MRB_ARGS_NONE());
 
   // Define derived classes for Siren::Curve
-  siren_line_install(mod_siren);
-  siren_circle_install(mod_siren);
-  siren_ellipse_install(mod_siren);
-  siren_hyperbola_install(mod_siren);
-  siren_parabola_install(mod_siren);
-  siren_bzcurve_install(mod_siren);
-  siren_bscurve_install(mod_siren);
-  siren_offsetcurve_install(mod_siren);
+  siren_line_install(sr_mSiren);
+  siren_circle_install(sr_mSiren);
+  siren_ellipse_install(sr_mSiren);
+  siren_hyperbola_install(sr_mSiren);
+  siren_parabola_install(sr_mSiren);
+  siren_bzcurve_install(sr_mSiren);
+  siren_bscurve_install(sr_mSiren);
+  siren_offsetcurve_install(sr_mSiren);
 
   return true;
 }
@@ -61,7 +61,7 @@ void siren_curve_final( void* p)
   if (!(*hgcurve).IsNull()) {
     (*hgcurve).Nullify();
   }
-  rb_free(p);
+  ruby_xfree(p);
 }
 
 opencascade::handle<Geom_Curve>* siren_curve_get( VALUE obj)
@@ -71,7 +71,7 @@ opencascade::handle<Geom_Curve>* siren_curve_get( VALUE obj)
 
 struct RClass* siren_curve_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Curve")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Curve")));
 }
 

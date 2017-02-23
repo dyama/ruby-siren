@@ -6,7 +6,7 @@
 #include <Geom_Parabola.hxx>
 
 static rb_data_type_t siren_parabola_type = { "Palabora", siren_curve_final };
-bool siren_parabola_install( struct RClass* mod_siren);
+bool siren_parabola_install( struct RClass* sr_mSiren);
 handle<Geom_Parabola> siren_parabola_get( VALUE self);
 VALUE siren_parabola_new( const handle<Geom_Curve>* curve);
 

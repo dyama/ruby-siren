@@ -7,15 +7,15 @@ gp_Trsf* siren_trans_get( VALUE obj)
 
 struct RClass* siren_trans_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Trans")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Trans")));
 }
 
 VALUE siren_trans_new( const gp_Trsf& src)
 {
   VALUE res;
   res = rb_instance_alloc(rb_obj_value(siren_trans_rclass()));
-  void* p = rb_malloc(sizeof(gp_Trsf));
+  void* p = ruby_xmalloc(sizeof(gp_Trsf));
   gp_Trsf* trans = new(p) gp_Trsf();
   *trans = src;
   DATA_PTR(res) = trans;
@@ -23,9 +23,9 @@ VALUE siren_trans_new( const gp_Trsf& src)
   return res;
 }
 
-bool siren_trans_install( struct RClass* mod_siren)
+bool siren_trans_install( struct RClass* sr_mSiren)
 {
-  struct RClass* cls_trans = rb_define_class_under(mod_siren, "Trans", rb_cObject);
+  struct RClass* cls_trans = rb_define_class_under(sr_mSiren, "Trans", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_trans, MRB_TT_DATA);
   rb_define_method(cls_trans, "initialize"     , siren_trans_init               , MRB_ARGS_NONE());
   rb_define_method(cls_trans, "inspect"        , siren_trans_to_s               , MRB_ARGS_NONE());
@@ -61,7 +61,7 @@ bool siren_trans_install( struct RClass* mod_siren)
 
 VALUE siren_trans_init( VALUE self)
 {
-  void* p = rb_malloc(sizeof(gp_Trsf));
+  void* p = ruby_xmalloc(sizeof(gp_Trsf));
   gp_Trsf* trans = new(p) gp_Trsf();
   DATA_PTR(self) = trans;
   DATA_TYPE(self) = &siren_trans_type;
@@ -71,7 +71,7 @@ VALUE siren_trans_init( VALUE self)
 void siren_trans_final( void* p)
 {
   gp_Trsf* t = static_cast<gp_Trsf*>(p);
-  rb_free(t);
+  ruby_xfree(t);
 }
 
 VALUE siren_trans_to_s( VALUE self)
@@ -107,7 +107,7 @@ VALUE siren_trans_to_s( VALUE self)
 VALUE siren_trans_translate_bang( VALUE self)
 {
   VALUE v;
-  int argc = rb_get_args("A", &v);
+  int argc = rb_scan_args("A", &v);
   gp_Vec vec = siren_ary_to_vec(v); 
   gp_Trsf* trans = siren_trans_get(self);
   trans->SetTranslation(vec);
@@ -118,7 +118,7 @@ VALUE siren_trans_rotate_bang( VALUE self)
 {
   VALUE op, norm;
   VALUE angle;
-  int argc = rb_get_args("AAf", &op, &norm, &angle);
+  int argc = rb_scan_args("AAf", &op, &norm, &angle);
   gp_Trsf* trans = siren_trans_get(self);
   trans->SetRotation(siren_ary_to_ax1(op, norm), angle);
   return self;
@@ -149,7 +149,7 @@ VALUE siren_trans_scale_bang( VALUE self)
 {
   VALUE op;
   VALUE factor;
-  int argc = rb_get_args("Af", &op, &factor);
+  int argc = rb_scan_args("Af", &op, &factor);
   gp_Trsf* trans  = siren_trans_get(self);
   trans->SetScale(siren_ary_to_pnt(op), factor);
   return self;
@@ -165,7 +165,7 @@ VALUE siren_trans_scalef( VALUE self)
 VALUE siren_trans_set_scalef( VALUE self)
 {
   VALUE f;
-  int argc = rb_get_args("f", &f);
+  int argc = rb_scan_args("f", &f);
   gp_Trsf* trans  = siren_trans_get(self);
   trans->SetScaleFactor(f);
   return (f);
@@ -174,7 +174,7 @@ VALUE siren_trans_set_scalef( VALUE self)
 VALUE siren_trans_mirror_bang( VALUE self)
 {
   VALUE op, norm, vx;
-  int argc = rb_get_args("A|AA", &op, &norm, &vx);
+  int argc = rb_scan_args("A|AA", &op, &norm, &vx);
   switch (argc) {
   case 1:
     siren_trans_get(self)->SetMirror(siren_ary_to_pnt(op));
@@ -192,7 +192,7 @@ VALUE siren_trans_mirror_bang( VALUE self)
 VALUE siren_trans_multiply( VALUE self)
 {
   VALUE other;
-  int argc = rb_get_args("o", &other);
+  int argc = rb_scan_args("o", &other);
   gp_Trsf* trans_me = siren_trans_get(self);
   gp_Trsf* trans_other = siren_trans_get(other);
   gp_Trsf t = trans_me->Multiplied(*trans_other);
@@ -202,7 +202,7 @@ VALUE siren_trans_multiply( VALUE self)
 VALUE siren_trans_multiply_bang( VALUE self)
 {
   VALUE other;
-  int argc = rb_get_args("o", &other);
+  int argc = rb_scan_args("o", &other);
   gp_Trsf* trans_me = siren_trans_get(self);
   gp_Trsf* trans_other = siren_trans_get(other);
   trans_me->Multiply(*trans_other);
@@ -212,14 +212,14 @@ VALUE siren_trans_multiply_bang( VALUE self)
 VALUE siren_trans_power( VALUE self)
 {
   VALUE n;
-  int argc = rb_get_args("i", &n);
+  int argc = rb_scan_args("i", &n);
   return siren_trans_new(siren_trans_get(self)->Powered(n));
 }
 
 VALUE siren_trans_power_bang( VALUE self)
 {
   VALUE n;
-  int argc = rb_get_args("i", &n);
+  int argc = rb_scan_args("i", &n);
   siren_trans_get(self)->Power(n);
   return self;
 }
@@ -244,7 +244,7 @@ VALUE siren_trans_transform_bang( VALUE self)
 {
   VALUE pos1, norm1, vdir1;
   VALUE pos2, norm2, vdir2;
-  int argc = rb_get_args("AAA|AAA", &pos1, &norm1, &vdir1, &pos2, &norm2, &vdir2);
+  int argc = rb_scan_args("AAA|AAA", &pos1, &norm1, &vdir1, &pos2, &norm2, &vdir2);
   gp_Trsf* trans = siren_trans_get(self);
   if (argc == 3) {
     trans->SetTransformation(siren_ary_to_ax3(pos1, norm1, vdir1));
@@ -274,7 +274,7 @@ VALUE siren_trans_matrix( VALUE self)
 VALUE siren_trans_set_matrix( VALUE self)
 {
   VALUE ary;
-  int argc = rb_get_args("A", &ary);
+  int argc = rb_scan_args("A", &ary);
   if (_ary_len(ary) != 4) {
     rb_raise(E_ARGUMENT_ERROR, "Number of items of specified array is wrong.");
   }
@@ -300,7 +300,7 @@ VALUE siren_trans_translatef( VALUE self)
 VALUE siren_trans_set_translatef( VALUE self)
 {
   VALUE v;
-  int argc = rb_get_args("o", &v);
+  int argc = rb_scan_args("o", &v);
   siren_trans_get(self)->SetTranslationPart(siren_ary_to_vec(v));
   return Qnil;
 }
@@ -308,7 +308,7 @@ VALUE siren_trans_set_translatef( VALUE self)
 VALUE siren_trans_move_point( VALUE self)
 {
   VALUE ary;
-  int argc = rb_get_args("A", &ary);
+  int argc = rb_scan_args("A", &ary);
   gp_Pnt point = siren_ary_to_pnt(ary);
   gp_Trsf* trans = siren_trans_get(self);
   point.Transform(*trans);

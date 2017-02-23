@@ -4,9 +4,9 @@ VALUE siren_compound_new( const TopoDS_Shape* src)
 {
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Compound")));
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Compound")));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -22,10 +22,10 @@ TopoDS_Compound siren_compound_get( VALUE self)
   return compound;
 }
 
-bool siren_compound_install( struct RClass* mod_siren)
+bool siren_compound_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_compound = rb_define_class_under(mod_siren, "Compound", cls_shape);
+  struct RClass* cls_compound = rb_define_class_under(sr_mSiren, "Compound", cls_shape);
   MRB_SET_INSTANCE_TT(cls_compound, MRB_TT_DATA);
   rb_define_method(cls_compound, "initialize", siren_compound_init,   MRB_ARGS_NONE());
   rb_define_method(cls_compound, "push",       siren_compound_push,   MRB_ARGS_NONE());
@@ -36,21 +36,21 @@ bool siren_compound_install( struct RClass* mod_siren)
 
 struct RClass* siren_compound_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Compound")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Compound")));
 }
 
 VALUE siren_compound_obj()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Compound"));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Compound"));
 }
 
 VALUE siren_compound_init( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_get_args("*", &a, &len);
+  int argc = rb_scan_args("*", &a, &len);
 
   TopoDS_Compound comp;
   BRep_Builder B;
@@ -71,7 +71,7 @@ VALUE siren_compound_init( VALUE self)
     }
   }
 
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = comp; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
@@ -83,7 +83,7 @@ VALUE siren_compound_push( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_get_args("*", &a, &len);
+  int argc = rb_scan_args("*", &a, &len);
   TopoDS_Compound comp = siren_compound_get(self);
   BRep_Builder B;
   for (int i = 0; i < len; i++) {
@@ -107,7 +107,7 @@ VALUE siren_compound_delete( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_get_args("*", &a, &len);
+  int argc = rb_scan_args("*", &a, &len);
   TopoDS_Compound comp = siren_compound_get(self);
   BRep_Builder B;
   for (int i = 0; i < len; i++) {

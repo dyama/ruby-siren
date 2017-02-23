@@ -4,9 +4,9 @@ VALUE siren_wire_new( const TopoDS_Shape* src)
 {
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Wire")));
-  void* p = rb_malloc(sizeof(TopoDS_Shape));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Wire")));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -22,10 +22,10 @@ TopoDS_Wire siren_wire_get( VALUE self)
   return wire;
 }
 
-bool siren_wire_install( struct RClass* mod_siren)
+bool siren_wire_install( struct RClass* sr_mSiren)
 {
   struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_wire = rb_define_class_under(mod_siren, "Wire", cls_shape);
+  struct RClass* cls_wire = rb_define_class_under(sr_mSiren, "Wire", cls_shape);
   MRB_SET_INSTANCE_TT(cls_wire, MRB_TT_DATA);
   rb_define_method(cls_wire, "initialize",    siren_shape_init,         MRB_ARGS_NONE());
   rb_define_method(cls_wire, "ordered_edges", siren_wire_ordered_edges, MRB_ARGS_NONE());
@@ -39,8 +39,8 @@ bool siren_wire_install( struct RClass* mod_siren)
 
 struct RClass* siren_wire_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Wire")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Wire")));
 }
 
 VALUE siren_wire_ordered_edges( VALUE self)
@@ -68,15 +68,15 @@ VALUE siren_wire_curves( VALUE self)
 
 VALUE siren_wire_obj()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Wire"));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Wire"));
 }
 
 VALUE siren_wire_make( VALUE self)
 {
   VALUE objs;
   VALUE tol;
-  int argc = rb_get_args("A|f", &objs, &tol);
+  int argc = rb_scan_args("A|f", &objs, &tol);
   BRepBuilderAPI_MakeWire api;
 #ifdef USE_WIRE_FIX
   ShapeFix_Wire sfw;

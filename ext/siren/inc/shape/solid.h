@@ -15,7 +15,7 @@
 #include <BRepPrimAPI_MakeWedge.hxx>
 
 static rb_data_type_t siren_solid_type = { "Solid", siren_shape_final };
-bool siren_solid_install( struct RClass* mod_siren);
+bool siren_solid_install( struct RClass* sr_mSiren);
 TopoDS_Solid siren_solid_get( VALUE self);
 VALUE siren_solid_new( const TopoDS_Shape* src);
 VALUE siren_solid_obj();

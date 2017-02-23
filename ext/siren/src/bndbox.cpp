@@ -4,7 +4,7 @@ VALUE siren_bndbox_new( const TopoDS_Shape& shape)
 {
   VALUE obj;
   obj = rb_instance_alloc(rb_obj_value(siren_bndbox_rclass()));
-  void* p = rb_malloc(sizeof(Bnd_Box));
+  void* p = ruby_xmalloc(sizeof(Bnd_Box));
   Bnd_Box* inner = new(p) Bnd_Box();
   BRepBndLib::Add(shape, *inner);
   DATA_PTR(obj)  = inner;
@@ -19,13 +19,13 @@ Bnd_Box* siren_bndbox_get( VALUE obj)
 
 struct RClass* siren_bndbox_rclass()
 {
-  struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("BndBox")));
+  struct RClass* sr_mSiren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("BndBox")));
 }
 
-bool siren_bndbox_install( struct RClass* mod_siren)
+bool siren_bndbox_install( struct RClass* sr_mSiren)
 {
-  struct RClass* cls_bndbox = rb_define_class_under(mod_siren, "BndBox", rb_cObject);
+  struct RClass* cls_bndbox = rb_define_class_under(sr_mSiren, "BndBox", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_bndbox, MRB_TT_DATA);
   rb_define_method(cls_bndbox, "initialize", siren_bndbox_init,          MRB_ARGS_NONE());
   rb_define_method(cls_bndbox, "inspect",    siren_bndbox_to_s,          MRB_ARGS_NONE());
@@ -66,7 +66,7 @@ bool siren_bndbox_install( struct RClass* mod_siren)
 
 VALUE siren_bndbox_init( VALUE self)
 {
-  void* p = rb_malloc(sizeof(Bnd_Box));
+  void* p = ruby_xmalloc(sizeof(Bnd_Box));
   Bnd_Box* bndbox = new(p) Bnd_Box();
   DATA_PTR(self) = bndbox;
   DATA_TYPE(self) = &siren_bndbox_type;
@@ -76,7 +76,7 @@ VALUE siren_bndbox_init( VALUE self)
 void siren_bndbox_final( void* p)
 {
   Bnd_Box* pp = static_cast<Bnd_Box*>(p);
-  rb_free(pp);
+  ruby_xfree(pp);
 }
 
 VALUE siren_bndbox_to_s( VALUE self)
@@ -127,7 +127,7 @@ VALUE siren_bndbox_max( VALUE self)
 VALUE siren_bndbox_add( VALUE self)
 {
   VALUE obj;
-  int argc = rb_get_args("o", &obj);
+  int argc = rb_scan_args("o", &obj);
 
   Bnd_Box* b = siren_bndbox_get(self);
 
@@ -149,7 +149,7 @@ VALUE siren_bndbox_add( VALUE self)
 VALUE siren_bndbox_is_out( VALUE self)
 {
   VALUE other;
-  int argc = rb_get_args("o", &other);
+  int argc = rb_scan_args("o", &other);
   Bnd_Box* b = siren_bndbox_get(self);
   // return b->IsOut(siren_pnt_get(other)) == Standard_True ? Qtrue : Qfalse;
   return b->IsOut(*siren_bndbox_get(other)) == Standard_True ? Qtrue : Qfalse;
@@ -228,7 +228,7 @@ VALUE siren_bndbox_whole_bang( VALUE self)
 VALUE siren_bndbox_is_xthin( VALUE self)
 {
   VALUE tol;
-  int argc = rb_get_args("|f", &tol);
+  int argc = rb_scan_args("|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
   return b->IsXThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
@@ -236,7 +236,7 @@ VALUE siren_bndbox_is_xthin( VALUE self)
 VALUE siren_bndbox_is_ythin( VALUE self)
 {
   VALUE tol;
-  int argc = rb_get_args("|f", &tol);
+  int argc = rb_scan_args("|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
   return b->IsYThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
@@ -244,7 +244,7 @@ VALUE siren_bndbox_is_ythin( VALUE self)
 VALUE siren_bndbox_is_zthin( VALUE self)
 {
   VALUE tol;
-  int argc = rb_get_args("|f", &tol);
+  int argc = rb_scan_args("|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
   return b->IsZThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
@@ -318,7 +318,7 @@ VALUE siren_bndbox_openzmax_bang( VALUE self)
 VALUE siren_bndbox_set_gap( VALUE self)
 {
   VALUE tol;
-  int argc = rb_get_args("f", &tol);
+  int argc = rb_scan_args("f", &tol);
   siren_bndbox_get(self)->SetGap(tol);
   return Qnil;
 }
@@ -332,7 +332,7 @@ VALUE siren_bndbox_get_gap( VALUE self)
 VALUE siren_bndbox_dist( VALUE self)
 {
   VALUE other;
-  int argc = rb_get_args("o", &other);
+  int argc = rb_scan_args("o", &other);
   Bnd_Box* b = siren_bndbox_get(self);
   Bnd_Box* bb= siren_bndbox_get(other);
   if (b->IsVoid() || bb->IsVoid()) {

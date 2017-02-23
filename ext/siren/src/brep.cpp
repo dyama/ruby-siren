@@ -1,15 +1,15 @@
 #include "brep.h"
 
-bool siren_brep_install( struct RClass* mod_siren)
+bool siren_brep_install( struct RClass* sr_mSiren)
 {
   // Class method
-  rb_define_class_method(mod_siren, "save_brep", siren_brep_save, MRB_ARGS_REQ(2));
-  rb_define_class_method(mod_siren, "load_brep", siren_brep_load, MRB_ARGS_REQ(1));
-  rb_define_class_method(mod_siren, "dump",      siren_brep_dump, MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "save_brep", siren_brep_save, MRB_ARGS_REQ(2));
+  rb_define_class_method(sr_mSiren, "load_brep", siren_brep_load, MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "dump",      siren_brep_dump, MRB_ARGS_REQ(1));
   // For mix-in
-  rb_define_method      (mod_siren, "save_brep", siren_brep_save, MRB_ARGS_REQ(2));
-  rb_define_method      (mod_siren, "load_brep", siren_brep_load, MRB_ARGS_REQ(1));
-  rb_define_method      (mod_siren, "dump",      siren_brep_dump, MRB_ARGS_REQ(1));
+  rb_define_method      (sr_mSiren, "save_brep", siren_brep_save, MRB_ARGS_REQ(2));
+  rb_define_method      (sr_mSiren, "load_brep", siren_brep_load, MRB_ARGS_REQ(1));
+  rb_define_method      (sr_mSiren, "dump",      siren_brep_dump, MRB_ARGS_REQ(1));
   return true;
 }
 
@@ -17,7 +17,7 @@ VALUE siren_brep_save( VALUE self)
 {
   VALUE target;
   VALUE path;
-  int argc = rb_get_args("oS", &target, &path);
+  int argc = rb_scan_args("oS", &target, &path);
   TopoDS_Shape* shape = siren_shape_get(target);
   try {
     std::ofstream fst(RSTRING_PTR(path), std::ios_base::out);
@@ -32,7 +32,7 @@ VALUE siren_brep_save( VALUE self)
 VALUE siren_brep_load( VALUE self)
 {
   VALUE path;
-  int argc = rb_get_args("S", &path);
+  int argc = rb_scan_args("S", &path);
   BRep_Builder B;
   TopoDS_Shape shape;
   try {
@@ -48,7 +48,7 @@ VALUE siren_brep_load( VALUE self)
 VALUE siren_brep_dump( VALUE self)
 {
   VALUE target;
-  int argc = rb_get_args("o", &target);
+  int argc = rb_scan_args("o", &target);
   TopoDS_Shape* shape = siren_shape_get(target);
   BRepTools::Dump(*shape, std::cout);
   return Qnil;
