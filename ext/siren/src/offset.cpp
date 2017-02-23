@@ -3,33 +3,33 @@
 bool siren_offset_install( struct RClass* mod_siren)
 {
   // Class method
-  mrb_define_class_method(mrb, mod_siren, "sweep_vec",       siren_offset_sweep_vec,       MRB_ARGS_REQ(2));
-  mrb_define_class_method(mrb, mod_siren, "sweep_path",      siren_offset_sweep_path,      MRB_ARGS_REQ(2) | MRB_ARGS_OPT(4));
-  mrb_define_class_method(mrb, mod_siren, "loft",            siren_offset_loft,            MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
-  mrb_define_class_method(mrb, mod_siren, "offset_geomsurf", siren_offset_offset_geomsurf, MRB_ARGS_REQ(2) | MRB_ARGS_OPT(1));
-  mrb_define_class_method(mrb, mod_siren, "offset",          siren_offset_offset,          MRB_ARGS_REQ(3) | MRB_ARGS_OPT(5));
-  mrb_define_class_method(mrb, mod_siren, "offset_shape",    siren_offset_offset_shape,    MRB_ARGS_REQ(3) | MRB_ARGS_OPT(4));
-  mrb_define_class_method(mrb, mod_siren, "pipe",            siren_offset_pipe,            MRB_ARGS_REQ(2) | MRB_ARGS_OPT(2));
+  rb_define_class_method(mod_siren, "sweep_vec",       siren_offset_sweep_vec,       MRB_ARGS_REQ(2));
+  rb_define_class_method(mod_siren, "sweep_path",      siren_offset_sweep_path,      MRB_ARGS_REQ(2) | MRB_ARGS_OPT(4));
+  rb_define_class_method(mod_siren, "loft",            siren_offset_loft,            MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
+  rb_define_class_method(mod_siren, "offset_geomsurf", siren_offset_offset_geomsurf, MRB_ARGS_REQ(2) | MRB_ARGS_OPT(1));
+  rb_define_class_method(mod_siren, "offset",          siren_offset_offset,          MRB_ARGS_REQ(3) | MRB_ARGS_OPT(5));
+  rb_define_class_method(mod_siren, "offset_shape",    siren_offset_offset_shape,    MRB_ARGS_REQ(3) | MRB_ARGS_OPT(4));
+  rb_define_class_method(mod_siren, "pipe",            siren_offset_pipe,            MRB_ARGS_REQ(2) | MRB_ARGS_OPT(2));
   // For mix-in
-  mrb_define_method      (mrb, mod_siren, "sweep_vec",       siren_offset_sweep_vec,       MRB_ARGS_REQ(2));
-  mrb_define_method      (mrb, mod_siren, "sweep_path",      siren_offset_sweep_path,      MRB_ARGS_REQ(2) | MRB_ARGS_OPT(4));
-  mrb_define_method      (mrb, mod_siren, "loft",            siren_offset_loft,            MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
-  mrb_define_method      (mrb, mod_siren, "offset_geomsurf", siren_offset_offset_geomsurf, MRB_ARGS_REQ(2) | MRB_ARGS_OPT(1));
-  mrb_define_method      (mrb, mod_siren, "offset",          siren_offset_offset,          MRB_ARGS_REQ(3) | MRB_ARGS_OPT(5));
-  mrb_define_method      (mrb, mod_siren, "offset_shape",    siren_offset_offset_shape,    MRB_ARGS_REQ(3) | MRB_ARGS_OPT(4));
-  mrb_define_method      (mrb, mod_siren, "pipe",            siren_offset_pipe,            MRB_ARGS_REQ(2) | MRB_ARGS_OPT(2));
+  rb_define_method      (mod_siren, "sweep_vec",       siren_offset_sweep_vec,       MRB_ARGS_REQ(2));
+  rb_define_method      (mod_siren, "sweep_path",      siren_offset_sweep_path,      MRB_ARGS_REQ(2) | MRB_ARGS_OPT(4));
+  rb_define_method      (mod_siren, "loft",            siren_offset_loft,            MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
+  rb_define_method      (mod_siren, "offset_geomsurf", siren_offset_offset_geomsurf, MRB_ARGS_REQ(2) | MRB_ARGS_OPT(1));
+  rb_define_method      (mod_siren, "offset",          siren_offset_offset,          MRB_ARGS_REQ(3) | MRB_ARGS_OPT(5));
+  rb_define_method      (mod_siren, "offset_shape",    siren_offset_offset_shape,    MRB_ARGS_REQ(3) | MRB_ARGS_OPT(4));
+  rb_define_method      (mod_siren, "pipe",            siren_offset_pipe,            MRB_ARGS_REQ(2) | MRB_ARGS_OPT(2));
   return true;
 }
 
 VALUE siren_offset_sweep_vec( VALUE self)
 {
   VALUE target, vec;
-  int argc = mrb_get_args(mrb, "oA", &target, &vec);
+  int argc = rb_get_args("oA", &target, &vec);
 
-  TopoDS_Shape* profile = siren_shape_get(mrb, target);
+  TopoDS_Shape* profile = siren_shape_get(target);
 
   gp_Pnt sp = gp_Pnt(0., 0., 0.).Transformed(profile->Location());
-  gp_Pnt tp = siren_ary_to_pnt(mrb, vec).Transformed(profile->Location());
+  gp_Pnt tp = siren_ary_to_pnt(vec).Transformed(profile->Location());
 
   TopoDS_Edge pe = BRepBuilderAPI_MakeEdge(sp, tp);
   TopoDS_Wire path = BRepBuilderAPI_MakeWire(pe);
@@ -37,18 +37,18 @@ VALUE siren_offset_sweep_vec( VALUE self)
   BRepOffsetAPI_MakePipe mp(path, *profile);
   mp.Build();
 
-  return siren_shape_new(mrb, mp.Shape());
+  return siren_shape_new(mp.Shape());
 }
 
 VALUE siren_offset_sweep_path( VALUE self)
 {
   VALUE target, pathwire;
-  mrb_bool cont, corr;
-  mrb_float scale_first, scale_last;
-  int argc = mrb_get_args(mrb, "oo|bbff", &target, &pathwire, &cont, &corr, &scale_first, &scale_last);
+  rb_bool cont, corr;
+  VALUE scale_first, scale_last;
+  int argc = rb_get_args("oo|bbff", &target, &pathwire, &cont, &corr, &scale_first, &scale_last);
 
-  TopoDS_Shape* shape_profile = siren_shape_get(mrb, target);
-  TopoDS_Shape* shape_path = siren_shape_get(mrb, pathwire);
+  TopoDS_Shape* shape_profile = siren_shape_get(target);
+  TopoDS_Shape* shape_path = siren_shape_get(pathwire);
 
   TopoDS_Wire path;
 
@@ -59,10 +59,10 @@ VALUE siren_offset_sweep_path( VALUE self)
     path = TopoDS::Wire(*shape_path);
   }
   else {
-    mrb_raise(mrb, E_ARGUMENT_ERROR, "Type of path is not Edge or Wire.");
+    rb_raise(E_ARGUMENT_ERROR, "Type of path is not Edge or Wire.");
   }
 
-  VALUE result = mrb_nil_value();
+  VALUE result = Qnil;
 
   if (argc >= 3 && argc <= 6) {
 
@@ -109,12 +109,12 @@ VALUE siren_offset_sweep_path( VALUE self)
         );
 
     ps.Build();
-    result = siren_shape_new(mrb, ps.Shape());
+    result = siren_shape_new(ps.Shape());
   }
   else {
     BRepOffsetAPI_MakePipe mp(path, *shape_profile);
     mp.Build();
-    result = siren_shape_new(mrb, mp.Shape());
+    result = siren_shape_new(mp.Shape());
   }
   return result;
 }
@@ -122,12 +122,12 @@ VALUE siren_offset_sweep_path( VALUE self)
 VALUE siren_offset_loft( VALUE self)
 {
   VALUE objs;
-  mrb_bool smooth, is_solid, is_ruled;
-  int argc = mrb_get_args(mrb, "A|bbb", &objs, &smooth,  &is_solid, &is_ruled);
-  int lsize = mrb_ary_len(mrb, objs);
+  rb_bool smooth, is_solid, is_ruled;
+  int argc = rb_get_args("A|bbb", &objs, &smooth,  &is_solid, &is_ruled);
+  int lsize = rb_ary_len(objs);
 
   if (lsize < 2) {
-    mrb_raise(mrb, E_ARGUMENT_ERROR, "Number of shapes must be over 2 wires.");
+    rb_raise(E_ARGUMENT_ERROR, "Number of shapes must be over 2 wires.");
   }
 
   Standard_Boolean is_sm, is_s, is_r;
@@ -138,8 +138,8 @@ VALUE siren_offset_loft( VALUE self)
   BRepOffsetAPI_ThruSections ts(is_s, is_r);
 
   for (int i=0; i<lsize; i++) {
-    VALUE line = mrb_ary_ref(mrb, objs, i);
-    TopoDS_Shape* shape = siren_shape_get(mrb, line);
+    VALUE line = rb_ary_ref(objs, i);
+    TopoDS_Shape* shape = siren_shape_get(line);
     TopoDS_Wire w = TopoDS::Wire(*shape);
     ts.AddWire(w);
   }
@@ -147,18 +147,18 @@ VALUE siren_offset_loft( VALUE self)
   ts.SetSmoothing(is_sm);
   ts.Build();
 
-  return siren_shape_new(mrb, ts.Shape());
+  return siren_shape_new(ts.Shape());
 }
 
 VALUE siren_offset_offset_geomsurf( VALUE self)
 {
   VALUE target;
-  mrb_float offset, tol;
-  int argc = mrb_get_args(mrb, "of|f", &target, &offset, &tol);
+  VALUE offset, tol;
+  int argc = rb_get_args("of|f", &target, &offset, &tol);
   if (argc < 3)
     tol = 1.0;
 
-  TopoDS_Shape* shape = siren_shape_get(mrb, target);
+  TopoDS_Shape* shape = siren_shape_get(target);
 
   TopoDS_Compound comp;
   BRep_Builder B;
@@ -174,67 +174,67 @@ VALUE siren_offset_offset_geomsurf( VALUE self)
     B.Add(comp, newface);
   }
 
-  return siren_shape_new(mrb, comp);
+  return siren_shape_new(comp);
 }
 
 VALUE siren_offset_offset( VALUE self)
 {
   VALUE target;
-  mrb_float offset, tol;
-  mrb_int mode = (int)BRepOffset_Skin;
-  mrb_bool intersect = false, self_intersect = false;
-  mrb_int join = (int)GeomAbs_Arc;
-  mrb_bool thickening = false;
-  int argc = mrb_get_args(mrb, "off|ibbib", &target, &offset, &tol, &mode,
+  VALUE offset, tol;
+  rb_int mode = (int)BRepOffset_Skin;
+  rb_bool intersect = false, self_intersect = false;
+  rb_int join = (int)GeomAbs_Arc;
+  rb_bool thickening = false;
+  int argc = rb_get_args("off|ibbib", &target, &offset, &tol, &mode,
       &intersect, &self_intersect, &join, &thickening);
 
-  TopoDS_Shape* shape = siren_shape_get(mrb, target);
+  TopoDS_Shape* shape = siren_shape_get(target);
 
   BRepOffset_MakeOffset api;
   api.Initialize(*shape, offset, tol, (BRepOffset_Mode)mode,
       intersect, self_intersect, (GeomAbs_JoinType)join, thickening);
   api.MakeOffsetShape();
   if (api.IsDone()) {
-    return siren_shape_new(mrb, api.Shape());
+    return siren_shape_new(api.Shape());
   }
   else {
     switch (api.Error()) {
     default: break;
     }
   }
-  return mrb_nil_value();
+  return Qnil;
 }
 
 VALUE siren_offset_offset_shape( VALUE self)
 {
   VALUE target;
-  mrb_float offset, tol;
-  mrb_int mode = (int)BRepOffset_Skin;
-  mrb_bool intersect = false, self_intersect = false;
-  mrb_int join = (int)GeomAbs_Arc;
-  int argc = mrb_get_args(mrb, "off|ibbi", &target, &offset, &tol, &mode,
+  VALUE offset, tol;
+  rb_int mode = (int)BRepOffset_Skin;
+  rb_bool intersect = false, self_intersect = false;
+  rb_int join = (int)GeomAbs_Arc;
+  int argc = rb_get_args("off|ibbi", &target, &offset, &tol, &mode,
       &intersect, &self_intersect, &join);
 
-  TopoDS_Shape* shape = siren_shape_get(mrb, target);
+  TopoDS_Shape* shape = siren_shape_get(target);
 
   TopoDS_Shape result = BRepOffsetAPI_MakeOffsetShape(*shape, offset, tol, (BRepOffset_Mode)mode,
       intersect, self_intersect, (GeomAbs_JoinType)join);
 
-  return siren_shape_new(mrb, result);
+  return siren_shape_new(result);
 }
 
 VALUE siren_offset_pipe( VALUE self)
 {
   VALUE profile, path;
-  mrb_int mode;
-  mrb_bool force_approx_c1;
-  int argc = mrb_get_args(mrb, "oo|ib", &profile, &path, &mode, &force_approx_c1);
+  rb_int mode;
+  rb_bool force_approx_c1;
+  int argc = rb_get_args("oo|ib", &profile, &path, &mode, &force_approx_c1);
 
-  TopoDS_Shape* shape_profile = siren_shape_get(mrb, profile);
-  TopoDS_Shape* shape_path = siren_shape_get(mrb, path);
+  TopoDS_Shape* shape_profile = siren_shape_get(profile);
+  TopoDS_Shape* shape_path = siren_shape_get(path);
 
   if (shape_path->ShapeType() != TopAbs_WIRE) {
-    mrb_raise(mrb, E_ARGUMENT_ERROR, "Type of path is not Edge or Wire.");
+    rb_raise(E_ARGUMENT_ERROR, "Type of path is not Edge or Wire.");
   }
 
   TopoDS_Wire wire = TopoDS::Wire(*shape_path);
@@ -242,7 +242,7 @@ VALUE siren_offset_pipe( VALUE self)
   if (argc == 2) {
     BRepOffsetAPI_MakePipe mp(wire, *shape_profile);
     mp.Build();
-    return siren_shape_new(mrb, mp.Shape());
+    return siren_shape_new(mp.Shape());
   }
   if (argc == 3) {
     force_approx_c1 = FALSE;
@@ -250,6 +250,6 @@ VALUE siren_offset_pipe( VALUE self)
 
   BRepOffsetAPI_MakePipe mp(wire, *shape_profile, (GeomFill_Trihedron)mode, force_approx_c1);
   mp.Build();
-  return siren_shape_new(mrb, mp.Shape());
+  return siren_shape_new(mp.Shape());
 }
 

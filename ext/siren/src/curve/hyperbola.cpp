@@ -7,10 +7,10 @@
 
 VALUE siren_hyperbola_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
+  struct RClass* mod_siren = rb_module_get("Siren");
   VALUE obj;
-  obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Hyperbola")));
-  void* p = mrb_malloc(mrb, sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Hyperbola")));
+  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -20,18 +20,18 @@ VALUE siren_hyperbola_new( const handle<Geom_Curve>* curve)
 
 handle<Geom_Hyperbola> siren_hyperbola_get( VALUE self)
 {
-  handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(mrb_get_datatype(mrb, self, &siren_hyperbola_type));
-  if (hgc.IsNull()) { mrb_raise(mrb, E_RUNTIME_ERROR, "The geometry type is not Curve."); }
+  handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_hyperbola_type));
+  if (hgc.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Curve."); }
   handle<Geom_Hyperbola> hyperbola = handle<Geom_Hyperbola>::DownCast(hgc);
-  if (hyperbola.IsNull()) { mrb_raise(mrb, E_RUNTIME_ERROR, "The geometry type is not Hyperbola."); }
+  if (hyperbola.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Hyperbola."); }
   return hyperbola;
 }
 
 bool siren_hyperbola_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_curve = siren_curve_rclass(mrb);
-  struct RClass* cls_hyperbola = mrb_define_class_under(mrb, mod_siren, "Hyperbola", cls_curve);
+  struct RClass* cls_curve = siren_curve_rclass();
+  struct RClass* cls_hyperbola = rb_define_class_under(mod_siren, "Hyperbola", cls_curve);
   MRB_SET_INSTANCE_TT(cls_hyperbola, MRB_TT_DATA);
-  mrb_define_method(mrb, cls_hyperbola, "initialize", siren_curve_init, MRB_ARGS_NONE());
+  rb_define_method(cls_hyperbola, "initialize", siren_curve_init, MRB_ARGS_NONE());
   return true;
 }

@@ -6,10 +6,10 @@
 
 VALUE siren_bzcurve_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
+  struct RClass* mod_siren = rb_module_get("Siren");
   VALUE obj;
-  obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "BzCurve")));
-  void* p = mrb_malloc(mrb, sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("BzCurve")));
+  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -19,38 +19,38 @@ VALUE siren_bzcurve_new( const handle<Geom_Curve>* curve)
 
 handle<Geom_BezierCurve> siren_bzcurve_get( VALUE self)
 {
-  handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(mrb_get_datatype(mrb, self, &siren_bzcurve_type));
-  if (hgc.IsNull()) { mrb_raise(mrb, E_RUNTIME_ERROR, "The geometry type is not Curve."); }
+  handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_bzcurve_type));
+  if (hgc.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Curve."); }
   handle<Geom_BezierCurve> bzcurve = handle<Geom_BezierCurve>::DownCast(hgc);
-  if (bzcurve.IsNull()) { mrb_raise(mrb, E_RUNTIME_ERROR, "The geometry type is not BzCurve."); }
+  if (bzcurve.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not BzCurve."); }
   return bzcurve;
 }
 
 bool siren_bzcurve_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_curve = siren_curve_rclass(mrb);
-  struct RClass* cls_bzcurve = mrb_define_class_under(mrb, mod_siren, "BzCurve", cls_curve);
+  struct RClass* cls_curve = siren_curve_rclass();
+  struct RClass* cls_bzcurve = rb_define_class_under(mod_siren, "BzCurve", cls_curve);
   MRB_SET_INSTANCE_TT(cls_bzcurve, MRB_TT_DATA);
-  mrb_define_method(mrb, cls_bzcurve, "initialize", siren_bzcurve_init,   MRB_ARGS_NONE());
-  // mrb_define_method(mrb, cls_bzcurve, "degree",     siren_bzcurve_degree, MRB_ARGS_NONE());
+  rb_define_method(cls_bzcurve, "initialize", siren_bzcurve_init,   MRB_ARGS_NONE());
+  // rb_define_method(cls_bzcurve, "degree",     siren_bzcurve_degree, MRB_ARGS_NONE());
   return true;
 }
 
 VALUE siren_bzcurve_init( VALUE self)
 {
   VALUE ps, ws;
-  int argc = mrb_get_args(mrb, "A|A", &ps, &ws);
+  int argc = rb_get_args("A|A", &ps, &ws);
   bool has_weight = argc == 2;
-  int plen = mrb_ary_len(mrb, ps);
+  int plen = rb_ary_len(ps);
   TColgp_Array1OfPnt poles(1, plen);
   TColStd_Array1OfReal weights(1, plen);
   // Start index of weights must be 1. Crash construction of Geom_BezierCurve
   // if another index specified.
   for (int i = 0; i < plen; i++) {
-    poles.SetValue(i + 1, siren_ary_to_pnt(mrb, mrb_ary_ref(mrb, ps, i)));
+    poles.SetValue(i + 1, siren_ary_to_pnt(rb_ary_ref(ps, i)));
     if (has_weight) {
-      VALUE w = mrb_ary_ref(mrb, ws, i);
-      weights.SetValue(i + 1, mrb_float(w));
+      VALUE w = rb_ary_ref(ws, i);
+      weights.SetValue(i + 1, VALUE(w));
     }
   }
   handle<Geom_Curve> curve = nullptr;
@@ -63,9 +63,9 @@ VALUE siren_bzcurve_init( VALUE self)
     }
   }
   catch (...) {
-    mrb_raise(mrb, E_ARGUMENT_ERROR, "Failed to make a BzCurve.");
+    rb_raise(E_ARGUMENT_ERROR, "Failed to make a BzCurve.");
   }
-  void* p = mrb_malloc(mrb, sizeof(handle<Geom_Curve>));
+  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = curve;
   DATA_PTR(self) = hgcurve;

@@ -5,10 +5,10 @@
 VALUE siren_chunk_new( const TopoDS_Shape* src)
 {
   VALUE obj;
-  struct RClass* cls_shape = siren_shape_rclass(mrb);
-  struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
-  obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Chunk")));
-  void* p = mrb_malloc(mrb, sizeof(TopoDS_Shape));
+  struct RClass* cls_shape = siren_shape_rclass();
+  struct RClass* mod_siren = rb_module_get("Siren");
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Chunk")));
+  void* p = rb_malloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
@@ -18,58 +18,58 @@ VALUE siren_chunk_new( const TopoDS_Shape* src)
 
 TopoDS_CompSolid siren_chunk_get( VALUE self)
 {
-  TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(mrb_get_datatype(mrb, self, &siren_chunk_type));
+  TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_chunk_type));
   TopoDS_CompSolid chunk = TopoDS::CompSolid(*shape);
-  if (chunk.IsNull()) { mrb_raise(mrb, E_RUNTIME_ERROR, "The geometry type is not Chunk."); }
+  if (chunk.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Chunk."); }
   return chunk;
 }
 
 bool siren_chunk_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_shape = siren_shape_rclass(mrb);
-  struct RClass* cls_chunk = mrb_define_class_under(mrb, mod_siren, "Chunk", cls_shape);
+  struct RClass* cls_shape = siren_shape_rclass();
+  struct RClass* cls_chunk = rb_define_class_under(mod_siren, "Chunk", cls_shape);
   MRB_SET_INSTANCE_TT(cls_chunk, MRB_TT_DATA);
-  mrb_define_method(mrb, cls_chunk, "initialize", siren_chunk_init,   MRB_ARGS_NONE());
-  mrb_define_method(mrb, cls_chunk, "to_solid",  siren_chunk_to_solid, MRB_ARGS_NONE());
+  rb_define_method(cls_chunk, "initialize", siren_chunk_init,   MRB_ARGS_NONE());
+  rb_define_method(cls_chunk, "to_solid",  siren_chunk_to_solid, MRB_ARGS_NONE());
   return true;
 }
 
 struct RClass* siren_chunk_rclass()
 {
-  struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
-  return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Chunk")));
+  struct RClass* mod_siren = rb_module_get("Siren");
+  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), rb_intern_lit("Chunk")));
 }
 
 VALUE siren_chunk_obj()
 {
-  struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
-  return mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Chunk"));
+  struct RClass* mod_siren = rb_module_get("Siren");
+  return rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Chunk"));
 }
 
 VALUE siren_chunk_init( VALUE self)
 {
   VALUE* a;
-  mrb_int len;
-  int argc = mrb_get_args(mrb, "*", &a, &len);
+  rb_int len;
+  int argc = rb_get_args("*", &a, &len);
 
   TopoDS_CompSolid cs;
   TopoDS_Builder builder;
   builder.MakeCompSolid(cs);
 
   for (int i = 0; i < len; i++) {
-    if (mrb_array_p(a[i])) {
-      for (int j = 0; j < mrb_ary_len(mrb, a[i]); j++) {
-        auto solid = siren_solid_get(mrb, mrb_ary_ref(mrb, a[i], j));
+    if (_array_p(a[i])) {
+      for (int j = 0; j < rb_ary_len(a[i]); j++) {
+        auto solid = siren_solid_get(rb_ary_ref(a[i], j));
         builder.Add(cs, solid);
       }
     }
     else {
-      auto solid = siren_solid_get(mrb, a[i]);
+      auto solid = siren_solid_get(a[i]);
       builder.Add(cs, solid);
     }
   }
 
-  void* p = mrb_malloc(mrb, sizeof(TopoDS_Shape));
+  void* p = rb_malloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = cs; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
@@ -79,9 +79,9 @@ VALUE siren_chunk_init( VALUE self)
 
 VALUE siren_chunk_to_solid( VALUE self)
 {
-  auto cs = siren_chunk_get(mrb, self);
+  auto cs = siren_chunk_get(self);
   auto solid = BRepBuilderAPI_MakeSolid(cs);
-  return siren_shape_new(mrb, solid);
+  return siren_shape_new(solid);
 }
 
 #endif

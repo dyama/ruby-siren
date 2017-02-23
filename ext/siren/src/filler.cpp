@@ -2,36 +2,36 @@
 
 BRepFill_Filling* siren_filler_get( VALUE obj)
 {
-  return static_cast<BRepFill_Filling*>(mrb_get_datatype(mrb, obj, &siren_filler_type));
+  return static_cast<BRepFill_Filling*>(_get_datatype(obj, &siren_filler_type));
 }
 
 bool siren_filler_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_filler = mrb_define_class_under(mrb, mod_siren, "Filler", mrb->object_class);
+  struct RClass* cls_filler = rb_define_class_under(mod_siren, "Filler", mrb->object_class);
   MRB_SET_INSTANCE_TT(cls_filler, MRB_TT_DATA);
-  mrb_define_method(mrb, cls_filler, "initialize", siren_filler_init,      MRB_ARGS_OPT(10));
-  mrb_define_method(mrb, cls_filler, "add_bound",  siren_filler_add_bound, MRB_ARGS_REQ(2));
-  mrb_define_method(mrb, cls_filler, "add",        siren_filler_add,       MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  mrb_define_method(mrb, cls_filler, "build",      siren_filler_build,     MRB_ARGS_NONE());
-  mrb_define_method(mrb, cls_filler, "done?",      siren_filler_is_done,   MRB_ARGS_NONE());
-  mrb_define_method(mrb, cls_filler, "face",       siren_filler_face,      MRB_ARGS_NONE());
-  mrb_define_method(mrb, cls_filler, "g0error",    siren_filler_g0error,   MRB_ARGS_OPT(1));
-  mrb_define_method(mrb, cls_filler, "g1error",    siren_filler_g1error,   MRB_ARGS_OPT(1));
-  mrb_define_method(mrb, cls_filler, "g2error",    siren_filler_g2error,   MRB_ARGS_OPT(1));
+  rb_define_method(cls_filler, "initialize", siren_filler_init,      MRB_ARGS_OPT(10));
+  rb_define_method(cls_filler, "add_bound",  siren_filler_add_bound, MRB_ARGS_REQ(2));
+  rb_define_method(cls_filler, "add",        siren_filler_add,       MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  rb_define_method(cls_filler, "build",      siren_filler_build,     MRB_ARGS_NONE());
+  rb_define_method(cls_filler, "done?",      siren_filler_is_done,   MRB_ARGS_NONE());
+  rb_define_method(cls_filler, "face",       siren_filler_face,      MRB_ARGS_NONE());
+  rb_define_method(cls_filler, "g0error",    siren_filler_g0error,   MRB_ARGS_OPT(1));
+  rb_define_method(cls_filler, "g1error",    siren_filler_g1error,   MRB_ARGS_OPT(1));
+  rb_define_method(cls_filler, "g2error",    siren_filler_g2error,   MRB_ARGS_OPT(1));
   return true;
 }
 
 VALUE siren_filler_init( VALUE self)
 {
-  mrb_int degree, nbptsoncur, nbiter;
-  mrb_bool anisotropie;
-  mrb_float tol2d, tol3d, tolang, tolcurv;
-  mrb_int maxdeg, maxsegs;
-  int argc = mrb_get_args(mrb, "|iiibffffii",
+  rb_int degree, nbptsoncur, nbiter;
+  rb_bool anisotropie;
+  VALUE tol2d, tol3d, tolang, tolcurv;
+  rb_int maxdeg, maxsegs;
+  int argc = rb_get_args("|iiibffffii",
       &degree, &nbptsoncur, &nbiter, &anisotropie,
       &tol2d, &tol3d, &tolang, &tolcurv, &maxdeg, &maxsegs);
 
-  void* p = mrb_malloc(mrb, sizeof(BRepFill_Filling));
+  void* p = rb_malloc(sizeof(BRepFill_Filling));
   BRepFill_Filling* inner = nullptr;
 
   switch (argc) {
@@ -84,96 +84,96 @@ VALUE siren_filler_init( VALUE self)
 void siren_filler_final( void* p)
 {
   BRepFill_Filling* pp = static_cast<BRepFill_Filling*>(p);
-  mrb_free(mrb, pp);
+  rb_free(pp);
 }
 
 VALUE siren_filler_add_bound( VALUE self)
 {
   VALUE edge;
-  mrb_int order;
-  int argc = mrb_get_args(mrb, "oi", &edge, &order);
-  TopoDS_Shape* s = siren_shape_get(mrb, edge);
+  rb_int order;
+  int argc = rb_get_args("oi", &edge, &order);
+  TopoDS_Shape* s = siren_shape_get(edge);
   TopoDS_Edge e = TopoDS::Edge(*s);
-  siren_filler_get(mrb, self)->Add(e, (GeomAbs_Shape)order,
+  siren_filler_get(self)->Add(e, (GeomAbs_Shape)order,
       /* IsBound= */ Standard_True);
-  return mrb_nil_value();
+  return Qnil;
 }
 
 VALUE siren_filler_add( VALUE self)
 {
   VALUE obj;
-  mrb_int order;
-  int argc = mrb_get_args(mrb, "o|i", &obj, &order);
+  rb_int order;
+  int argc = rb_get_args("o|i", &obj, &order);
   if (argc == 2) {
-    TopoDS_Shape* s = siren_shape_get(mrb, obj);
+    TopoDS_Shape* s = siren_shape_get(obj);
     TopoDS_Edge e = TopoDS::Edge(*s);
-    siren_filler_get(mrb, self)->Add(e, (GeomAbs_Shape)order,
+    siren_filler_get(self)->Add(e, (GeomAbs_Shape)order,
         /* IsBound= */ Standard_False);
   }
   else {
-    gp_Pnt pnt = siren_ary_to_pnt(mrb, obj);
-    siren_filler_get(mrb, self)->Add(pnt);
+    gp_Pnt pnt = siren_ary_to_pnt(obj);
+    siren_filler_get(self)->Add(pnt);
   }
-  return mrb_nil_value();
+  return Qnil;
 }
 
 VALUE siren_filler_build( VALUE self)
 {
-  siren_filler_get(mrb, self)->Build();
-  return mrb_nil_value();
+  siren_filler_get(self)->Build();
+  return Qnil;
 }
 
 VALUE siren_filler_is_done( VALUE self)
 {
-  return siren_filler_get(mrb, self)->IsDone() == Standard_True ?
-    mrb_true_value() : mrb_false_value();
+  return siren_filler_get(self)->IsDone() == Standard_True ?
+    rb_true_value() : rb_false_value();
 }
 
 VALUE siren_filler_face( VALUE self)
 {
-  TopoDS_Face f = siren_filler_get(mrb, self)->Face();
-  return siren_shape_new(mrb, f);
+  TopoDS_Face f = siren_filler_get(self)->Face();
+  return siren_shape_new(f);
 }
 
 VALUE siren_filler_g0error( VALUE self)
 {
-  mrb_int index;
-  int argc = mrb_get_args(mrb, "|i", &index);
+  rb_int index;
+  int argc = rb_get_args("|i", &index);
   Standard_Real value;
   if (argc) {
-    value = siren_filler_get(mrb, self)->G0Error(index);
+    value = siren_filler_get(self)->G0Error(index);
   }
   else {
-    value = siren_filler_get(mrb, self)->G0Error();
+    value = siren_filler_get(self)->G0Error();
   }
-  return mrb_float_value(mrb, value);
+  return (value);
 }
 
 VALUE siren_filler_g1error( VALUE self)
 {
-  mrb_int index;
-  int argc = mrb_get_args(mrb, "|i", &index);
+  rb_int index;
+  int argc = rb_get_args("|i", &index);
   Standard_Real value;
   if (argc) {
-    value = siren_filler_get(mrb, self)->G1Error(index);
+    value = siren_filler_get(self)->G1Error(index);
   }
   else {
-    value = siren_filler_get(mrb, self)->G1Error();
+    value = siren_filler_get(self)->G1Error();
   }
-  return mrb_float_value(mrb, value);
+  return (value);
 }
 
 VALUE siren_filler_g2error( VALUE self)
 {
-  mrb_int index;
-  int argc = mrb_get_args(mrb, "|i", &index);
+  rb_int index;
+  int argc = rb_get_args("|i", &index);
   Standard_Real value;
   if (argc) {
-    value = siren_filler_get(mrb, self)->G2Error(index);
+    value = siren_filler_get(self)->G2Error(index);
   }
   else {
-    value = siren_filler_get(mrb, self)->G2Error();
+    value = siren_filler_get(self)->G2Error();
   }
-  return mrb_float_value(mrb, value);
+  return (value);
 }
 

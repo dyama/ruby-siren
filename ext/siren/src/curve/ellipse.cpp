@@ -7,10 +7,10 @@
 
 VALUE siren_ellipse_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
+  struct RClass* mod_siren = rb_module_get("Siren");
   VALUE obj;
-  obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Ellipse")));
-  void* p = mrb_malloc(mrb, sizeof(handle<Geom_Curve>));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Ellipse")));
+  void* p = rb_malloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
@@ -20,18 +20,18 @@ VALUE siren_ellipse_new( const handle<Geom_Curve>* curve)
 
 handle<Geom_Ellipse> siren_ellipse_get( VALUE self)
 {
-  handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(mrb_get_datatype(mrb, self, &siren_ellipse_type));
-  if (hgc.IsNull()) { mrb_raise(mrb, E_RUNTIME_ERROR, "The geometry type is not Curve."); }
+  handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_ellipse_type));
+  if (hgc.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Curve."); }
   handle<Geom_Ellipse> ellipse = handle<Geom_Ellipse>::DownCast(hgc);
-  if (ellipse.IsNull()) { mrb_raise(mrb, E_RUNTIME_ERROR, "The geometry type is not Ellipse."); }
+  if (ellipse.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Ellipse."); }
   return ellipse;
 }
 
 bool siren_ellipse_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_curve = siren_curve_rclass(mrb);
-  struct RClass* cls_ellipse = mrb_define_class_under(mrb, mod_siren, "Ellipse", cls_curve);
+  struct RClass* cls_curve = siren_curve_rclass();
+  struct RClass* cls_ellipse = rb_define_class_under(mod_siren, "Ellipse", cls_curve);
   MRB_SET_INSTANCE_TT(cls_ellipse, MRB_TT_DATA);
-  mrb_define_method(mrb, cls_ellipse, "initialize", siren_curve_init, MRB_ARGS_NONE());
+  rb_define_method(cls_ellipse, "initialize", siren_curve_init, MRB_ARGS_NONE());
   return true;
 }

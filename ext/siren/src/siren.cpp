@@ -38,45 +38,45 @@ MRB_BEGIN_DECL
   struct RClass* mod_siren;
 
   // initializer
-  void mrb_mruby_siren_gem_init()
+  void rb_mruby_siren_gem_init()
   {
     // Siren module
-    mod_siren  = mrb_define_module(mrb, "Siren");
+    mod_siren  = rb_define_module("Siren");
 
     // Class
-    siren_bndbox_install (mrb, mod_siren);
-    siren_curve_install  (mrb, mod_siren);
-    siren_shape_install  (mrb, mod_siren);
-    siren_trans_install  (mrb, mod_siren);
-    siren_vec_install    (mrb, mod_siren);
+    siren_bndbox_install (mod_siren);
+    siren_curve_install  (mod_siren);
+    siren_shape_install  (mod_siren);
+    siren_trans_install  (mod_siren);
+    siren_vec_install    (mod_siren);
 
     // API class
-    siren_filler_install (mrb, mod_siren);
+    siren_filler_install (mod_siren);
 
     // Method
-    siren_topalgo_install(mrb, mod_siren);
-    siren_brep_install   (mrb, mod_siren);
+    siren_topalgo_install(mod_siren);
+    siren_brep_install   (mod_siren);
 #ifdef SIREN_ENABLE_OFFSET
-    siren_offset_install (mrb, mod_siren);
+    siren_offset_install (mod_siren);
 #endif
 #ifdef SIREN_ENABLE_BO
-    siren_bo_install     (mrb, mod_siren);
+    siren_bo_install     (mod_siren);
 #endif
 #ifdef SIREN_ENABLE_IGES
-    siren_iges_install   (mrb, mod_siren);
+    siren_iges_install   (mod_siren);
 #endif
 #ifdef SIREN_ENABLE_STL
-    siren_stl_install    (mrb, mod_siren);
+    siren_stl_install    (mod_siren);
 #endif
 #ifdef SIREN_ENABLE_STEP
-    siren_step_install   (mrb, mod_siren);
+    siren_step_install   (mod_siren);
 #endif
 
     return;
   }
 
   // finalizer
-  void mrb_mruby_siren_gem_final()
+  void rb_mruby_siren_gem_final()
   {
     return;
   }

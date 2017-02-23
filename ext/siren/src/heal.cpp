@@ -2,32 +2,32 @@
 
 VALUE siren_heal_outerwire( VALUE self)
 {
-  mrb_float tol = 1.0e-1;
-  int argc = mrb_get_args(mrb, "|f", &tol);
+  VALUE tol = 1.0e-1;
+  int argc = rb_get_args("|f", &tol);
 
-  TopoDS_Shape* shape = siren_shape_get(mrb, self);
+  TopoDS_Shape* shape = siren_shape_get(self);
 
-  VALUE res = mrb_nil_value();
+  VALUE res = Qnil;
 
   if (shape->ShapeType() == TopAbs_FACE) {
     TopoDS_Face face = TopoDS::Face(*shape);
     TopoDS_Wire wire = ShapeAnalysis::OuterWire(face);
     // ShapeAnalysis_FreeBounds
     // ::ConnectWiresToWires
-    res = siren_shape_new(mrb, wire);
+    res = siren_shape_new(wire);
   }
   else {
     ShapeAnalysis_FreeBounds safb(*shape, tol);
     TopoDS_Compound comp = safb.GetClosedWires();
-    res = siren_shape_new(mrb, comp);
+    res = siren_shape_new(comp);
   }
   return res;
 }
 
 VALUE siren_heal_fix( VALUE self)
 {
-  TopoDS_Shape* shape = siren_shape_get(mrb, self);
-  VALUE res = mrb_nil_value();
+  TopoDS_Shape* shape = siren_shape_get(self);
+  VALUE res = Qnil;
 
   opencascade::handle<ShapeFix_Shape> sfs = new ShapeFix_Shape();
   sfs->Init(*shape);
@@ -82,7 +82,7 @@ VALUE siren_heal_fix( VALUE self)
 
   TopoDS_Shape fixedshape = sfs->Shape();
   if (!fixedshape.IsNull()) {
-    res = siren_shape_new(mrb, fixedshape);
+    res = siren_shape_new(fixedshape);
   }
 
   return res;

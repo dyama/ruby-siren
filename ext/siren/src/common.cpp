@@ -1,50 +1,50 @@
 #include "common.h"
 
 /* this function copied from class.c */
-VALUE mrb_instance_alloc( VALUE cv)
+VALUE rb_instance_alloc( VALUE cv)
 {
-  struct RClass *c = mrb_class_ptr(cv);
+  struct RClass *c = rb_class_ptr(cv);
   struct RObject *o;
-  enum mrb_vtype ttype = MRB_INSTANCE_TT(c);
+  enum rb_vtype ttype = MRB_INSTANCE_TT(c);
 
   if (c->tt == MRB_TT_SCLASS)
-    mrb_raise(mrb, E_TYPE_ERROR, "can't create instance of singleton class");
+    rb_raise(E_TYPE_ERROR, "can't create instance of singleton class");
 
   if (ttype == 0) ttype = MRB_TT_OBJECT;
-  o = (struct RObject*)mrb_obj_alloc(mrb, ttype, c);
-  return mrb_obj_value(o);
+  o = (struct RObject*)rb_obj_alloc(ttype, c);
+  return rb_obj_value(o);
 }
 /* end of function */
 
 void siren_ary_to_xyz( VALUE ary, Standard_Real& x, Standard_Real& y, Standard_Real& z)
 {
   x = 0.0; y = 0.0; z = 0.0;
-  int len = mrb_ary_len(mrb, ary);
+  int len = rb_ary_len(ary);
   if (len > 0) {
-    VALUE val = mrb_ary_ref(mrb, ary, 0);
-    if (mrb_float_p(val)) {
-      x = mrb_float(val);
+    VALUE val = rb_ary_ref(ary, 0);
+    if (_float_p(val)) {
+      x = VALUE(val);
     }
-    else if (mrb_fixnum_p(val)) {
-      x = mrb_fixnum(val);
+    else if (_fixnum_p(val)) {
+      x = rb_fixnum(val);
     }
   }
   if (len > 1) {
-    VALUE val = mrb_ary_ref(mrb, ary, 1);
-    if (mrb_float_p(val)) {
-      y = mrb_float(val);
+    VALUE val = rb_ary_ref(ary, 1);
+    if (_float_p(val)) {
+      y = VALUE(val);
     }
-    else if (mrb_fixnum_p(val)) {
-      y = mrb_fixnum(val);
+    else if (_fixnum_p(val)) {
+      y = rb_fixnum(val);
     }
   }
   if (len > 2) {
-    VALUE val = mrb_ary_ref(mrb, ary, 2);
-    if (mrb_float_p(val)) {
-      z = mrb_float(val);
+    VALUE val = rb_ary_ref(ary, 2);
+    if (_float_p(val)) {
+      z = VALUE(val);
     }
-    else if (mrb_fixnum_p(val)) {
-      z = mrb_fixnum(val);
+    else if (_fixnum_p(val)) {
+      z = rb_fixnum(val);
     }
   }
   return;
