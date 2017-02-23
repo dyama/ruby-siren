@@ -1,8 +1,8 @@
 #include "shape/compound.h"
 
-mrb_value siren_compound_new(mrb_state* mrb, const TopoDS_Shape* src)
+VALUE siren_compound_new( const TopoDS_Shape* src)
 {
-  mrb_value obj;
+  VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Compound")));
@@ -14,7 +14,7 @@ mrb_value siren_compound_new(mrb_state* mrb, const TopoDS_Shape* src)
   return obj;
 }
 
-TopoDS_Compound siren_compound_get(mrb_state* mrb, mrb_value self)
+TopoDS_Compound siren_compound_get( VALUE self)
 {
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(mrb_get_datatype(mrb, self, &siren_compound_type));
   TopoDS_Compound compound = TopoDS::Compound(*shape);
@@ -22,7 +22,7 @@ TopoDS_Compound siren_compound_get(mrb_state* mrb, mrb_value self)
   return compound;
 }
 
-bool siren_compound_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_compound_install( struct RClass* mod_siren)
 {
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* cls_compound = mrb_define_class_under(mrb, mod_siren, "Compound", cls_shape);
@@ -34,21 +34,21 @@ bool siren_compound_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-struct RClass* siren_compound_rclass(mrb_state* mrb)
+struct RClass* siren_compound_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Compound")));
 }
 
-mrb_value siren_compound_obj(mrb_state* mrb)
+VALUE siren_compound_obj()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Compound"));
 }
 
-mrb_value siren_compound_init(mrb_state* mrb, mrb_value self)
+VALUE siren_compound_init( VALUE self)
 {
-  mrb_value* a;
+  VALUE* a;
   mrb_int len;
   int argc = mrb_get_args(mrb, "*", &a, &len);
 
@@ -57,9 +57,9 @@ mrb_value siren_compound_init(mrb_state* mrb, mrb_value self)
   B.MakeCompound(comp);
 
   for (int i = 0; i < len; i++) {
-    mrb_value arg = *(a + i);
+    VALUE arg = *(a + i);
     if (mrb_array_p(arg)) {
-      mrb_value subary = mrb_funcall(mrb, arg, "flatten", 0);
+      VALUE subary = mrb_funcall(mrb, arg, "flatten", 0);
       for (int j = 0; j < mrb_ary_len(mrb, subary); j++) {
         TopoDS_Shape* shape = siren_shape_get(mrb, mrb_ary_ref(mrb, subary, j));
         B.Add(comp, *shape);
@@ -79,17 +79,17 @@ mrb_value siren_compound_init(mrb_state* mrb, mrb_value self)
   return self;
 }
 
-mrb_value siren_compound_push(mrb_state* mrb, mrb_value self)
+VALUE siren_compound_push( VALUE self)
 {
-  mrb_value* a;
+  VALUE* a;
   mrb_int len;
   int argc = mrb_get_args(mrb, "*", &a, &len);
   TopoDS_Compound comp = siren_compound_get(mrb, self);
   BRep_Builder B;
   for (int i = 0; i < len; i++) {
-    mrb_value arg = *(a + i);
+    VALUE arg = *(a + i);
     if (mrb_array_p(arg)) {
-      mrb_value subary = mrb_funcall(mrb, arg, "flatten", 0);
+      VALUE subary = mrb_funcall(mrb, arg, "flatten", 0);
       for (int j = 0; j < mrb_ary_len(mrb, subary); j++) {
         TopoDS_Shape* shape = siren_shape_get(mrb, mrb_ary_ref(mrb, subary, j));
         B.Add(comp, *shape);
@@ -103,17 +103,17 @@ mrb_value siren_compound_push(mrb_state* mrb, mrb_value self)
   return self;
 }
 
-mrb_value siren_compound_delete(mrb_state* mrb, mrb_value self)
+VALUE siren_compound_delete( VALUE self)
 {
-  mrb_value* a;
+  VALUE* a;
   mrb_int len;
   int argc = mrb_get_args(mrb, "*", &a, &len);
   TopoDS_Compound comp = siren_compound_get(mrb, self);
   BRep_Builder B;
   for (int i = 0; i < len; i++) {
-    mrb_value arg = *(a + i);
+    VALUE arg = *(a + i);
     if (mrb_array_p(arg)) {
-      mrb_value subary = mrb_funcall(mrb, arg, "flatten", 0);
+      VALUE subary = mrb_funcall(mrb, arg, "flatten", 0);
       for (int j = 0; j < mrb_ary_len(mrb, subary); j++) {
         TopoDS_Shape* shape = siren_shape_get(mrb, mrb_ary_ref(mrb, subary, j));
         B.Remove(comp, *shape);

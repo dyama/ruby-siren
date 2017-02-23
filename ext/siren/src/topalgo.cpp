@@ -1,6 +1,6 @@
 #include "topalgo.h"
 
-bool siren_topalgo_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_topalgo_install( struct RClass* mod_siren)
 {
   // Class method
   mrb_define_class_method(mrb, mod_siren, "copy",       siren_topalgo_copy,       MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
@@ -30,9 +30,9 @@ bool siren_topalgo_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_topalgo_copy(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_copy( VALUE self)
 {
-  mrb_value target;
+  VALUE target;
   mrb_bool copy_geom = (mrb_bool)Standard_True;
   int argc = mrb_get_args(mrb, "o|b", &target, &copy_geom);
   TopoDS_Shape* src = siren_shape_get(mrb, target);
@@ -40,9 +40,9 @@ mrb_value siren_topalgo_copy(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, res);
 }
 
-mrb_value siren_topalgo_line(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_line( VALUE self)
 {
-  mrb_value sp, tp;
+  VALUE sp, tp;
   int argc = mrb_get_args(mrb, "|AA", &sp, &tp);
   gp_Pnt S(0., 0., 0.);
   gp_Pnt T(1., 1., 1.);
@@ -61,9 +61,9 @@ mrb_value siren_topalgo_line(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, shape);
 }
 
-mrb_value siren_topalgo_infline(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_infline( VALUE self)
 {
-  mrb_value orig, dir;
+  VALUE orig, dir;
   int argc = mrb_get_args(mrb, "|AA", &orig, &dir);
   gp_Pnt p(0., 0., 0.);
   gp_Dir d(1., 0., 0.);
@@ -77,9 +77,9 @@ mrb_value siren_topalgo_infline(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, shape);
 }
 
-mrb_value siren_topalgo_polyline(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_polyline( VALUE self)
 {
-  mrb_value ary;
+  VALUE ary;
   int argc = mrb_get_args(mrb, "A", &ary);
   BRepBuilderAPI_MakePolygon poly;
   for (int i = 0; i < mrb_ary_len(mrb, ary); i++) {
@@ -89,9 +89,9 @@ mrb_value siren_topalgo_polyline(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, shape);
 }
 
-mrb_value siren_topalgo_interpolate(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_interpolate( VALUE self)
 {
-  mrb_value pts, vecs;
+  VALUE pts, vecs;
   int argc = mrb_get_args(mrb, "A|A", &pts, &vecs);
 
   int psize = mrb_ary_len(mrb, pts);
@@ -112,7 +112,7 @@ mrb_value siren_topalgo_interpolate(mrb_state* mrb, mrb_value self)
       opencascade::handle<TColStd_HArray1OfBoolean> use = new TColStd_HArray1OfBoolean(1, psize);
 
       for (int i=0; i<psize; i++) {
-        mrb_value avec = mrb_ary_ref(mrb, vecs, i);
+        VALUE avec = mrb_ary_ref(mrb, vecs, i);
         if (mrb_nil_p(avec)) {
           use->SetValue(i+1, Standard_False);
         }
@@ -143,9 +143,9 @@ mrb_value siren_topalgo_interpolate(mrb_state* mrb, mrb_value self)
   return mrb_nil_value();
 }
 
-mrb_value siren_topalgo_arc(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_arc( VALUE self)
 {
-  mrb_value orig, dir, vx;
+  VALUE orig, dir, vx;
   mrb_float r, start_ang, term_ang;
   int argc = mrb_get_args(mrb, "AAAfff", &orig, &dir, &vx, &r, &start_ang, &term_ang);
   gp_Circ circle = gp_Circ(gp_Ax2(siren_ary_to_pnt(mrb, orig), siren_ary_to_dir(mrb, dir), siren_ary_to_dir(mrb, vx)), r);
@@ -160,9 +160,9 @@ mrb_value siren_topalgo_arc(mrb_state* mrb, mrb_value self)
   }
 }
 
-mrb_value siren_topalgo_arc3p(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_arc3p( VALUE self)
 {
-  mrb_value p1, p2, p3;
+  VALUE p1, p2, p3;
   int argc = mrb_get_args(mrb, "AAA", &p1, &p2, &p3);
   opencascade::handle<Geom_TrimmedCurve> gc = GC_MakeArcOfCircle(
       siren_ary_to_pnt(mrb, p1),
@@ -178,9 +178,9 @@ mrb_value siren_topalgo_arc3p(mrb_state* mrb, mrb_value self)
   }
 }
 
-mrb_value siren_topalgo_circle(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_circle( VALUE self)
 {
-  mrb_value orig, dir;
+  VALUE orig, dir;
   mrb_float r;
   int argc = mrb_get_args(mrb, "AAf", &orig, &dir, &r);
   opencascade::handle<Geom_Circle> gc = GC_MakeCircle(
@@ -197,9 +197,9 @@ mrb_value siren_topalgo_circle(mrb_state* mrb, mrb_value self)
   }
 }
 
-mrb_value siren_topalgo_circle3p(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_circle3p( VALUE self)
 {
-  mrb_value p1, p2, p3;
+  VALUE p1, p2, p3;
   int argc = mrb_get_args(mrb, "AAA", &p1, &p2, &p3);
   opencascade::handle<Geom_Circle> gc = GC_MakeCircle(
       siren_ary_to_pnt(mrb, p1),
@@ -215,7 +215,7 @@ mrb_value siren_topalgo_circle3p(mrb_state* mrb, mrb_value self)
   }
 }
 
-mrb_value siren_topalgo_volume(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_volume( VALUE self)
 {
   TopoDS_Shape* shape = siren_shape_get(mrb, self);
   GProp_GProps gprops;
@@ -224,7 +224,7 @@ mrb_value siren_topalgo_volume(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, (mrb_float)vol);
 }
 
-mrb_value siren_topalgo_cog(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_cog( VALUE self)
 {
   TopoDS_Shape* shape = siren_shape_get(mrb, self);
   GProp_GProps gprops;
@@ -233,7 +233,7 @@ mrb_value siren_topalgo_cog(mrb_state* mrb, mrb_value self)
   return siren_pnt_to_ary(mrb, cog);
 }
 
-mrb_value siren_topalgo_area(mrb_state* mrb, mrb_value self)
+VALUE siren_topalgo_area( VALUE self)
 {
   TopoDS_Shape* shape = siren_shape_get(mrb, self);
   GProp_GProps gprops;

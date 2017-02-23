@@ -1,7 +1,7 @@
 #include "common.h"
 
 /* this function copied from class.c */
-mrb_value mrb_instance_alloc(mrb_state *mrb, mrb_value cv)
+VALUE mrb_instance_alloc( VALUE cv)
 {
   struct RClass *c = mrb_class_ptr(cv);
   struct RObject *o;
@@ -16,12 +16,12 @@ mrb_value mrb_instance_alloc(mrb_state *mrb, mrb_value cv)
 }
 /* end of function */
 
-void siren_ary_to_xyz(mrb_state* mrb, mrb_value ary, Standard_Real& x, Standard_Real& y, Standard_Real& z)
+void siren_ary_to_xyz( VALUE ary, Standard_Real& x, Standard_Real& y, Standard_Real& z)
 {
   x = 0.0; y = 0.0; z = 0.0;
   int len = mrb_ary_len(mrb, ary);
   if (len > 0) {
-    mrb_value val = mrb_ary_ref(mrb, ary, 0);
+    VALUE val = mrb_ary_ref(mrb, ary, 0);
     if (mrb_float_p(val)) {
       x = mrb_float(val);
     }
@@ -30,7 +30,7 @@ void siren_ary_to_xyz(mrb_state* mrb, mrb_value ary, Standard_Real& x, Standard_
     }
   }
   if (len > 1) {
-    mrb_value val = mrb_ary_ref(mrb, ary, 1);
+    VALUE val = mrb_ary_ref(mrb, ary, 1);
     if (mrb_float_p(val)) {
       y = mrb_float(val);
     }
@@ -39,7 +39,7 @@ void siren_ary_to_xyz(mrb_state* mrb, mrb_value ary, Standard_Real& x, Standard_
     }
   }
   if (len > 2) {
-    mrb_value val = mrb_ary_ref(mrb, ary, 2);
+    VALUE val = mrb_ary_ref(mrb, ary, 2);
     if (mrb_float_p(val)) {
       z = mrb_float(val);
     }

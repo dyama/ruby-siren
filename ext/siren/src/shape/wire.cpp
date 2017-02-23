@@ -1,8 +1,8 @@
 #include "shape/wire.h"
 
-mrb_value siren_wire_new(mrb_state* mrb, const TopoDS_Shape* src)
+VALUE siren_wire_new( const TopoDS_Shape* src)
 {
-  mrb_value obj;
+  VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Wire")));
@@ -14,7 +14,7 @@ mrb_value siren_wire_new(mrb_state* mrb, const TopoDS_Shape* src)
   return obj;
 }
 
-TopoDS_Wire siren_wire_get(mrb_state* mrb, mrb_value self)
+TopoDS_Wire siren_wire_get( VALUE self)
 {
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(mrb_get_datatype(mrb, self, &siren_wire_type));
   TopoDS_Wire wire = TopoDS::Wire(*shape);
@@ -22,7 +22,7 @@ TopoDS_Wire siren_wire_get(mrb_state* mrb, mrb_value self)
   return wire;
 }
 
-bool siren_wire_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_wire_install( struct RClass* mod_siren)
 {
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* cls_wire = mrb_define_class_under(mrb, mod_siren, "Wire", cls_shape);
@@ -37,16 +37,16 @@ bool siren_wire_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-struct RClass* siren_wire_rclass(mrb_state* mrb)
+struct RClass* siren_wire_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Wire")));
 }
 
-mrb_value siren_wire_ordered_edges(mrb_state* mrb, mrb_value self)
+VALUE siren_wire_ordered_edges( VALUE self)
 {
   TopoDS_Wire wire = siren_wire_get(mrb, self);
-  mrb_value res = mrb_ary_new(mrb);
+  VALUE res = mrb_ary_new(mrb);
   for (BRepTools_WireExplorer exp(wire); exp.More(); exp.Next()) {
     TopoDS_Edge e = exp.Current();
     mrb_ary_push(mrb, res, siren_shape_new(mrb, e));
@@ -54,27 +54,27 @@ mrb_value siren_wire_ordered_edges(mrb_state* mrb, mrb_value self)
   return res;
 }
 
-mrb_value siren_wire_curves(mrb_state* mrb, mrb_value self)
+VALUE siren_wire_curves( VALUE self)
 {
-  mrb_value res = mrb_ary_new(mrb);
-  mrb_value edges = mrb_funcall(mrb, self, "edges", 0);
+  VALUE res = mrb_ary_new(mrb);
+  VALUE edges = mrb_funcall(mrb, self, "edges", 0);
   for (int i = 0; i < mrb_ary_len(mrb, edges); i++) {
-    mrb_value edge = mrb_ary_ref(mrb, edges, i);
-    mrb_value curve = mrb_funcall(mrb, edge, "curve", 0);
+    VALUE edge = mrb_ary_ref(mrb, edges, i);
+    VALUE curve = mrb_funcall(mrb, edge, "curve", 0);
     mrb_ary_push(mrb, res, curve);
   }
   return res;
 }
 
-mrb_value siren_wire_obj(mrb_state* mrb)
+VALUE siren_wire_obj()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Wire"));
 }
 
-mrb_value siren_wire_make(mrb_state* mrb, mrb_value self)
+VALUE siren_wire_make( VALUE self)
 {
-  mrb_value objs;
+  VALUE objs;
   mrb_float tol;
   int argc = mrb_get_args(mrb, "A|f", &objs, &tol);
   BRepBuilderAPI_MakeWire api;
@@ -84,7 +84,7 @@ mrb_value siren_wire_make(mrb_state* mrb, mrb_value self)
   ShapeFix_ShapeTolerance FTol;
   int osize = mrb_ary_len(mrb, objs);
   for (int i = 0; i < osize ; i++) {
-    mrb_value obj = mrb_ary_ref(mrb, objs, i);
+    VALUE obj = mrb_ary_ref(mrb, objs, i);
     TopoDS_Shape* s = siren_shape_get(mrb, obj);
     if (s->IsNull()) {
       continue;

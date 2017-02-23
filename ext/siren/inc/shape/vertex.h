@@ -7,15 +7,15 @@
 #include <TopoDS_Vertex.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 
-static struct mrb_data_type siren_vertex_type = { "Vertex", siren_shape_final };
-bool siren_vertex_install(mrb_state* mrb, struct RClass* mod_siren);
-TopoDS_Vertex siren_vertex_get(mrb_state* mrb, mrb_value self);
-mrb_value siren_vertex_new(mrb_state* mrb, const TopoDS_Shape* src);
-mrb_value siren_vertex_obj(mrb_state* mrb);
-struct RClass* siren_vertex_rclass(mrb_state* mrb);
+static rb_data_type_t siren_vertex_type = { "Vertex", siren_shape_final };
+bool siren_vertex_install( struct RClass* mod_siren);
+TopoDS_Vertex siren_vertex_get( VALUE self);
+VALUE siren_vertex_new( const TopoDS_Shape* src);
+VALUE siren_vertex_obj();
+struct RClass* siren_vertex_rclass();
 
-mrb_value siren_vertex_init(mrb_state* mrb, mrb_value self);
-mrb_value siren_vertex_xyz(mrb_state* mrb, mrb_value self);
-mrb_value siren_vertex_to_v(mrb_state* mrb, mrb_value self);
+VALUE siren_vertex_init( VALUE self);
+VALUE siren_vertex_xyz( VALUE self);
+VALUE siren_vertex_to_v( VALUE self);
 
 #endif

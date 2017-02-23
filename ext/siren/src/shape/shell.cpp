@@ -1,8 +1,8 @@
 #include "shape/shell.h"
 
-mrb_value siren_shell_new(mrb_state* mrb, const TopoDS_Shape* src)
+VALUE siren_shell_new( const TopoDS_Shape* src)
 {
-  mrb_value obj;
+  VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Shell")));
@@ -14,7 +14,7 @@ mrb_value siren_shell_new(mrb_state* mrb, const TopoDS_Shape* src)
   return obj;
 }
 
-TopoDS_Shell siren_shell_get(mrb_state* mrb, mrb_value self)
+TopoDS_Shell siren_shell_get( VALUE self)
 {
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(mrb_get_datatype(mrb, self, &siren_shell_type));
   TopoDS_Shell shell = TopoDS::Shell(*shape);
@@ -22,7 +22,7 @@ TopoDS_Shell siren_shell_get(mrb_state* mrb, mrb_value self)
   return shell;
 }
 
-bool siren_shell_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_shell_install( struct RClass* mod_siren)
 {
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* cls_shell = mrb_define_class_under(mrb, mod_siren, "Shell", cls_shape);
@@ -35,21 +35,21 @@ bool siren_shell_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-struct RClass* siren_shell_rclass(mrb_state* mrb)
+struct RClass* siren_shell_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Shell")));
 }
 
-mrb_value siren_shell_obj(mrb_state* mrb)
+VALUE siren_shell_obj()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Shell"));
 }
 
-mrb_value siren_shell_make(mrb_state* mrb, mrb_value self)
+VALUE siren_shell_make( VALUE self)
 {
-  mrb_value ary;
+  VALUE ary;
   mrb_float tol;
   int argc = mrb_get_args(mrb, "A|f", &ary, &tol);
   BRepBuilderAPI_Sewing sewer;
@@ -59,7 +59,7 @@ mrb_value siren_shell_make(mrb_state* mrb, mrb_value self)
   }
   int len = mrb_ary_len(mrb, ary);
   for (int i=0; i < len; i++) {
-    mrb_value item = mrb_ary_ref(mrb, ary, i);
+    VALUE item = mrb_ary_ref(mrb, ary, i);
     TopoDS_Shape* shape = siren_shape_get(mrb, item);
     if (shape->IsNull()) {
       continue;

@@ -1,8 +1,8 @@
 #include "shape/solid.h"
 
-mrb_value siren_solid_new(mrb_state* mrb, const TopoDS_Shape* src)
+VALUE siren_solid_new( const TopoDS_Shape* src)
 {
-  mrb_value obj;
+  VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Solid")));
@@ -14,7 +14,7 @@ mrb_value siren_solid_new(mrb_state* mrb, const TopoDS_Shape* src)
   return obj;
 }
 
-TopoDS_Solid siren_solid_get(mrb_state* mrb, mrb_value self)
+TopoDS_Solid siren_solid_get( VALUE self)
 {
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(mrb_get_datatype(mrb, self, &siren_solid_type));
   TopoDS_Solid solid = TopoDS::Solid(*shape);
@@ -22,7 +22,7 @@ TopoDS_Solid siren_solid_get(mrb_state* mrb, mrb_value self)
   return solid;
 }
 
-bool siren_solid_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_solid_install( struct RClass* mod_siren)
 {
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* cls_solid = mrb_define_class_under(mrb, mod_siren, "Solid", cls_shape);
@@ -45,21 +45,21 @@ bool siren_solid_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-struct RClass* siren_solid_rclass(mrb_state* mrb)
+struct RClass* siren_solid_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Solid")));
 }
 
-mrb_value siren_solid_obj(mrb_state* mrb)
+VALUE siren_solid_obj()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Solid"));
 }
 
-mrb_value siren_solid_init(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_init( VALUE self)
 {
-  mrb_value* a;
+  VALUE* a;
   mrb_int len;
   int argc = mrb_get_args(mrb, "*", &a, &len);
   if (len == 0) {
@@ -85,9 +85,9 @@ mrb_value siren_solid_init(mrb_state* mrb, mrb_value self)
   return self;
 }
 
-mrb_value siren_solid_box(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_box( VALUE self)
 {
-  mrb_value size, pos;
+  VALUE size, pos;
   int argc = mrb_get_args(mrb, "|AA", &size, &pos);
 
   Standard_Real sx, sy, sz;
@@ -115,9 +115,9 @@ mrb_value siren_solid_box(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_solid_box2p(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_box2p( VALUE self)
 {
-  mrb_value p1, p2;
+  VALUE p1, p2;
   int argc = mrb_get_args(mrb, "|AA", &p1, &p2);
 
   Standard_Real x1 = 0.0, y1 = 0.0, z1 = 0.0;
@@ -137,9 +137,9 @@ mrb_value siren_solid_box2p(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_solid_boxax(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_boxax( VALUE self)
 {
-  mrb_value size, pos, dir;
+  VALUE size, pos, dir;
   int argc = mrb_get_args(mrb, "AAA", &size, &pos, &dir);
 
   Standard_Real sx, sy, sz;
@@ -157,10 +157,10 @@ mrb_value siren_solid_boxax(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_solid_sphere(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_sphere( VALUE self)
 {
   mrb_float r = 1.0;
-  mrb_value pos;
+  VALUE pos;
   int argc = mrb_get_args(mrb, "|fA", &r, &pos);
 
   gp_Pnt op;
@@ -182,9 +182,9 @@ mrb_value siren_solid_sphere(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_solid_cylinder(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_cylinder( VALUE self)
 {
-  mrb_value pos, norm;
+  VALUE pos, norm;
   mrb_float r, h, a;
   int argc = mrb_get_args(mrb, "AAfff", &pos, &norm, &r, &h, &a);
 
@@ -195,9 +195,9 @@ mrb_value siren_solid_cylinder(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_solid_cone(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_cone( VALUE self)
 {
-  mrb_value pos, norm;
+  VALUE pos, norm;
   mrb_float r1, r2, h, ang;
   int argc = mrb_get_args(mrb, "AAffff", &pos, &norm, &r1, &r2, &h, &ang);
 
@@ -207,10 +207,10 @@ mrb_value siren_solid_cone(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_solid_torus(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_torus( VALUE self)
 {
   mrb_float r1, r2, ang;
-  mrb_value pos, norm;
+  VALUE pos, norm;
   int argc = mrb_get_args(mrb, "AAfff", &pos, &norm, &r1, &r2, &ang);
 
   gp_Ax2 ax = siren_ary_to_ax2(mrb, pos, norm);
@@ -219,9 +219,9 @@ mrb_value siren_solid_torus(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_solid_halfspace(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_halfspace( VALUE self)
 {
-  mrb_value surf, refpnt;
+  VALUE surf, refpnt;
   int argc = mrb_get_args(mrb, "oA", &surf, &refpnt);
   TopoDS_Shape* shape = siren_shape_get(mrb, surf);
   if (shape == nullptr || shape->IsNull()) {
@@ -241,25 +241,25 @@ mrb_value siren_solid_halfspace(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, solid);
 }
 
-mrb_value siren_solid_prism(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_prism( VALUE self)
 {
   mrb_raise(mrb, E_NOTIMP_ERROR, "Not implemented.");
   return mrb_nil_value();
 }
 
-mrb_value siren_solid_revol(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_revol( VALUE self)
 {
   mrb_raise(mrb, E_NOTIMP_ERROR, "Not implemented.");
   return mrb_nil_value();
 }
 
-mrb_value siren_solid_revolution(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_revolution( VALUE self)
 {
   mrb_raise(mrb, E_NOTIMP_ERROR, "Not implemented.");
   return mrb_nil_value();
 }
 
-mrb_value siren_solid_wedge(mrb_state* mrb, mrb_value self)
+VALUE siren_solid_wedge( VALUE self)
 {
   mrb_float dx = 1.0, dy = 1.0, dz = 1.0, x = 0.5, z = 0.5, X = 0.5, Z = 0.5;
   int argc = mrb_get_args(mrb, "|fffffff", &dx, &dy, &dz, &x, &z, &X, &Z);

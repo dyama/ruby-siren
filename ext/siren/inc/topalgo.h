@@ -32,21 +32,21 @@
 #include <GC_MakeArcOfCircle.hxx>
 #include <GC_MakeCircle.hxx>
 
-bool siren_topalgo_install(mrb_state* mrb, struct RClass* rclass);
+bool siren_topalgo_install( struct RClass* rclass);
 
-mrb_value siren_topalgo_copy     (mrb_state* mrb, mrb_value self);
+VALUE siren_topalgo_copy     ( VALUE self);
 
-mrb_value siren_topalgo_line       (mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_infline    (mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_polyline   (mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_interpolate(mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_arc        (mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_arc3p      (mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_circle     (mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_circle3p   (mrb_state* mrb, mrb_value self);
+VALUE siren_topalgo_line       ( VALUE self);
+VALUE siren_topalgo_infline    ( VALUE self);
+VALUE siren_topalgo_polyline   ( VALUE self);
+VALUE siren_topalgo_interpolate( VALUE self);
+VALUE siren_topalgo_arc        ( VALUE self);
+VALUE siren_topalgo_arc3p      ( VALUE self);
+VALUE siren_topalgo_circle     ( VALUE self);
+VALUE siren_topalgo_circle3p   ( VALUE self);
 
-mrb_value siren_topalgo_volume(mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_cog(mrb_state* mrb, mrb_value self);
-mrb_value siren_topalgo_area(mrb_state* mrb, mrb_value self);
+VALUE siren_topalgo_volume( VALUE self);
+VALUE siren_topalgo_cog( VALUE self);
+VALUE siren_topalgo_area( VALUE self);
 
 #endif

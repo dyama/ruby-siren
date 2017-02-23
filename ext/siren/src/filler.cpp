@@ -1,11 +1,11 @@
 #include "filler.h"
 
-BRepFill_Filling* siren_filler_get(mrb_state* mrb, mrb_value obj)
+BRepFill_Filling* siren_filler_get( VALUE obj)
 {
   return static_cast<BRepFill_Filling*>(mrb_get_datatype(mrb, obj, &siren_filler_type));
 }
 
-bool siren_filler_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_filler_install( struct RClass* mod_siren)
 {
   struct RClass* cls_filler = mrb_define_class_under(mrb, mod_siren, "Filler", mrb->object_class);
   MRB_SET_INSTANCE_TT(cls_filler, MRB_TT_DATA);
@@ -21,7 +21,7 @@ bool siren_filler_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_filler_init(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_init( VALUE self)
 {
   mrb_int degree, nbptsoncur, nbiter;
   mrb_bool anisotropie;
@@ -81,15 +81,15 @@ mrb_value siren_filler_init(mrb_state* mrb, mrb_value self)
   return self;
 }
 
-void siren_filler_final(mrb_state* mrb, void* p)
+void siren_filler_final( void* p)
 {
   BRepFill_Filling* pp = static_cast<BRepFill_Filling*>(p);
   mrb_free(mrb, pp);
 }
 
-mrb_value siren_filler_add_bound(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_add_bound( VALUE self)
 {
-  mrb_value edge;
+  VALUE edge;
   mrb_int order;
   int argc = mrb_get_args(mrb, "oi", &edge, &order);
   TopoDS_Shape* s = siren_shape_get(mrb, edge);
@@ -99,9 +99,9 @@ mrb_value siren_filler_add_bound(mrb_state* mrb, mrb_value self)
   return mrb_nil_value();
 }
 
-mrb_value siren_filler_add(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_add( VALUE self)
 {
-  mrb_value obj;
+  VALUE obj;
   mrb_int order;
   int argc = mrb_get_args(mrb, "o|i", &obj, &order);
   if (argc == 2) {
@@ -117,25 +117,25 @@ mrb_value siren_filler_add(mrb_state* mrb, mrb_value self)
   return mrb_nil_value();
 }
 
-mrb_value siren_filler_build(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_build( VALUE self)
 {
   siren_filler_get(mrb, self)->Build();
   return mrb_nil_value();
 }
 
-mrb_value siren_filler_is_done(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_is_done( VALUE self)
 {
   return siren_filler_get(mrb, self)->IsDone() == Standard_True ?
     mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_filler_face(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_face( VALUE self)
 {
   TopoDS_Face f = siren_filler_get(mrb, self)->Face();
   return siren_shape_new(mrb, f);
 }
 
-mrb_value siren_filler_g0error(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_g0error( VALUE self)
 {
   mrb_int index;
   int argc = mrb_get_args(mrb, "|i", &index);
@@ -149,7 +149,7 @@ mrb_value siren_filler_g0error(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, value);
 }
 
-mrb_value siren_filler_g1error(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_g1error( VALUE self)
 {
   mrb_int index;
   int argc = mrb_get_args(mrb, "|i", &index);
@@ -163,7 +163,7 @@ mrb_value siren_filler_g1error(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, value);
 }
 
-mrb_value siren_filler_g2error(mrb_state* mrb, mrb_value self)
+VALUE siren_filler_g2error( VALUE self)
 {
   mrb_int index;
   int argc = mrb_get_args(mrb, "|i", &index);

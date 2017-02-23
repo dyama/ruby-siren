@@ -1,8 +1,8 @@
 #include "bndbox.h"
 
-mrb_value siren_bndbox_new(mrb_state* mrb, const TopoDS_Shape& shape)
+VALUE siren_bndbox_new( const TopoDS_Shape& shape)
 {
-  mrb_value obj;
+  VALUE obj;
   obj = mrb_instance_alloc(mrb, mrb_obj_value(siren_bndbox_rclass(mrb)));
   void* p = mrb_malloc(mrb, sizeof(Bnd_Box));
   Bnd_Box* inner = new(p) Bnd_Box();
@@ -12,18 +12,18 @@ mrb_value siren_bndbox_new(mrb_state* mrb, const TopoDS_Shape& shape)
   return obj;
 }
 
-Bnd_Box* siren_bndbox_get(mrb_state* mrb, mrb_value obj)
+Bnd_Box* siren_bndbox_get( VALUE obj)
 {
   return static_cast<Bnd_Box*>(mrb_get_datatype(mrb, obj, &siren_bndbox_type));
 }
 
-struct RClass* siren_bndbox_rclass(mrb_state* mrb)
+struct RClass* siren_bndbox_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "BndBox")));
 }
 
-bool siren_bndbox_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_bndbox_install( struct RClass* mod_siren)
 {
   struct RClass* cls_bndbox = mrb_define_class_under(mrb, mod_siren, "BndBox", mrb->object_class);
   MRB_SET_INSTANCE_TT(cls_bndbox, MRB_TT_DATA);
@@ -64,7 +64,7 @@ bool siren_bndbox_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_bndbox_init(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_init( VALUE self)
 {
   void* p = mrb_malloc(mrb, sizeof(Bnd_Box));
   Bnd_Box* bndbox = new(p) Bnd_Box();
@@ -73,13 +73,13 @@ mrb_value siren_bndbox_init(mrb_state* mrb, mrb_value self)
   return self;
 }
 
-void siren_bndbox_final(mrb_state* mrb, void* p)
+void siren_bndbox_final( void* p)
 {
   Bnd_Box* pp = static_cast<Bnd_Box*>(p);
   mrb_free(mrb, pp);
 }
 
-mrb_value siren_bndbox_to_s(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_to_s( VALUE self)
 {
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   char str[128];
@@ -106,7 +106,7 @@ mrb_value siren_bndbox_to_s(mrb_state* mrb, mrb_value self)
   return mrb_str_new_cstr(mrb, str);
 }
 
-mrb_value siren_bndbox_min(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_min( VALUE self)
 {
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   if (b->IsVoid()) {
@@ -115,7 +115,7 @@ mrb_value siren_bndbox_min(mrb_state* mrb, mrb_value self)
   return siren_pnt_to_ary(mrb, b->CornerMin());
 }
 
-mrb_value siren_bndbox_max(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_max( VALUE self)
 {
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   if (b->IsVoid()) {
@@ -124,9 +124,9 @@ mrb_value siren_bndbox_max(mrb_state* mrb, mrb_value self)
   return siren_pnt_to_ary(mrb, b->CornerMax());
 }
 
-mrb_value siren_bndbox_add(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_add( VALUE self)
 {
-  mrb_value obj;
+  VALUE obj;
   int argc = mrb_get_args(mrb, "o", &obj);
 
   Bnd_Box* b = siren_bndbox_get(mrb, self);
@@ -146,16 +146,16 @@ mrb_value siren_bndbox_add(mrb_state* mrb, mrb_value self)
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_is_out(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_out( VALUE self)
 {
-  mrb_value other;
+  VALUE other;
   int argc = mrb_get_args(mrb, "o", &other);
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   // return b->IsOut(siren_pnt_get(mrb, other)) == Standard_True ? mrb_true_value() : mrb_false_value();
   return b->IsOut(*siren_bndbox_get(mrb, other)) == Standard_True ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_center(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_center( VALUE self)
 {
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   if (b->IsVoid()) {
@@ -167,7 +167,7 @@ mrb_value siren_bndbox_center(mrb_state* mrb, mrb_value self)
   return siren_pnt_new(mrb, (xmax - xmin) / 2.0, (ymax - ymin) / 2.0, (zmax - zmin) / 2.0);
 }
 
-mrb_value siren_bndbox_xsize(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_xsize( VALUE self)
 {
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   if (b->IsVoid()) {
@@ -179,7 +179,7 @@ mrb_value siren_bndbox_xsize(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, xmax - xmin);
 }
 
-mrb_value siren_bndbox_ysize(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_ysize( VALUE self)
 {
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   if (b->IsVoid()) {
@@ -191,7 +191,7 @@ mrb_value siren_bndbox_ysize(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, ymax - ymin);
 }
 
-mrb_value siren_bndbox_zsize(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_zsize( VALUE self)
 {
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   if (b->IsVoid()) {
@@ -203,29 +203,29 @@ mrb_value siren_bndbox_zsize(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, zmax - zmin);
 }
 
-mrb_value siren_bndbox_is_void(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_void( VALUE self)
 {
   return siren_bndbox_get(mrb, self)->IsVoid() ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_whole(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_whole( VALUE self)
 {
   return siren_bndbox_get(mrb, self)->IsWhole() ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_void_bang(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_void_bang( VALUE self)
 {
   siren_bndbox_get(mrb, self)->SetVoid();
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_whole_bang(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_whole_bang( VALUE self)
 {
   siren_bndbox_get(mrb, self)->SetWhole();
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_is_xthin(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_xthin( VALUE self)
 {
   mrb_float tol;
   int argc = mrb_get_args(mrb, "|f", &tol);
@@ -233,7 +233,7 @@ mrb_value siren_bndbox_is_xthin(mrb_state* mrb, mrb_value self)
   return b->IsXThin(argc ? tol : 0.0) ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_ythin(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_ythin( VALUE self)
 {
   mrb_float tol;
   int argc = mrb_get_args(mrb, "|f", &tol);
@@ -241,7 +241,7 @@ mrb_value siren_bndbox_is_ythin(mrb_state* mrb, mrb_value self)
   return b->IsYThin(argc ? tol : 0.0) ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_zthin(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_zthin( VALUE self)
 {
   mrb_float tol;
   int argc = mrb_get_args(mrb, "|f", &tol);
@@ -249,73 +249,73 @@ mrb_value siren_bndbox_is_zthin(mrb_state* mrb, mrb_value self)
   return b->IsZThin(argc ? tol : 0.0) ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_openxmin(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_openxmin( VALUE self)
 {
   return siren_bndbox_get(mrb, self)->IsOpenXmin() ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_openxmax(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_openxmax( VALUE self)
 {
   return siren_bndbox_get(mrb, self)->IsOpenXmax() ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_openymin(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_openymin( VALUE self)
 {
   return siren_bndbox_get(mrb, self)->IsOpenYmin() ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_openymax(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_openymax( VALUE self)
 {
   return siren_bndbox_get(mrb, self)->IsOpenYmax() ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_openzmin(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_openzmin( VALUE self)
 {
   return siren_bndbox_get(mrb, self)->IsOpenZmin() ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_is_openzmax(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_is_openzmax( VALUE self)
 {
   return siren_bndbox_get(mrb, self)->IsOpenZmax() ? mrb_true_value() : mrb_false_value();
 }
 
-mrb_value siren_bndbox_openxmin_bang(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_openxmin_bang( VALUE self)
 {
   siren_bndbox_get(mrb, self)->OpenXmin();
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_openxmax_bang(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_openxmax_bang( VALUE self)
 {
   siren_bndbox_get(mrb, self)->OpenXmax();
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_openymin_bang(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_openymin_bang( VALUE self)
 {
   siren_bndbox_get(mrb, self)->OpenYmin();
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_openymax_bang(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_openymax_bang( VALUE self)
 {
   siren_bndbox_get(mrb, self)->OpenYmax();
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_openzmin_bang(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_openzmin_bang( VALUE self)
 {
   siren_bndbox_get(mrb, self)->OpenZmin();
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_openzmax_bang(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_openzmax_bang( VALUE self)
 {
   siren_bndbox_get(mrb, self)->OpenZmax();
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_set_gap(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_set_gap( VALUE self)
 {
   mrb_float tol;
   int argc = mrb_get_args(mrb, "f", &tol);
@@ -323,15 +323,15 @@ mrb_value siren_bndbox_set_gap(mrb_state* mrb, mrb_value self)
   return mrb_nil_value();
 }
 
-mrb_value siren_bndbox_get_gap(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_get_gap( VALUE self)
 {
   Standard_Real tol = siren_bndbox_get(mrb, self)->GetGap();
   return mrb_float_value(mrb, tol);
 }
 
-mrb_value siren_bndbox_dist(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_dist( VALUE self)
 {
-  mrb_value other;
+  VALUE other;
   int argc = mrb_get_args(mrb, "o", &other);
   Bnd_Box* b = siren_bndbox_get(mrb, self);
   Bnd_Box* bb= siren_bndbox_get(mrb, other);
@@ -342,7 +342,7 @@ mrb_value siren_bndbox_dist(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, value);
 }
 
-mrb_value siren_bndbox_square(mrb_state* mrb, mrb_value self)
+VALUE siren_bndbox_square( VALUE self)
 {
   Standard_Real value = siren_bndbox_get(mrb, self)->SquareExtent();
   return mrb_float_value(mrb, value);

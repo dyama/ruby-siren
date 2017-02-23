@@ -16,15 +16,15 @@
 #include <ShapeFix_ShapeTolerance.hxx>
 #include <BRepTools_WireExplorer.hxx>
 
-static struct mrb_data_type siren_wire_type = { "Wire", siren_shape_final };
-bool siren_wire_install(mrb_state* mrb, struct RClass* mod_siren);
-TopoDS_Wire siren_wire_get(mrb_state* mrb, mrb_value self);
-mrb_value siren_wire_new(mrb_state* mrb, const TopoDS_Shape* src);
-mrb_value siren_wire_obj(mrb_state* mrb);
-struct RClass* siren_wire_rclass(mrb_state* mrb);
+static rb_data_type_t siren_wire_type = { "Wire", siren_shape_final };
+bool siren_wire_install( struct RClass* mod_siren);
+TopoDS_Wire siren_wire_get( VALUE self);
+VALUE siren_wire_new( const TopoDS_Shape* src);
+VALUE siren_wire_obj();
+struct RClass* siren_wire_rclass();
 
-mrb_value siren_wire_make(mrb_state* mrb, mrb_value self);
-mrb_value siren_wire_ordered_edges(mrb_state* mrb, mrb_value self);
-mrb_value siren_wire_curves(mrb_state* mrb, mrb_value self);
+VALUE siren_wire_make( VALUE self);
+VALUE siren_wire_ordered_edges( VALUE self);
+VALUE siren_wire_curves( VALUE self);
 
 #endif

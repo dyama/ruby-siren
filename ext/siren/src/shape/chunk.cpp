@@ -2,9 +2,9 @@
 
 #include "shape/chunk.h"
 
-mrb_value siren_chunk_new(mrb_state* mrb, const TopoDS_Shape* src)
+VALUE siren_chunk_new( const TopoDS_Shape* src)
 {
-  mrb_value obj;
+  VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Chunk")));
@@ -16,7 +16,7 @@ mrb_value siren_chunk_new(mrb_state* mrb, const TopoDS_Shape* src)
   return obj;
 }
 
-TopoDS_CompSolid siren_chunk_get(mrb_state* mrb, mrb_value self)
+TopoDS_CompSolid siren_chunk_get( VALUE self)
 {
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(mrb_get_datatype(mrb, self, &siren_chunk_type));
   TopoDS_CompSolid chunk = TopoDS::CompSolid(*shape);
@@ -24,7 +24,7 @@ TopoDS_CompSolid siren_chunk_get(mrb_state* mrb, mrb_value self)
   return chunk;
 }
 
-bool siren_chunk_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_chunk_install( struct RClass* mod_siren)
 {
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* cls_chunk = mrb_define_class_under(mrb, mod_siren, "Chunk", cls_shape);
@@ -34,21 +34,21 @@ bool siren_chunk_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-struct RClass* siren_chunk_rclass(mrb_state* mrb)
+struct RClass* siren_chunk_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Chunk")));
 }
 
-mrb_value siren_chunk_obj(mrb_state* mrb)
+VALUE siren_chunk_obj()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Chunk"));
 }
 
-mrb_value siren_chunk_init(mrb_state* mrb, mrb_value self)
+VALUE siren_chunk_init( VALUE self)
 {
-  mrb_value* a;
+  VALUE* a;
   mrb_int len;
   int argc = mrb_get_args(mrb, "*", &a, &len);
 
@@ -77,7 +77,7 @@ mrb_value siren_chunk_init(mrb_state* mrb, mrb_value self)
   return self;
 }
 
-mrb_value siren_chunk_to_solid(mrb_state* mrb, mrb_value self)
+VALUE siren_chunk_to_solid( VALUE self)
 {
   auto cs = siren_chunk_get(mrb, self);
   auto solid = BRepBuilderAPI_MakeSolid(cs);

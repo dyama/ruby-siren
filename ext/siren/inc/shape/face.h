@@ -43,23 +43,23 @@
 #include <Poly_Triangle.hxx>
 #include <Poly_Array1OfTriangle.hxx>
 
-static struct mrb_data_type siren_face_type = { "Face", siren_shape_final };
-bool siren_face_install(mrb_state* mrb, struct RClass* mod_siren);
-TopoDS_Face siren_face_get(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_new(mrb_state* mrb, const TopoDS_Shape* src);
-mrb_value siren_face_obj(mrb_state* mrb);
-struct RClass* siren_face_rclass(mrb_state* mrb);
+static rb_data_type_t siren_face_type = { "Face", siren_shape_final };
+bool siren_face_install( struct RClass* mod_siren);
+TopoDS_Face siren_face_get( VALUE self);
+VALUE siren_face_new( const TopoDS_Shape* src);
+VALUE siren_face_obj();
+struct RClass* siren_face_rclass();
 
-mrb_value siren_face_plane(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_face(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_infplane(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_polygon(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_bzsurf(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_bssurf(mrb_state* mrb, mrb_value self);
+VALUE siren_face_plane( VALUE self);
+VALUE siren_face_face( VALUE self);
+VALUE siren_face_infplane( VALUE self);
+VALUE siren_face_polygon( VALUE self);
+VALUE siren_face_bzsurf( VALUE self);
+VALUE siren_face_bssurf( VALUE self);
 
-mrb_value siren_face_normal(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_to_bezier(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_split(mrb_state* mrb, mrb_value self);
-mrb_value siren_face_triangle(mrb_state* mrb, mrb_value self);
+VALUE siren_face_normal( VALUE self);
+VALUE siren_face_to_bezier( VALUE self);
+VALUE siren_face_split( VALUE self);
+VALUE siren_face_triangle( VALUE self);
 
 #endif

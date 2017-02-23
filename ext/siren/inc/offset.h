@@ -22,14 +22,14 @@
 #include <BRepOffset_MakeOffset.hxx>
 #include <BRepOffsetAPI_MakeOffsetShape.hxx>
 
-bool siren_offset_install(mrb_state* mrb, struct RClass* rclass);
+bool siren_offset_install( struct RClass* rclass);
 
-mrb_value siren_offset_sweep_vec(mrb_state* mrb, mrb_value self);
-mrb_value siren_offset_sweep_path(mrb_state* mrb, mrb_value self);
-mrb_value siren_offset_loft(mrb_state* mrb, mrb_value self);
-mrb_value siren_offset_offset_geomsurf(mrb_state* mrb, mrb_value self);
-mrb_value siren_offset_offset(mrb_state* mrb, mrb_value self);
-mrb_value siren_offset_offset_shape(mrb_state* mrb, mrb_value self);
-mrb_value siren_offset_pipe(mrb_state* mrb, mrb_value self);
+VALUE siren_offset_sweep_vec( VALUE self);
+VALUE siren_offset_sweep_path( VALUE self);
+VALUE siren_offset_loft( VALUE self);
+VALUE siren_offset_offset_geomsurf( VALUE self);
+VALUE siren_offset_offset( VALUE self);
+VALUE siren_offset_offset_shape( VALUE self);
+VALUE siren_offset_pipe( VALUE self);
 
 #endif

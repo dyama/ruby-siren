@@ -11,10 +11,10 @@
 
 #include <BRepProj_Projection.hxx>
 
-bool siren_bo_install(mrb_state* mrb, struct RClass* mod_siren);
-mrb_value siren_bo_common   (mrb_state* mrb, mrb_value self);
-mrb_value siren_bo_fuse     (mrb_state* mrb, mrb_value self);
-mrb_value siren_bo_cut      (mrb_state* mrb, mrb_value self);
-mrb_value siren_bo_projwire (mrb_state* mrb, mrb_value self);
+bool siren_bo_install( struct RClass* mod_siren);
+VALUE siren_bo_common   ( VALUE self);
+VALUE siren_bo_fuse     ( VALUE self);
+VALUE siren_bo_cut      ( VALUE self);
+VALUE siren_bo_projwire ( VALUE self);
 
 #endif

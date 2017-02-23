@@ -1,8 +1,8 @@
 #include "shape/face.h"
 
-mrb_value siren_face_new(mrb_state* mrb, const TopoDS_Shape* src)
+VALUE siren_face_new( const TopoDS_Shape* src)
 {
-  mrb_value obj;
+  VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Face")));
@@ -14,7 +14,7 @@ mrb_value siren_face_new(mrb_state* mrb, const TopoDS_Shape* src)
   return obj;
 }
 
-TopoDS_Face siren_face_get(mrb_state* mrb, mrb_value self)
+TopoDS_Face siren_face_get( VALUE self)
 {
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(mrb_get_datatype(mrb, self, &siren_face_type));
   TopoDS_Face face = TopoDS::Face(*shape);
@@ -22,7 +22,7 @@ TopoDS_Face siren_face_get(mrb_state* mrb, mrb_value self)
   return face;
 }
 
-bool siren_face_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_face_install( struct RClass* mod_siren)
 {
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* cls_face = mrb_define_class_under(mrb, mod_siren, "Face", cls_shape);
@@ -43,13 +43,13 @@ bool siren_face_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-struct RClass* siren_face_rclass(mrb_state* mrb)
+struct RClass* siren_face_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Face")));
 }
 
-mrb_value siren_face_normal(mrb_state* mrb, mrb_value self)
+VALUE siren_face_normal( VALUE self)
 {
   TopoDS_Face f = siren_face_get(mrb, self);
   Standard_Real umin, umax, vmin, vmax;
@@ -60,7 +60,7 @@ mrb_value siren_face_normal(mrb_state* mrb, mrb_value self)
   return siren_vec_new(mrb, n.X(), n.Y(), n.Z());
 }
 
-mrb_value siren_face_to_bezier(mrb_state* mrb, mrb_value self)
+VALUE siren_face_to_bezier( VALUE self)
 {
   TopoDS_Face face = siren_face_get(mrb, self);
   handle<Geom_Surface> gsurf  = BRep_Tool::Surface(face);
@@ -89,9 +89,9 @@ mrb_value siren_face_to_bezier(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, comp);
 }
 
-mrb_value siren_face_split(mrb_state* mrb, mrb_value self)
+VALUE siren_face_split( VALUE self)
 {
-  mrb_value obj;
+  VALUE obj;
   int argc = mrb_get_args(mrb, "o", &obj);
 
   TopoDS_Face face = siren_face_get(mrb, self);
@@ -123,12 +123,12 @@ mrb_value siren_face_split(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, splitter.Shape());
 }
 
-mrb_value siren_face_triangle(mrb_state* mrb, mrb_value self)
+VALUE siren_face_triangle( VALUE self)
 {
   mrb_float deflection, angle;
   int argc = mrb_get_args(mrb, "ff", &deflection, &angle);
 
-  mrb_value result = mrb_ary_new(mrb);
+  VALUE result = mrb_ary_new(mrb);
 
   TopoDS_Face face = siren_face_get(mrb, self);
   BRepTools::Update(face);
@@ -183,7 +183,7 @@ mrb_value siren_face_triangle(mrb_state* mrb, mrb_value self)
     }
     norm.Normalize();
 
-    mrb_value trimesh = mrb_ary_new(mrb);
+    VALUE trimesh = mrb_ary_new(mrb);
     mrb_ary_push(mrb, trimesh, siren_pnt_to_ary(mrb, p1));
     mrb_ary_push(mrb, trimesh, siren_pnt_to_ary(mrb, p2));
     mrb_ary_push(mrb, trimesh, siren_pnt_to_ary(mrb, p3));
@@ -197,15 +197,15 @@ mrb_value siren_face_triangle(mrb_state* mrb, mrb_value self)
   return result;
 }
 
-mrb_value siren_face_obj(mrb_state* mrb)
+VALUE siren_face_obj()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Face"));
 }
 
-mrb_value siren_face_plane(mrb_state* mrb, mrb_value self)
+VALUE siren_face_plane( VALUE self)
 {
-  mrb_value pos, norm, vx;
+  VALUE pos, norm, vx;
   mrb_float umin, umax, vmin, vmax;
   int argc = mrb_get_args(mrb, "AAAffff", &pos, &norm, &vx, &umin, &umax, &vmin, &vmax);
   try {
@@ -220,9 +220,9 @@ mrb_value siren_face_plane(mrb_state* mrb, mrb_value self)
   }
 }
 
-mrb_value siren_face_face(mrb_state* mrb, mrb_value self)
+VALUE siren_face_face( VALUE self)
 {
-  mrb_value wire;
+  VALUE wire;
   mrb_bool force_plane;
   int argc = mrb_get_args(mrb, "ob", &wire, &force_plane);
   TopoDS_Shape* s = siren_shape_get(mrb, wire);
@@ -234,18 +234,18 @@ mrb_value siren_face_face(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, face);
 }
 
-mrb_value siren_face_infplane(mrb_state* mrb, mrb_value self)
+VALUE siren_face_infplane( VALUE self)
 {
-  mrb_value orig, dir;
+  VALUE orig, dir;
   int argc = mrb_get_args(mrb, "AA", &orig, &dir);
   gp_Pln pln(siren_ary_to_pnt(mrb, orig), siren_ary_to_dir(mrb, dir));
   TopoDS_Face face = BRepBuilderAPI_MakeFace(pln);
   return siren_shape_new(mrb, face);
 }
 
-mrb_value siren_face_polygon(mrb_state* mrb, mrb_value self)
+VALUE siren_face_polygon( VALUE self)
 {
-  mrb_value pts;
+  VALUE pts;
   mrb_bool force_plane = (mrb_bool)Standard_True;
   int argc = mrb_get_args(mrb, "A|b", &pts, &force_plane);
 
@@ -266,9 +266,9 @@ mrb_value siren_face_polygon(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, mf.Shape());
 }
 
-mrb_value siren_face_bzsurf(mrb_state* mrb, mrb_value self)
+VALUE siren_face_bzsurf( VALUE self)
 {
-  mrb_value ptary, wtary;
+  VALUE ptary, wtary;
   int argc = mrb_get_args(mrb, "A|A", &ptary, &wtary);
 
   int rlen = mrb_ary_len(mrb, ptary);
@@ -277,7 +277,7 @@ mrb_value siren_face_bzsurf(mrb_state* mrb, mrb_value self)
   TColgp_Array2OfPnt poles(0, rlen-1, 0, clen-1);
 
   for (int r=0; r<rlen; r++) {
-    mrb_value ar = mrb_ary_ref(mrb, ptary, r);
+    VALUE ar = mrb_ary_ref(mrb, ptary, r);
     for (int c=0; c<clen; c++) {
       poles.SetValue(r, c, siren_ary_to_pnt(mrb, mrb_ary_ref(mrb, ar, c)));
     }
@@ -288,9 +288,9 @@ mrb_value siren_face_bzsurf(mrb_state* mrb, mrb_value self)
   if (argc == 2) {
     TColStd_Array2OfReal weights(0, rlen-1, 0, clen-1);
     for (int r=0; r<rlen; r++) {
-      mrb_value ar = mrb_ary_ref(mrb, wtary, r);
+      VALUE ar = mrb_ary_ref(mrb, wtary, r);
       for (int c=0; c<clen; c++) {
-        mrb_value val = mrb_ary_ref(mrb, ar, c);
+        VALUE val = mrb_ary_ref(mrb, ar, c);
         weights.SetValue(r, c, mrb_float(val));
       }
     }
@@ -303,12 +303,12 @@ mrb_value siren_face_bzsurf(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, BRepBuilderAPI_MakeFace(s, 1.0e-7));
 }
 
-mrb_value siren_face_bssurf(mrb_state* mrb, mrb_value self)
+VALUE siren_face_bssurf( VALUE self)
 {
   mrb_int _udeg, _vdeg;
-  mrb_value _ar_ukm, _ar_vkm;
-  mrb_value _pol;
-  mrb_value _wire;
+  VALUE _ar_ukm, _ar_vkm;
+  VALUE _pol;
+  VALUE _wire;
   int argc = mrb_get_args(mrb, "iAiAA|o", &_udeg, &_ar_ukm, &_vdeg, &_ar_vkm, &_pol, &_wire);
 
   bool has_contour = argc == 6;
@@ -319,9 +319,9 @@ mrb_value siren_face_bssurf(mrb_state* mrb, mrb_value self)
   TColStd_Array1OfReal uknots(1, nbuknots);
   TColStd_Array1OfInteger umults(1, nbuknots);
   for (int i=1; i<=nbuknots; i++) {
-    mrb_value item = mrb_ary_ref(mrb, _ar_ukm, i - 1);
-    mrb_value knot = mrb_ary_ref(mrb, item, 0);
-    mrb_value mult = mrb_ary_ref(mrb, item, 1);
+    VALUE item = mrb_ary_ref(mrb, _ar_ukm, i - 1);
+    VALUE knot = mrb_ary_ref(mrb, item, 0);
+    VALUE mult = mrb_ary_ref(mrb, item, 1);
     uknots(i) = mrb_float(knot);
     umults(i) = mrb_fixnum(mult);
     nbuknots_pure += umults(i);
@@ -334,9 +334,9 @@ mrb_value siren_face_bssurf(mrb_state* mrb, mrb_value self)
   TColStd_Array1OfReal vknots(1, nbvknots);
   TColStd_Array1OfInteger vmults(1, nbvknots);
   for (int i=1; i<=nbvknots; i++) {
-    mrb_value item = mrb_ary_ref(mrb, _ar_vkm, i - 1);
-    mrb_value knot = mrb_ary_ref(mrb, item, 0);
-    mrb_value mult = mrb_ary_ref(mrb, item, 1);
+    VALUE item = mrb_ary_ref(mrb, _ar_vkm, i - 1);
+    VALUE knot = mrb_ary_ref(mrb, item, 0);
+    VALUE mult = mrb_ary_ref(mrb, item, 1);
     vknots(i) = mrb_float(knot);
     vmults(i) = mrb_fixnum(mult);
     nbvknots_pure += vmults(i);
@@ -347,9 +347,9 @@ mrb_value siren_face_bssurf(mrb_state* mrb, mrb_value self)
   TColStd_Array2OfReal weights(1, nbupoles, 1, nbvpoles);
 
   for (int v=1; v <= nbvpoles; v++) {
-    mrb_value vitem = mrb_ary_ref(mrb, _pol, v - 1);
+    VALUE vitem = mrb_ary_ref(mrb, _pol, v - 1);
     for (int u=1; u <= nbupoles; u++) {
-      mrb_value uitem = mrb_ary_ref(mrb, vitem, u - 1);
+      VALUE uitem = mrb_ary_ref(mrb, vitem, u - 1);
       poles.SetValue(u, v, siren_ary_to_pnt(mrb, mrb_ary_ref(mrb, uitem, 0)));
       weights.SetValue(u, v, mrb_float(mrb_ary_ref(mrb, uitem, 1)));
     }

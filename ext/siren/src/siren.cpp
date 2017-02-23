@@ -38,7 +38,7 @@ MRB_BEGIN_DECL
   struct RClass* mod_siren;
 
   // initializer
-  void mrb_mruby_siren_gem_init(mrb_state* mrb)
+  void mrb_mruby_siren_gem_init()
   {
     // Siren module
     mod_siren  = mrb_define_module(mrb, "Siren");
@@ -76,7 +76,7 @@ MRB_BEGIN_DECL
   }
 
   // finalizer
-  void mrb_mruby_siren_gem_final(mrb_state* mrb)
+  void mrb_mruby_siren_gem_final()
   {
     return;
   }

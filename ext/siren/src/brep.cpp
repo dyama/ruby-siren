@@ -1,6 +1,6 @@
 #include "brep.h"
 
-bool siren_brep_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_brep_install( struct RClass* mod_siren)
 {
   // Class method
   mrb_define_class_method(mrb, mod_siren, "save_brep", siren_brep_save, MRB_ARGS_REQ(2));
@@ -13,10 +13,10 @@ bool siren_brep_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_brep_save(mrb_state* mrb, mrb_value self)
+VALUE siren_brep_save( VALUE self)
 {
-  mrb_value target;
-  mrb_value path;
+  VALUE target;
+  VALUE path;
   int argc = mrb_get_args(mrb, "oS", &target, &path);
   TopoDS_Shape* shape = siren_shape_get(mrb, target);
   try {
@@ -29,9 +29,9 @@ mrb_value siren_brep_save(mrb_state* mrb, mrb_value self)
   return mrb_nil_value();
 }
 
-mrb_value siren_brep_load(mrb_state* mrb, mrb_value self)
+VALUE siren_brep_load( VALUE self)
 {
-  mrb_value path;
+  VALUE path;
   int argc = mrb_get_args(mrb, "S", &path);
   BRep_Builder B;
   TopoDS_Shape shape;
@@ -45,9 +45,9 @@ mrb_value siren_brep_load(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, shape);
 }
 
-mrb_value siren_brep_dump(mrb_state* mrb, mrb_value self)
+VALUE siren_brep_dump( VALUE self)
 {
-  mrb_value target;
+  VALUE target;
   int argc = mrb_get_args(mrb, "o", &target);
   TopoDS_Shape* shape = siren_shape_get(mrb, target);
   BRepTools::Dump(*shape, std::cout);

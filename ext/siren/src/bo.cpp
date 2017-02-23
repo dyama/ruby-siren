@@ -1,6 +1,6 @@
 #include "bo.h"
 
-bool siren_bo_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_bo_install( struct RClass* mod_siren)
 {
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   mrb_define_method(mrb, cls_shape, "common",     siren_bo_common,      MRB_ARGS_REQ(1));
@@ -10,9 +10,9 @@ bool siren_bo_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_bo_common(mrb_state* mrb, mrb_value self)
+VALUE siren_bo_common( VALUE self)
 {
-  mrb_value target;
+  VALUE target;
   int argc = mrb_get_args(mrb, "o", &target);
   TopoDS_Shape* S1 = siren_shape_get(mrb, self);
   TopoDS_Shape* S2 = siren_shape_get(mrb, target);
@@ -24,9 +24,9 @@ mrb_value siren_bo_common(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_bo_fuse(mrb_state* mrb, mrb_value self)
+VALUE siren_bo_fuse( VALUE self)
 {
-  mrb_value target;
+  VALUE target;
   int argc = mrb_get_args(mrb, "o", &target);
   TopoDS_Shape* S1 = siren_shape_get(mrb, self);
   TopoDS_Shape* S2 = siren_shape_get(mrb, target);
@@ -38,9 +38,9 @@ mrb_value siren_bo_fuse(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_bo_cut(mrb_state* mrb, mrb_value self)
+VALUE siren_bo_cut( VALUE self)
 {
-  mrb_value target;
+  VALUE target;
   int argc = mrb_get_args(mrb, "o", &target);
   TopoDS_Shape* S1 = siren_shape_get(mrb, self);
   TopoDS_Shape* S2 = siren_shape_get(mrb, target);
@@ -52,9 +52,9 @@ mrb_value siren_bo_cut(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, api.Shape());
 }
 
-mrb_value siren_bo_projwire(mrb_state* mrb, mrb_value self)
+VALUE siren_bo_projwire( VALUE self)
 {
-  mrb_value w, v;
+  VALUE w, v;
   int argc = mrb_get_args(mrb, "oo", &w, &v);
   TopoDS_Shape* wire = siren_shape_get(mrb, w);
   TopoDS_Shape* shape = siren_shape_get(mrb, self);

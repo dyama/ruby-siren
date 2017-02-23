@@ -7,15 +7,15 @@
 #include <TopoDS_Compound.hxx>
 #include <BRep_Builder.hxx>
 
-static struct mrb_data_type siren_compound_type = { "Compound", siren_shape_final };
-bool siren_compound_install(mrb_state* mrb, struct RClass* mod_siren);
-TopoDS_Compound siren_compound_get(mrb_state* mrb, mrb_value self);
-mrb_value siren_compound_new(mrb_state* mrb, const TopoDS_Shape* src);
-mrb_value siren_compound_obj(mrb_state* mrb);
-struct RClass* siren_compound_rclass(mrb_state* mrb);
+static rb_data_type_t siren_compound_type = { "Compound", siren_shape_final };
+bool siren_compound_install( struct RClass* mod_siren);
+TopoDS_Compound siren_compound_get( VALUE self);
+VALUE siren_compound_new( const TopoDS_Shape* src);
+VALUE siren_compound_obj();
+struct RClass* siren_compound_rclass();
 
-mrb_value siren_compound_init(mrb_state* mrb, mrb_value self);
-mrb_value siren_compound_push(mrb_state* mrb, mrb_value self);
-mrb_value siren_compound_delete(mrb_state* mrb, mrb_value self);
+VALUE siren_compound_init( VALUE self);
+VALUE siren_compound_push( VALUE self);
+VALUE siren_compound_delete( VALUE self);
 
 #endif

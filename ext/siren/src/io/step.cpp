@@ -2,7 +2,7 @@
 
 #ifdef SIREN_ENABLE_STEP
 
-bool siren_step_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_step_install( struct RClass* mod_siren)
 {
   // Class method
   mrb_define_class_method(mrb, mod_siren, "save_step",  siren_step_save, MRB_ARGS_REQ(2));
@@ -13,10 +13,10 @@ bool siren_step_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_step_save(mrb_state* mrb, mrb_value self)
+VALUE siren_step_save( VALUE self)
 {
-  mrb_value s;
-  mrb_value path;
+  VALUE s;
+  VALUE path;
   int argc = mrb_get_args(mrb, "oS", &s, &path);
   TopoDS_Shape* shape = siren_shape_get(mrb, s);
   STEPControl_Writer writer;
@@ -29,9 +29,9 @@ mrb_value siren_step_save(mrb_state* mrb, mrb_value self)
   return mrb_nil_value();
 }
 
-mrb_value siren_step_load(mrb_state* mrb, mrb_value self)
+VALUE siren_step_load( VALUE self)
 {
-  mrb_value path;
+  VALUE path;
   int argc = mrb_get_args(mrb, "S", &path);
   STEPControl_Reader reader;
   if (!reader.ReadFile((Standard_CString)RSTRING_PTR(path))) {

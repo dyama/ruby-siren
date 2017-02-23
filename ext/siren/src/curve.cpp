@@ -5,7 +5,7 @@
 
 #include "curve.h"
 
-mrb_value siren_curve_new(mrb_state* mrb, const opencascade::handle<Geom_Curve>* curve)
+VALUE siren_curve_new( const opencascade::handle<Geom_Curve>* curve)
 {
   GeomAbs_CurveType type = siren_curve_geomtype_native(*curve);
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
@@ -21,7 +21,7 @@ mrb_value siren_curve_new(mrb_state* mrb, const opencascade::handle<Geom_Curve>*
     default: break;
   }
   // rIght?
-  mrb_value obj = mrb_instance_alloc(mrb, mrb_obj_value(siren_curve_rclass(mrb)));
+  VALUE obj = mrb_instance_alloc(mrb, mrb_obj_value(siren_curve_rclass(mrb)));
   void* p = mrb_malloc(mrb, sizeof(opencascade::handle<Geom_Curve>));
   opencascade::handle<Geom_Curve>* hgcurve = new(p) opencascade::handle<Geom_Curve>();
   *hgcurve = *curve;
@@ -30,7 +30,7 @@ mrb_value siren_curve_new(mrb_state* mrb, const opencascade::handle<Geom_Curve>*
   return obj;
 }
 
-bool siren_curve_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_curve_install( struct RClass* mod_siren)
 {
   struct RClass* cls_curve = mrb_define_class_under(mrb, mod_siren, "Curve", mrb->object_class);
   MRB_SET_INSTANCE_TT(cls_curve, MRB_TT_DATA);
@@ -49,13 +49,13 @@ bool siren_curve_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_curve_init(mrb_state* mrb, mrb_value self)
+VALUE siren_curve_init( VALUE self)
 {
   mrb_raise(mrb, E_NOMETHOD_ERROR, "private method `new' called for Curve:Class");
   return mrb_nil_value();
 }
 
-void siren_curve_final(mrb_state* mrb, void* p)
+void siren_curve_final( void* p)
 {
   opencascade::handle<Geom_Curve>* hgcurve = static_cast<opencascade::handle<Geom_Curve>*>(p);
   if (!(*hgcurve).IsNull()) {
@@ -64,12 +64,12 @@ void siren_curve_final(mrb_state* mrb, void* p)
   mrb_free(mrb, p);
 }
 
-opencascade::handle<Geom_Curve>* siren_curve_get(mrb_state* mrb, mrb_value obj)
+opencascade::handle<Geom_Curve>* siren_curve_get( VALUE obj)
 {
   return static_cast<opencascade::handle<Geom_Curve>*>(mrb_get_datatype(mrb, obj, &siren_curve_type));
 }
 
-struct RClass* siren_curve_rclass(mrb_state* mrb)
+struct RClass* siren_curve_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Curve")));

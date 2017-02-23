@@ -1,13 +1,13 @@
 #include "heal.h"
 
-mrb_value siren_heal_outerwire(mrb_state* mrb, mrb_value self)
+VALUE siren_heal_outerwire( VALUE self)
 {
   mrb_float tol = 1.0e-1;
   int argc = mrb_get_args(mrb, "|f", &tol);
 
   TopoDS_Shape* shape = siren_shape_get(mrb, self);
 
-  mrb_value res = mrb_nil_value();
+  VALUE res = mrb_nil_value();
 
   if (shape->ShapeType() == TopAbs_FACE) {
     TopoDS_Face face = TopoDS::Face(*shape);
@@ -24,10 +24,10 @@ mrb_value siren_heal_outerwire(mrb_state* mrb, mrb_value self)
   return res;
 }
 
-mrb_value siren_heal_fix(mrb_state* mrb, mrb_value self)
+VALUE siren_heal_fix( VALUE self)
 {
   TopoDS_Shape* shape = siren_shape_get(mrb, self);
-  mrb_value res = mrb_nil_value();
+  VALUE res = mrb_nil_value();
 
   opencascade::handle<ShapeFix_Shape> sfs = new ShapeFix_Shape();
   sfs->Init(*shape);

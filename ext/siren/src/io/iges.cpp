@@ -2,7 +2,7 @@
 
 #ifdef SIREN_ENABLE_IGES
 
-bool siren_iges_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_iges_install( struct RClass* mod_siren)
 {
   // Class method
   mrb_define_class_method(mrb, mod_siren, "save_iges", siren_iges_save, MRB_ARGS_REQ(2));
@@ -13,10 +13,10 @@ bool siren_iges_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_iges_save(mrb_state* mrb, mrb_value self)
+VALUE siren_iges_save( VALUE self)
 {
-  mrb_value target;
-  mrb_value path;
+  VALUE target;
+  VALUE path;
   int argc = mrb_get_args(mrb, "oS", &target, &path);
 
   IGESControl_Controller::Init();
@@ -35,15 +35,15 @@ mrb_value siren_iges_save(mrb_state* mrb, mrb_value self)
   return mrb_nil_value();
 }
 
-mrb_value siren_iges_load(mrb_state* mrb, mrb_value self)
+VALUE siren_iges_load( VALUE self)
 {
-  mrb_value path;
+  VALUE path;
   mrb_bool as_ary = FALSE;
   int argc = mrb_get_args(mrb, "S|b", &path, &as_ary);
 
   IGESControl_Reader iges_reader;
   int stat = iges_reader.ReadFile((Standard_CString)RSTRING_PTR(path));
-  mrb_value result;
+  VALUE result;
 
   if (stat == IFSelect_RetDone) {
     try {
@@ -59,7 +59,7 @@ mrb_value siren_iges_load(mrb_state* mrb, mrb_value self)
       for (int i=1; i <= iges_reader.NbShapes(); i++) {
         try {
           TopoDS_Shape shape = iges_reader.Shape(i);
-          mrb_value mrshape = siren_shape_new(mrb, shape);
+          VALUE mrshape = siren_shape_new(mrb, shape);
           mrb_ary_push(mrb, result, mrshape);
         }
         catch(...) {

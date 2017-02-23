@@ -10,36 +10,36 @@
 #include <gp_Ax3.hxx>
 #include <gp_Trsf.hxx>
 
-bool siren_trans_install(mrb_state* mrb, struct RClass* rclass);
-void siren_trans_final(mrb_state* mrb, void* p);
-static struct mrb_data_type siren_trans_type = { "Trans", siren_trans_final };
-gp_Trsf* siren_trans_get(mrb_state* mrb, mrb_value obj);
-struct RClass* siren_trans_rclass(mrb_state* mrb);
-mrb_value siren_trans_new(mrb_state* mrb, const gp_Trsf& src);
+bool siren_trans_install( struct RClass* rclass);
+void siren_trans_final( void* p);
+static rb_data_type_t siren_trans_type = { "Trans", siren_trans_final };
+gp_Trsf* siren_trans_get( VALUE obj);
+struct RClass* siren_trans_rclass();
+VALUE siren_trans_new( const gp_Trsf& src);
 
-mrb_value siren_trans_init(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_to_s(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_to_a(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_matrix(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_set_matrix(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_multiply(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_multiply_bang(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_power(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_power_bang(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_invert(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_invert_bang(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_is_negative(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_translate_bang(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_translatef(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_set_translatef(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_mirror_bang(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_rotate_bang(mrb_state* mrb, mrb_value self);
-//mrb_value siren_trans_rotatef(mrb_state* mrb, mrb_value self);
-//mrb_value siren_trans_set_rotatef(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_scale_bang(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_scalef(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_set_scalef(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_transform_bang(mrb_state* mrb, mrb_value self);
-mrb_value siren_trans_move_point(mrb_state* mrb, mrb_value self);
+VALUE siren_trans_init( VALUE self);
+VALUE siren_trans_to_s( VALUE self);
+VALUE siren_trans_to_a( VALUE self);
+VALUE siren_trans_matrix( VALUE self);
+VALUE siren_trans_set_matrix( VALUE self);
+VALUE siren_trans_multiply( VALUE self);
+VALUE siren_trans_multiply_bang( VALUE self);
+VALUE siren_trans_power( VALUE self);
+VALUE siren_trans_power_bang( VALUE self);
+VALUE siren_trans_invert( VALUE self);
+VALUE siren_trans_invert_bang( VALUE self);
+VALUE siren_trans_is_negative( VALUE self);
+VALUE siren_trans_translate_bang( VALUE self);
+VALUE siren_trans_translatef( VALUE self);
+VALUE siren_trans_set_translatef( VALUE self);
+VALUE siren_trans_mirror_bang( VALUE self);
+VALUE siren_trans_rotate_bang( VALUE self);
+//VALUE siren_trans_rotatef( VALUE self);
+//VALUE siren_trans_set_rotatef( VALUE self);
+VALUE siren_trans_scale_bang( VALUE self);
+VALUE siren_trans_scalef( VALUE self);
+VALUE siren_trans_set_scalef( VALUE self);
+VALUE siren_trans_transform_bang( VALUE self);
+VALUE siren_trans_move_point( VALUE self);
 
 #endif

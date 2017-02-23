@@ -1,8 +1,8 @@
 #include "shape/edge.h"
 
-mrb_value siren_edge_new(mrb_state* mrb, const TopoDS_Shape* src)
+VALUE siren_edge_new( const TopoDS_Shape* src)
 {
-  mrb_value obj;
+  VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   obj = mrb_instance_alloc(mrb, mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Edge")));
@@ -14,7 +14,7 @@ mrb_value siren_edge_new(mrb_state* mrb, const TopoDS_Shape* src)
   return obj;
 }
 
-TopoDS_Edge siren_edge_get(mrb_state* mrb, mrb_value self)
+TopoDS_Edge siren_edge_get( VALUE self)
 {
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(mrb_get_datatype(mrb, self, &siren_edge_type));
   TopoDS_Edge edge = TopoDS::Edge(*shape);
@@ -22,7 +22,7 @@ TopoDS_Edge siren_edge_get(mrb_state* mrb, mrb_value self)
   return edge;
 }
 
-bool siren_edge_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_edge_install( struct RClass* mod_siren)
 {
   struct RClass* cls_shape = siren_shape_rclass(mrb);
   struct RClass* cls_edge = mrb_define_class_under(mrb, mod_siren, "Edge", cls_shape);
@@ -44,9 +44,9 @@ bool siren_edge_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_edge_init(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_init( VALUE self)
 {
-  mrb_value curve;
+  VALUE curve;
   mrb_float sp = 0.0, tp = 1.0;
   int argc = mrb_get_args(mrb, "o|ff", &curve, &sp, &tp);
   opencascade::handle<Geom_Curve>* phgcurve
@@ -78,27 +78,27 @@ mrb_value siren_edge_init(mrb_state* mrb, mrb_value self)
   return self;
 }
 
-struct RClass* siren_edge_rclass(mrb_state* mrb)
+struct RClass* siren_edge_rclass()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_class_ptr(mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Edge")));
 }
 
-mrb_value siren_edge_sp(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_sp( VALUE self)
 {
   BRepAdaptor_Curve bracurve(siren_edge_get(mrb, self));
   gp_Pnt sp = bracurve.Value(bracurve.FirstParameter());
   return siren_pnt_to_ary(mrb, sp);
 }
 
-mrb_value siren_edge_tp(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_tp( VALUE self)
 {
   BRepAdaptor_Curve bracurve(siren_edge_get(mrb, self));
   gp_Pnt tp = bracurve.Value(bracurve.LastParameter());
   return siren_pnt_to_ary(mrb, tp);
 }
 
-mrb_value siren_edge_to_pts(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_to_pts( VALUE self)
 {
   mrb_float deflect = 1.0e-7;
   mrb_float lintol = 1.0e-7;
@@ -109,7 +109,7 @@ mrb_value siren_edge_to_pts(mrb_state* mrb, mrb_value self)
   first_param = adaptor.FirstParameter();
   last_param = adaptor.LastParameter();
 
-  mrb_value line = mrb_ary_new(mrb);
+  VALUE line = mrb_ary_new(mrb);
 
   GCPnts_UniformDeflection unidef(adaptor, deflect);
   if (unidef.IsDone()) {
@@ -135,9 +135,9 @@ mrb_value siren_edge_to_pts(mrb_state* mrb, mrb_value self)
   return line;
 }
 
-mrb_value siren_edge_param(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_param( VALUE self)
 {
-  mrb_value xyz;
+  VALUE xyz;
   mrb_float tol = 1.0e-7;
   int argc = mrb_get_args(mrb, "A|f", &xyz, &tol);
 
@@ -157,7 +157,7 @@ mrb_value siren_edge_param(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, param);
 }
 
-mrb_value siren_edge_to_xyz(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_to_xyz( VALUE self)
 {
   mrb_float param;
   int argc = mrb_get_args(mrb, "f", &param);
@@ -168,7 +168,7 @@ mrb_value siren_edge_to_xyz(mrb_state* mrb, mrb_value self)
   return siren_pnt_to_ary(mrb, p);
 }
 
-mrb_value siren_edge_curvature(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_curvature( VALUE self)
 {
   mrb_float param;
   int argc = mrb_get_args(mrb, "f", &param);
@@ -179,7 +179,7 @@ mrb_value siren_edge_curvature(mrb_state* mrb, mrb_value self)
   return siren_vec_new(mrb, v2.X(), v2.Y(), v2.Z());
 }
 
-mrb_value siren_edge_tangent(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_tangent( VALUE self)
 {
   mrb_float param;
   int argc = mrb_get_args(mrb, "f", &param);
@@ -190,18 +190,18 @@ mrb_value siren_edge_tangent(mrb_state* mrb, mrb_value self)
   return siren_vec_new(mrb, v1.X(), v1.Y(), v1.Z());
 }
 
-mrb_value siren_edge_terms(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_terms( VALUE self)
 {
   TopoDS_Edge edge = siren_edge_get(mrb, self);
   Standard_Real first, last;
   BRep_Tool::Curve(edge, first, last);
-  mrb_value res = mrb_ary_new(mrb);
+  VALUE res = mrb_ary_new(mrb);
   mrb_ary_push(mrb, res, mrb_float_value(mrb, first));
   mrb_ary_push(mrb, res, mrb_float_value(mrb, last));
   return res;
 }
 
-mrb_value siren_edge_curve(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_curve( VALUE self)
 {
   TopoDS_Edge edge = siren_edge_get(mrb, self);
   // // set property
@@ -215,9 +215,9 @@ mrb_value siren_edge_curve(mrb_state* mrb, mrb_value self)
   return siren_curve_new(mrb, &hgcurve);
 }
 
-mrb_value siren_edge_extrema(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_extrema( VALUE self)
 {
-  mrb_value other;
+  VALUE other;
   int argc = mrb_get_args(mrb, "o", &other);
   TopoDS_Edge e2 = siren_edge_get(mrb, other);
   if (e2.IsNull()) {
@@ -231,17 +231,17 @@ mrb_value siren_edge_extrema(mrb_state* mrb, mrb_value self)
   else if (ext.IsParallel()) {
     return mrb_nil_value();
   }
-  mrb_value p1s = mrb_ary_new(mrb);
-  mrb_value p2s = mrb_ary_new(mrb);
+  VALUE p1s = mrb_ary_new(mrb);
+  VALUE p2s = mrb_ary_new(mrb);
   for (int i = 1; i <= ext.NbExt(); i++) {
     mrb_ary_push(mrb, p1s, mrb_float_value(mrb, ext.ParameterOnE1(i)));
     mrb_ary_push(mrb, p2s, mrb_float_value(mrb, ext.ParameterOnE2(i)));
   }
-  mrb_value res[2] = { p1s, p2s };
+  VALUE res[2] = { p1s, p2s };
   return mrb_ary_new_from_values(mrb, 2, res);
 }
 
-mrb_value siren_edge_split(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_split( VALUE self)
 {
   mrb_float param;
   int argc = mrb_get_args(mrb, "f", &param);
@@ -253,11 +253,11 @@ mrb_value siren_edge_split(mrb_state* mrb, mrb_value self)
   }
   TopoDS_Edge e1 = BRepBuilderAPI_MakeEdge(gc, first, param);
   TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(gc, param, last);
-  mrb_value res[] = { siren_shape_new(mrb, e1), siren_shape_new(mrb, e2) };
+  VALUE res[] = { siren_shape_new(mrb, e1), siren_shape_new(mrb, e2) };
   return mrb_ary_new_from_values(mrb, 2, res);
 }
 
-mrb_value siren_edge_trim(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_trim( VALUE self)
 {
   mrb_float first2, last2;
   int argc = mrb_get_args(mrb, "ff", &first2, &last2);
@@ -271,10 +271,10 @@ mrb_value siren_edge_trim(mrb_state* mrb, mrb_value self)
   return siren_shape_new(mrb, edge);
 }
 
-mrb_value siren_edge_length(mrb_state* mrb, mrb_value self)
+VALUE siren_edge_length( VALUE self)
 {
   Standard_Real res = 0.0;
-  mrb_value ary = siren_edge_to_pts(mrb, self);
+  VALUE ary = siren_edge_to_pts(mrb, self);
   gp_Pnt prev;
   for (int i=0; i < mrb_ary_len(mrb, ary); i++) {
     if (i == 0) {
@@ -289,7 +289,7 @@ mrb_value siren_edge_length(mrb_state* mrb, mrb_value self)
   return mrb_float_value(mrb, res);
 }
 
-mrb_value siren_edge_obj(mrb_state* mrb)
+VALUE siren_edge_obj()
 {
   struct RClass* mod_siren = mrb_module_get(mrb, "Siren");
   return mrb_const_get(mrb, mrb_obj_value(mod_siren), mrb_intern_lit(mrb, "Edge"));

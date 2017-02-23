@@ -5,16 +5,16 @@
 
 #include <Geom_BSplineCurve.hxx>
 
-static struct mrb_data_type siren_bscurve_type = { "BSCurve", siren_curve_final };
-bool siren_bscurve_install(mrb_state* mrb, struct RClass* mod_siren);
-handle<Geom_BSplineCurve> siren_bscurve_get(mrb_state* mrb, mrb_value self);
-mrb_value siren_bscurve_new(mrb_state* mrb, const handle<Geom_Curve>* curve);
+static rb_data_type_t siren_bscurve_type = { "BSCurve", siren_curve_final };
+bool siren_bscurve_install( struct RClass* mod_siren);
+handle<Geom_BSplineCurve> siren_bscurve_get( VALUE self);
+VALUE siren_bscurve_new( const handle<Geom_Curve>* curve);
 
-mrb_value siren_bscurve_init(mrb_state* mrb, mrb_value self);
-mrb_value siren_bscurve_degree(mrb_state* mrb, mrb_value self);
-mrb_value siren_bscurve_knots(mrb_state* mrb, mrb_value self);
-mrb_value siren_bscurve_mults(mrb_state* mrb, mrb_value self);
-mrb_value siren_bscurve_poles(mrb_state* mrb, mrb_value self);
-mrb_value siren_bscurve_weights(mrb_state* mrb, mrb_value self);
+VALUE siren_bscurve_init( VALUE self);
+VALUE siren_bscurve_degree( VALUE self);
+VALUE siren_bscurve_knots( VALUE self);
+VALUE siren_bscurve_mults( VALUE self);
+VALUE siren_bscurve_poles( VALUE self);
+VALUE siren_bscurve_weights( VALUE self);
 
 #endif

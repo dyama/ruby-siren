@@ -1,6 +1,6 @@
 #include "io/stl.h"
 
-bool siren_stl_install(mrb_state* mrb, struct RClass* mod_siren)
+bool siren_stl_install( struct RClass* mod_siren)
 {
   // Class method
   mrb_define_class_method(mrb, mod_siren, "load_stl", siren_stl_load, MRB_ARGS_REQ(1));
@@ -9,9 +9,9 @@ bool siren_stl_install(mrb_state* mrb, struct RClass* mod_siren)
   return true;
 }
 
-mrb_value siren_stl_load(mrb_state* mrb, mrb_value self)
+VALUE siren_stl_load( VALUE self)
 {
-  mrb_value path;
+  VALUE path;
   int argc = mrb_get_args(mrb, "S", &path);
 
   TopoDS_Shape shape;
