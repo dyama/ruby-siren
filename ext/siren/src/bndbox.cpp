@@ -20,12 +20,12 @@ Bnd_Box* siren_bndbox_get( VALUE obj)
 struct RClass* siren_bndbox_rclass()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), rb_intern_lit("BndBox")));
+  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("BndBox")));
 }
 
 bool siren_bndbox_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_bndbox = rb_define_class_under(mod_siren, "BndBox", mrb->object_class);
+  struct RClass* cls_bndbox = rb_define_class_under(mod_siren, "BndBox", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_bndbox, MRB_TT_DATA);
   rb_define_method(cls_bndbox, "initialize", siren_bndbox_init,          MRB_ARGS_NONE());
   rb_define_method(cls_bndbox, "inspect",    siren_bndbox_to_s,          MRB_ARGS_NONE());
@@ -151,8 +151,8 @@ VALUE siren_bndbox_is_out( VALUE self)
   VALUE other;
   int argc = rb_get_args("o", &other);
   Bnd_Box* b = siren_bndbox_get(self);
-  // return b->IsOut(siren_pnt_get(other)) == Standard_True ? rb_true_value() : rb_false_value();
-  return b->IsOut(*siren_bndbox_get(other)) == Standard_True ? rb_true_value() : rb_false_value();
+  // return b->IsOut(siren_pnt_get(other)) == Standard_True ? Qtrue : Qfalse;
+  return b->IsOut(*siren_bndbox_get(other)) == Standard_True ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_center( VALUE self)
@@ -205,12 +205,12 @@ VALUE siren_bndbox_zsize( VALUE self)
 
 VALUE siren_bndbox_is_void( VALUE self)
 {
-  return siren_bndbox_get(self)->IsVoid() ? rb_true_value() : rb_false_value();
+  return siren_bndbox_get(self)->IsVoid() ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_whole( VALUE self)
 {
-  return siren_bndbox_get(self)->IsWhole() ? rb_true_value() : rb_false_value();
+  return siren_bndbox_get(self)->IsWhole() ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_void_bang( VALUE self)
@@ -230,7 +230,7 @@ VALUE siren_bndbox_is_xthin( VALUE self)
   VALUE tol;
   int argc = rb_get_args("|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
-  return b->IsXThin(argc ? tol : 0.0) ? rb_true_value() : rb_false_value();
+  return b->IsXThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_ythin( VALUE self)
@@ -238,7 +238,7 @@ VALUE siren_bndbox_is_ythin( VALUE self)
   VALUE tol;
   int argc = rb_get_args("|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
-  return b->IsYThin(argc ? tol : 0.0) ? rb_true_value() : rb_false_value();
+  return b->IsYThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_zthin( VALUE self)
@@ -246,37 +246,37 @@ VALUE siren_bndbox_is_zthin( VALUE self)
   VALUE tol;
   int argc = rb_get_args("|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
-  return b->IsZThin(argc ? tol : 0.0) ? rb_true_value() : rb_false_value();
+  return b->IsZThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_openxmin( VALUE self)
 {
-  return siren_bndbox_get(self)->IsOpenXmin() ? rb_true_value() : rb_false_value();
+  return siren_bndbox_get(self)->IsOpenXmin() ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_openxmax( VALUE self)
 {
-  return siren_bndbox_get(self)->IsOpenXmax() ? rb_true_value() : rb_false_value();
+  return siren_bndbox_get(self)->IsOpenXmax() ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_openymin( VALUE self)
 {
-  return siren_bndbox_get(self)->IsOpenYmin() ? rb_true_value() : rb_false_value();
+  return siren_bndbox_get(self)->IsOpenYmin() ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_openymax( VALUE self)
 {
-  return siren_bndbox_get(self)->IsOpenYmax() ? rb_true_value() : rb_false_value();
+  return siren_bndbox_get(self)->IsOpenYmax() ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_openzmin( VALUE self)
 {
-  return siren_bndbox_get(self)->IsOpenZmin() ? rb_true_value() : rb_false_value();
+  return siren_bndbox_get(self)->IsOpenZmin() ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_is_openzmax( VALUE self)
 {
-  return siren_bndbox_get(self)->IsOpenZmax() ? rb_true_value() : rb_false_value();
+  return siren_bndbox_get(self)->IsOpenZmax() ? Qtrue : Qfalse;
 }
 
 VALUE siren_bndbox_openxmin_bang( VALUE self)

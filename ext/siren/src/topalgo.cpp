@@ -33,7 +33,7 @@ bool siren_topalgo_install( struct RClass* mod_siren)
 VALUE siren_topalgo_copy( VALUE self)
 {
   VALUE target;
-  rb_bool copy_geom = (_bool)Standard_True;
+  VALUE copy_geom = (_bool)Standard_True;
   int argc = rb_get_args("o|b", &target, &copy_geom);
   TopoDS_Shape* src = siren_shape_get(target);
   TopoDS_Shape res = BRepBuilderAPI_Copy(*src, (Standard_Boolean)copy_geom);

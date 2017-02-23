@@ -38,7 +38,7 @@ VALUE siren_iges_save( VALUE self)
 VALUE siren_iges_load( VALUE self)
 {
   VALUE path;
-  rb_bool as_ary = FALSE;
+  VALUE as_ary = FALSE;
   int argc = rb_get_args("S|b", &path, &as_ary);
 
   IGESControl_Reader iges_reader;

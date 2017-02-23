@@ -1,9 +1,15 @@
 #include "heal.h"
 
-VALUE siren_heal_outerwire( VALUE self)
+VALUE siren_heal_outerwire(VALUE self, VALUE tol)
 {
+#if 0
   VALUE tol = 1.0e-1;
   int argc = rb_get_args("|f", &tol);
+#else
+  if (tol == Qnil) {
+    tol = 1.0e-1;
+  }
+#endif
 
   TopoDS_Shape* shape = siren_shape_get(self);
 
@@ -17,7 +23,11 @@ VALUE siren_heal_outerwire( VALUE self)
     res = siren_shape_new(wire);
   }
   else {
+#if 0
     ShapeAnalysis_FreeBounds safb(*shape, tol);
+#else
+    ShapeAnalysis_FreeBounds safb(*shape, NUM2DBL(tol));
+#endif
     TopoDS_Compound comp = safb.GetClosedWires();
     res = siren_shape_new(comp);
   }

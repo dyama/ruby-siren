@@ -7,7 +7,7 @@ VALUE siren_chunk_new( const TopoDS_Shape* src)
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Chunk")));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Chunk")));
   void* p = rb_malloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
@@ -37,19 +37,19 @@ bool siren_chunk_install( struct RClass* mod_siren)
 struct RClass* siren_chunk_rclass()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), rb_intern_lit("Chunk")));
+  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Chunk")));
 }
 
 VALUE siren_chunk_obj()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Chunk"));
+  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Chunk"));
 }
 
 VALUE siren_chunk_init( VALUE self)
 {
   VALUE* a;
-  rb_int len;
+  VALUE len;
   int argc = rb_get_args("*", &a, &len);
 
   TopoDS_CompSolid cs;

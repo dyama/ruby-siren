@@ -43,7 +43,7 @@ VALUE siren_offset_sweep_vec( VALUE self)
 VALUE siren_offset_sweep_path( VALUE self)
 {
   VALUE target, pathwire;
-  rb_bool cont, corr;
+  VALUE cont, corr;
   VALUE scale_first, scale_last;
   int argc = rb_get_args("oo|bbff", &target, &pathwire, &cont, &corr, &scale_first, &scale_last);
 
@@ -122,7 +122,7 @@ VALUE siren_offset_sweep_path( VALUE self)
 VALUE siren_offset_loft( VALUE self)
 {
   VALUE objs;
-  rb_bool smooth, is_solid, is_ruled;
+  VALUE smooth, is_solid, is_ruled;
   int argc = rb_get_args("A|bbb", &objs, &smooth,  &is_solid, &is_ruled);
   int lsize = rb_ary_len(objs);
 
@@ -181,10 +181,10 @@ VALUE siren_offset_offset( VALUE self)
 {
   VALUE target;
   VALUE offset, tol;
-  rb_int mode = (int)BRepOffset_Skin;
-  rb_bool intersect = false, self_intersect = false;
-  rb_int join = (int)GeomAbs_Arc;
-  rb_bool thickening = false;
+  VALUE mode = (int)BRepOffset_Skin;
+  VALUE intersect = false, self_intersect = false;
+  VALUE join = (int)GeomAbs_Arc;
+  VALUE thickening = false;
   int argc = rb_get_args("off|ibbib", &target, &offset, &tol, &mode,
       &intersect, &self_intersect, &join, &thickening);
 
@@ -209,9 +209,9 @@ VALUE siren_offset_offset_shape( VALUE self)
 {
   VALUE target;
   VALUE offset, tol;
-  rb_int mode = (int)BRepOffset_Skin;
-  rb_bool intersect = false, self_intersect = false;
-  rb_int join = (int)GeomAbs_Arc;
+  VALUE mode = (int)BRepOffset_Skin;
+  VALUE intersect = false, self_intersect = false;
+  VALUE join = (int)GeomAbs_Arc;
   int argc = rb_get_args("off|ibbi", &target, &offset, &tol, &mode,
       &intersect, &self_intersect, &join);
 
@@ -226,8 +226,8 @@ VALUE siren_offset_offset_shape( VALUE self)
 VALUE siren_offset_pipe( VALUE self)
 {
   VALUE profile, path;
-  rb_int mode;
-  rb_bool force_approx_c1;
+  VALUE mode;
+  VALUE force_approx_c1;
   int argc = rb_get_args("oo|ib", &profile, &path, &mode, &force_approx_c1);
 
   TopoDS_Shape* shape_profile = siren_shape_get(profile);

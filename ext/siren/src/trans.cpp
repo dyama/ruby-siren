@@ -8,7 +8,7 @@ gp_Trsf* siren_trans_get( VALUE obj)
 struct RClass* siren_trans_rclass()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), rb_intern_lit("Trans")));
+  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Trans")));
 }
 
 VALUE siren_trans_new( const gp_Trsf& src)
@@ -25,7 +25,7 @@ VALUE siren_trans_new( const gp_Trsf& src)
 
 bool siren_trans_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_trans = rb_define_class_under(mod_siren, "Trans", mrb->object_class);
+  struct RClass* cls_trans = rb_define_class_under(mod_siren, "Trans", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_trans, MRB_TT_DATA);
   rb_define_method(cls_trans, "initialize"     , siren_trans_init               , MRB_ARGS_NONE());
   rb_define_method(cls_trans, "inspect"        , siren_trans_to_s               , MRB_ARGS_NONE());
@@ -211,14 +211,14 @@ VALUE siren_trans_multiply_bang( VALUE self)
 
 VALUE siren_trans_power( VALUE self)
 {
-  rb_int n;
+  VALUE n;
   int argc = rb_get_args("i", &n);
   return siren_trans_new(siren_trans_get(self)->Powered(n));
 }
 
 VALUE siren_trans_power_bang( VALUE self)
 {
-  rb_int n;
+  VALUE n;
   int argc = rb_get_args("i", &n);
   siren_trans_get(self)->Power(n);
   return self;
@@ -237,7 +237,7 @@ VALUE siren_trans_invert_bang( VALUE self)
 
 VALUE siren_trans_is_negative( VALUE self)
 {
-  return siren_trans_get(self)->IsNegative() ? rb_true_value() : rb_false_value();
+  return siren_trans_get(self)->IsNegative() ? Qtrue : Qfalse;
 }
 
 VALUE siren_trans_transform_bang( VALUE self)

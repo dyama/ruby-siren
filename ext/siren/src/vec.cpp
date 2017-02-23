@@ -8,7 +8,7 @@ gp_Vec* siren_vec_get( VALUE obj)
 struct RClass* siren_vec_rclass()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), rb_intern_lit("Vec")));
+  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Vec")));
 }
 
 VALUE siren_vec_new( double x, double y, double z)
@@ -27,7 +27,7 @@ VALUE siren_vec_new( const gp_Vec& vec)
 
 bool siren_vec_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_vec = rb_define_class_under(mod_siren, "Vec", mrb->object_class);
+  struct RClass* cls_vec = rb_define_class_under(mod_siren, "Vec", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_vec, MRB_TT_DATA);
   rb_define_method(cls_vec, "initialize",       siren_vec_init,             MRB_ARGS_NONE() | MRB_ARGS_OPT(1));
   rb_define_method(cls_vec, "x",                siren_vec_x,                MRB_ARGS_NONE());
@@ -81,7 +81,7 @@ bool siren_vec_install( struct RClass* mod_siren)
 VALUE siren_vec_init( VALUE self)
 {
   VALUE* a;
-  rb_int len;
+  VALUE len;
   int argc = rb_get_args("*", &a, &len);
 
   Standard_Real x = 0.0, y = 0.0, z = 0.0;
@@ -184,7 +184,7 @@ VALUE siren_vec_is_equal( VALUE self)
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
   Standard_Boolean res = me->IsEqual(*o, lintol, angtol);
-  return res ? rb_true_value() : rb_false_value();
+  return res ? Qtrue : Qfalse;
 }
 
 VALUE siren_vec_is_normal( VALUE self)
@@ -195,7 +195,7 @@ VALUE siren_vec_is_normal( VALUE self)
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
   Standard_Boolean res = me->IsNormal(*o, angtol);
-  return res ? rb_true_value() : rb_false_value();
+  return res ? Qtrue : Qfalse;
 }
 
 VALUE siren_vec_is_reverse( VALUE self)
@@ -206,7 +206,7 @@ VALUE siren_vec_is_reverse( VALUE self)
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
   Standard_Boolean res = me->IsOpposite(*o, angtol);
-  return res ? rb_true_value() : rb_false_value();
+  return res ? Qtrue : Qfalse;
 }
 
 VALUE siren_vec_is_parallel( VALUE self)
@@ -217,7 +217,7 @@ VALUE siren_vec_is_parallel( VALUE self)
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
   Standard_Boolean res = me->IsParallel(*o, angtol);
-  return res ? rb_true_value() : rb_false_value();
+  return res ? Qtrue : Qfalse;
 }
 
 VALUE siren_vec_normal( VALUE self)
@@ -281,7 +281,7 @@ VALUE siren_vec_eq( VALUE self)
   int argc = rb_get_args("o", &other);
   Standard_Real lintol = 0.0, angtol = 0.0; // to be use the default tolerance value
   Standard_Boolean ans = siren_vec_get(self)->IsEqual(*siren_vec_get(other), lintol, angtol);
-  return ans ? rb_true_value() : rb_false_value();
+  return ans ? Qtrue : Qfalse;
 }
 
 VALUE siren_vec_plus( VALUE self)

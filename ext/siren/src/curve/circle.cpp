@@ -4,7 +4,7 @@ VALUE siren_circle_new( const handle<Geom_Curve>* curve)
 {
   struct RClass* mod_siren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Circle")));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Circle")));
   void* p = rb_malloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
@@ -25,7 +25,7 @@ handle<Geom_Circle> siren_circle_get( VALUE self)
 bool siren_circle_install( struct RClass* mod_siren)
 {
   struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_circle = rb_define_class_under(mod_siren, "Circle", mrb->object_class);
+  struct RClass* cls_circle = rb_define_class_under(mod_siren, "Circle", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_circle, MRB_TT_DATA);
   rb_define_method(cls_circle, "initialize", siren_curve_init, MRB_ARGS_NONE());
 
@@ -163,5 +163,5 @@ VALUE siren_circle_contain( VALUE self)
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
-  return circ.Contains(p, lintol) ? rb_true_value() : rb_false_value();
+  return circ.Contains(p, lintol) ? Qtrue : Qfalse;
 }

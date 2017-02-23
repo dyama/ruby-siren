@@ -5,7 +5,7 @@ VALUE siren_face_new( const TopoDS_Shape* src)
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Face")));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Face")));
   void* p = rb_malloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
@@ -46,7 +46,7 @@ bool siren_face_install( struct RClass* mod_siren)
 struct RClass* siren_face_rclass()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), rb_intern_lit("Face")));
+  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Face")));
 }
 
 VALUE siren_face_normal( VALUE self)
@@ -200,7 +200,7 @@ VALUE siren_face_triangle( VALUE self)
 VALUE siren_face_obj()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Face"));
+  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Face"));
 }
 
 VALUE siren_face_plane( VALUE self)
@@ -223,7 +223,7 @@ VALUE siren_face_plane( VALUE self)
 VALUE siren_face_face( VALUE self)
 {
   VALUE wire;
-  rb_bool force_plane;
+  VALUE force_plane;
   int argc = rb_get_args("ob", &wire, &force_plane);
   TopoDS_Shape* s = siren_shape_get(wire);
   TopoDS_Wire w = TopoDS::Wire(*s);
@@ -246,7 +246,7 @@ VALUE siren_face_infplane( VALUE self)
 VALUE siren_face_polygon( VALUE self)
 {
   VALUE pts;
-  rb_bool force_plane = (_bool)Standard_True;
+  VALUE force_plane = (_bool)Standard_True;
   int argc = rb_get_args("A|b", &pts, &force_plane);
 
   BRepBuilderAPI_MakePolygon mp;
@@ -305,7 +305,7 @@ VALUE siren_face_bzsurf( VALUE self)
 
 VALUE siren_face_bssurf( VALUE self)
 {
-  rb_int _udeg, _vdeg;
+  VALUE _udeg, _vdeg;
   VALUE _ar_ukm, _ar_vkm;
   VALUE _pol;
   VALUE _wire;

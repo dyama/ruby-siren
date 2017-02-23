@@ -5,7 +5,7 @@ VALUE siren_edge_new( const TopoDS_Shape* src)
   VALUE obj;
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* mod_siren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Edge")));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Edge")));
   void* p = rb_malloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
@@ -81,7 +81,7 @@ VALUE siren_edge_init( VALUE self)
 struct RClass* siren_edge_rclass()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), rb_intern_lit("Edge")));
+  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Edge")));
 }
 
 VALUE siren_edge_sp( VALUE self)
@@ -207,9 +207,9 @@ VALUE siren_edge_curve( VALUE self)
   // // set property
   // Standard_Real first, last;
   // handle<Geom_Curve> hgcurve = BRep_Tool::Curve(edge, first, last);
-  // rb_obj_iv_set(rb_obj_value(cls_edge), rb_intern_lit("@curve"), siren_curve_new(&hgcurve));
+  // rb_obj_iv_set(rb_obj_value(cls_edge), VALUEern_lit("@curve"), siren_curve_new(&hgcurve));
   // // get property
-  // return rb_iv_get(self, rb_intern_lit("@curve"));
+  // return rb_iv_get(self, VALUEern_lit("@curve"));
   Standard_Real first, last;
   handle<Geom_Curve> hgcurve = BRep_Tool::Curve(edge, first, last);
   return siren_curve_new(&hgcurve);
@@ -292,5 +292,5 @@ VALUE siren_edge_length( VALUE self)
 VALUE siren_edge_obj()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("Edge"));
+  return rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("Edge"));
 }

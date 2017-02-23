@@ -9,7 +9,7 @@ VALUE siren_offsetcurve_new( const handle<Geom_Curve>* curve)
 {
   struct RClass* mod_siren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), rb_intern_lit("OffsetCurve")));
+  obj = rb_instance_alloc(rb_const_get(rb_obj_value(mod_siren), VALUEern_lit("OffsetCurve")));
   void* p = rb_malloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;

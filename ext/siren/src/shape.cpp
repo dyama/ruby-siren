@@ -35,12 +35,12 @@ VALUE siren_shape_new( const TopoDS_Shape& shape)
 struct RClass* siren_shape_rclass()
 {
   struct RClass* mod_siren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), rb_intern_lit("Shape")));
+  return rb_class_ptr(_const_get(rb_obj_value(mod_siren), VALUEern_lit("Shape")));
 }
 
 bool siren_shape_install( struct RClass* mod_siren)
 {
-  struct RClass* cls_shape = rb_define_class_under(mod_siren, "Shape", mrb->object_class);
+  struct RClass* cls_shape = rb_define_class_under(mod_siren, "Shape", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_shape, MRB_TT_DATA);
   rb_define_method(cls_shape, "initialize", siren_shape_init,       MRB_ARGS_NONE());
   rb_define_method(cls_shape, "null?",      siren_shape_is_null,    MRB_ARGS_NONE());
@@ -141,7 +141,7 @@ void siren_shape_final( void* p)
 VALUE siren_shape_is_null( VALUE self)
 {
   TopoDS_Shape* shape = siren_shape_get(self);
-  return shape->IsNull() ? rb_true_value() : rb_false_value();
+  return shape->IsNull() ? Qtrue : Qfalse;
 }
 
 VALUE siren_shape_pos( VALUE self)
@@ -289,7 +289,7 @@ VALUE siren_shape_move( VALUE self)
 
 VALUE siren_shape_hashcode( VALUE self)
 {
-  rb_int upper;
+  VALUE upper;
   int argc = rb_get_args("i", &upper);
   TopoDS_Shape* shape = siren_shape_get(self);
   return rb_fixnum_value(shape->HashCode(upper));
@@ -301,7 +301,7 @@ VALUE siren_shape_is_partner( VALUE self)
   int argc = rb_get_args("o", &other);
   TopoDS_Shape* shape_self  = siren_shape_get(self);
   TopoDS_Shape* shape_other = siren_shape_get(other);
-  return shape_self->IsPartner(*shape_other) ? rb_true_value() : rb_false_value();
+  return shape_self->IsPartner(*shape_other) ? Qtrue : Qfalse;
 }
 
 VALUE siren_shape_is_same( VALUE self)
@@ -310,7 +310,7 @@ VALUE siren_shape_is_same( VALUE self)
   int argc = rb_get_args("o", &other);
   TopoDS_Shape* shape_self  = siren_shape_get(self);
   TopoDS_Shape* shape_other = siren_shape_get(other);
-  return shape_self->IsSame(*shape_other) ? rb_true_value() : rb_false_value();
+  return shape_self->IsSame(*shape_other) ? Qtrue : Qfalse;
 }
 
 VALUE siren_shape_is_equal( VALUE self)
@@ -319,7 +319,7 @@ VALUE siren_shape_is_equal( VALUE self)
   int argc = rb_get_args("o", &other);
   TopoDS_Shape* shape_self  = siren_shape_get(self);
   TopoDS_Shape* shape_other = siren_shape_get(other);
-  return shape_self->IsEqual(*shape_other) ? rb_true_value() : rb_false_value();
+  return shape_self->IsEqual(*shape_other) ? Qtrue : Qfalse;
 }
 
 VALUE siren_shape_explore( VALUE self)
@@ -401,7 +401,7 @@ VALUE siren_shape_explore( VALUE self)
   }
   VALUE ar = rb_ary_new();
   for (; ex.More(); ex.Next()) {
-    rb_int ai = rb_gc_arena_save();
+    VALUE ai = rb_gc_arena_save();
     rb_ary_push(ar, siren_shape_new(ex.Current()));
     rb_gc_arena_restore(ai);
   }
@@ -410,7 +410,7 @@ VALUE siren_shape_explore( VALUE self)
 
 VALUE siren_shape_subshapes( VALUE self)
 {
-  rb_bool ori, loc;
+  VALUE ori, loc;
   int argc = rb_get_args("|bb", &ori, &loc);
   if (argc == 0) {
     ori = TRUE;
@@ -426,7 +426,7 @@ VALUE siren_shape_subshapes( VALUE self)
   }
   TopoDS_Iterator it(*shape, (Standard_Boolean)ori, (Standard_Boolean)loc);
   for (; it.More(); it.Next()) {
-    rb_int ai = rb_gc_arena_save();
+    VALUE ai = rb_gc_arena_save();
     rb_ary_push(ar, siren_shape_new(it.Value()));
     rb_gc_arena_restore(ai);
   }
@@ -485,12 +485,12 @@ VALUE siren_shape_clean_bang( VALUE self)
 VALUE siren_shape_is_lock( VALUE self)
 {
   return siren_shape_get(self)->Locked() == Standard_True ?
-    rb_true_value() : rb_false_value();
+    Qtrue : Qfalse;
 }
 
 VALUE siren_shape_set_lock( VALUE self)
 {
-  rb_bool flag;
+  VALUE flag;
   int argc = rb_get_args("b", &flag);
   siren_shape_get(self)->Locked((Standard_Boolean)flag);
   return self;
@@ -499,12 +499,12 @@ VALUE siren_shape_set_lock( VALUE self)
 VALUE siren_shape_is_modify( VALUE self)
 {
   return siren_shape_get(self)->Modified() == Standard_True ?
-    rb_true_value() : rb_false_value();
+    Qtrue : Qfalse;
 }
 
 VALUE siren_shape_set_modify( VALUE self)
 {
-  rb_bool flag;
+  VALUE flag;
   int argc = rb_get_args("b", &flag);
   siren_shape_get(self)->Modified((Standard_Boolean)flag);
   return self;
@@ -513,12 +513,12 @@ VALUE siren_shape_set_modify( VALUE self)
 VALUE siren_shape_is_check( VALUE self)
 {
   return siren_shape_get(self)->Checked() == Standard_True ?
-    rb_true_value() : rb_false_value();
+    Qtrue : Qfalse;
 }
 
 VALUE siren_shape_set_check( VALUE self)
 {
-  rb_bool flag;
+  VALUE flag;
   int argc = rb_get_args("b", &flag);
   siren_shape_get(self)->Checked((Standard_Boolean)flag);
   return self;
@@ -527,12 +527,12 @@ VALUE siren_shape_set_check( VALUE self)
 VALUE siren_shape_is_orientable( VALUE self)
 {
   return siren_shape_get(self)->Orientable() == Standard_True ?
-    rb_true_value() : rb_false_value();
+    Qtrue : Qfalse;
 }
 
 VALUE siren_shape_set_orientable( VALUE self)
 {
-  rb_bool flag;
+  VALUE flag;
   int argc = rb_get_args("b", &flag);
   siren_shape_get(self)->Orientable((Standard_Boolean)flag);
   return self;
@@ -541,12 +541,12 @@ VALUE siren_shape_set_orientable( VALUE self)
 VALUE siren_shape_is_close( VALUE self)
 {
   return siren_shape_get(self)->Closed() == Standard_True ?
-    rb_true_value() : rb_false_value();
+    Qtrue : Qfalse;
 }
 
 VALUE siren_shape_set_close( VALUE self)
 {
-  rb_bool flag;
+  VALUE flag;
   int argc = rb_get_args("b", &flag);
   siren_shape_get(self)->Closed((Standard_Boolean)flag);
   return self;
@@ -555,12 +555,12 @@ VALUE siren_shape_set_close( VALUE self)
 VALUE siren_shape_is_infinite( VALUE self)
 {
   return siren_shape_get(self)->Infinite() == Standard_True ?
-    rb_true_value() : rb_false_value();
+    Qtrue : Qfalse;
 }
 
 VALUE siren_shape_set_infinite( VALUE self)
 {
-  rb_bool flag;
+  VALUE flag;
   int argc = rb_get_args("b", &flag);
   siren_shape_get(self)->Infinite((Standard_Boolean)flag);
   return self;
@@ -569,12 +569,12 @@ VALUE siren_shape_set_infinite( VALUE self)
 VALUE siren_shape_is_convex( VALUE self)
 {
   return siren_shape_get(self)->Convex() == Standard_True ?
-    rb_true_value() : rb_false_value();
+    Qtrue : Qfalse;
 }
 
 VALUE siren_shape_set_convex( VALUE self)
 {
-  rb_bool flag;
+  VALUE flag;
   int argc = rb_get_args("b", &flag);
   siren_shape_get(self)->Convex((Standard_Boolean)flag);
   return self;
