@@ -22,7 +22,7 @@ TopoDS_Face siren_face_get( VALUE self)
   return face;
 }
 
-bool siren_face_install( struct RClass* sr_mSiren)
+bool siren_face_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_face = rb_define_class_under(sr_mSiren, "Face", cls_shape);

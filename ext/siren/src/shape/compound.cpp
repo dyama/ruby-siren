@@ -22,7 +22,7 @@ TopoDS_Compound siren_compound_get( VALUE self)
   return compound;
 }
 
-bool siren_compound_install( struct RClass* sr_mSiren)
+bool siren_compound_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_compound = rb_define_class_under(sr_mSiren, "Compound", cls_shape);

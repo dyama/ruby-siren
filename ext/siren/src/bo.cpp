@@ -1,6 +1,6 @@
 #include "bo.h"
 
-bool siren_bo_install( struct RClass* sr_mSiren)
+bool siren_bo_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   rb_define_method(cls_shape, "common",     siren_bo_common,      MRB_ARGS_REQ(1));

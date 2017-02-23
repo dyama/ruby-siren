@@ -2,7 +2,7 @@
 
 #ifdef SIREN_ENABLE_IGES
 
-bool siren_iges_install( struct RClass* sr_mSiren)
+bool siren_iges_install()
 {
   // Class method
   rb_define_class_method(sr_mSiren, "save_iges", siren_iges_save, MRB_ARGS_REQ(2));

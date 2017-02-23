@@ -26,7 +26,7 @@ handle<Geom_BezierCurve> siren_bzcurve_get( VALUE self)
   return bzcurve;
 }
 
-bool siren_bzcurve_install( struct RClass* sr_mSiren)
+bool siren_bzcurve_install()
 {
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_bzcurve = rb_define_class_under(sr_mSiren, "BzCurve", cls_curve);

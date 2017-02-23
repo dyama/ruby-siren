@@ -9,7 +9,7 @@
 #include <TopoDS_CompSolid.hxx>
 
 static rb_data_type_t siren_chunk_type = { "Chunk", siren_shape_final };
-bool siren_chunk_install( struct RClass* sr_mSiren);
+bool siren_chunk_install();
 TopoDS_CompSolid siren_chunk_get( VALUE self);
 VALUE siren_chunk_new( const TopoDS_Shape* src);
 VALUE siren_chunk_obj();

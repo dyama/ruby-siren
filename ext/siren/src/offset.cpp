@@ -1,6 +1,6 @@
 #include "offset.h"
 
-bool siren_offset_install( struct RClass* sr_mSiren)
+bool siren_offset_install()
 {
   // Class method
   rb_define_class_method(sr_mSiren, "sweep_vec",       siren_offset_sweep_vec,       MRB_ARGS_REQ(2));

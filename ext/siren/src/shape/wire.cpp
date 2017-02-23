@@ -22,7 +22,7 @@ TopoDS_Wire siren_wire_get( VALUE self)
   return wire;
 }
 
-bool siren_wire_install( struct RClass* sr_mSiren)
+bool siren_wire_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_wire = rb_define_class_under(sr_mSiren, "Wire", cls_shape);

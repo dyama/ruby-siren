@@ -27,7 +27,7 @@ handle<Geom_Ellipse> siren_ellipse_get( VALUE self)
   return ellipse;
 }
 
-bool siren_ellipse_install( struct RClass* sr_mSiren)
+bool siren_ellipse_install()
 {
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_ellipse = rb_define_class_under(sr_mSiren, "Ellipse", cls_curve);

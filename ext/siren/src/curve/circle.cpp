@@ -22,7 +22,7 @@ handle<Geom_Circle> siren_circle_get( VALUE self)
   return circle;
 }
 
-bool siren_circle_install( struct RClass* sr_mSiren)
+bool siren_circle_install()
 {
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_circle = rb_define_class_under(sr_mSiren, "Circle", rb_cObject);

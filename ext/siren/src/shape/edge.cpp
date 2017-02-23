@@ -22,7 +22,7 @@ TopoDS_Edge siren_edge_get( VALUE self)
   return edge;
 }
 
-bool siren_edge_install( struct RClass* sr_mSiren)
+bool siren_edge_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_edge = rb_define_class_under(sr_mSiren, "Edge", cls_shape);

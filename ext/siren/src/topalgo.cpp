@@ -1,6 +1,6 @@
 #include "topalgo.h"
 
-bool siren_topalgo_install( struct RClass* sr_mSiren)
+bool siren_topalgo_install()
 {
   // Class method
   rb_define_class_method(sr_mSiren, "copy",       siren_topalgo_copy,       MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));

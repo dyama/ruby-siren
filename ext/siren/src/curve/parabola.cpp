@@ -27,7 +27,7 @@ handle<Geom_Parabola> siren_parabola_get( VALUE self)
   return parabola;
 }
 
-bool siren_parabola_install( struct RClass* sr_mSiren)
+bool siren_parabola_install()
 {
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_parabola = rb_define_class_under(sr_mSiren, "Parabola", cls_curve);

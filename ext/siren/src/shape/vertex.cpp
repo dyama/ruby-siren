@@ -22,7 +22,7 @@ TopoDS_Vertex siren_vertex_get( VALUE self)
   return vertex;
 }
 
-bool siren_vertex_install( struct RClass* sr_mSiren)
+bool siren_vertex_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_vertex = rb_define_class_under(sr_mSiren, "Vertex", cls_shape);

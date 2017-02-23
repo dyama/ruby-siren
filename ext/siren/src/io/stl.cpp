@@ -1,6 +1,6 @@
 #include "io/stl.h"
 
-bool siren_stl_install( struct RClass* sr_mSiren)
+bool siren_stl_install()
 {
   // Class method
   rb_define_class_method(sr_mSiren, "load_stl", siren_stl_load, MRB_ARGS_REQ(1));

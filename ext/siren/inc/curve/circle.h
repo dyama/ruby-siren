@@ -6,7 +6,7 @@
 #include <Geom_Circle.hxx>
 
 static rb_data_type_t siren_circle_type = { "Circle", siren_curve_final };
-bool siren_circle_install( struct RClass* sr_mSiren);
+bool siren_circle_install();
 handle<Geom_Circle> siren_circle_get( VALUE self);
 VALUE siren_circle_new( const handle<Geom_Curve>* curve);
 

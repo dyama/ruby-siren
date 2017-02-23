@@ -1,6 +1,6 @@
 #include "brep.h"
 
-bool siren_brep_install( struct RClass* sr_mSiren)
+bool siren_brep_install()
 {
   // Class method
   rb_define_class_method(sr_mSiren, "save_brep", siren_brep_save, MRB_ARGS_REQ(2));

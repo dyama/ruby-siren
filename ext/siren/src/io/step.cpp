@@ -2,7 +2,7 @@
 
 #ifdef SIREN_ENABLE_STEP
 
-bool siren_step_install( struct RClass* sr_mSiren)
+bool siren_step_install()
 {
   // Class method
   rb_define_class_method(sr_mSiren, "save_step",  siren_step_save, MRB_ARGS_REQ(2));

@@ -23,7 +23,7 @@ VALUE siren_trans_new( const gp_Trsf& src)
   return res;
 }
 
-bool siren_trans_install( struct RClass* sr_mSiren)
+bool siren_trans_install()
 {
   struct RClass* cls_trans = rb_define_class_under(sr_mSiren, "Trans", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_trans, MRB_TT_DATA);

@@ -27,7 +27,7 @@ handle<Geom_OffsetCurve> siren_offsetcurve_get( VALUE self)
   return offsetcurve;
 }
 
-bool siren_offsetcurve_install( struct RClass* sr_mSiren)
+bool siren_offsetcurve_install()
 {
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_offsetcurve = rb_define_class_under(sr_mSiren, "offsetcurve", cls_curve);

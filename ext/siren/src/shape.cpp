@@ -38,7 +38,7 @@ struct RClass* siren_shape_rclass()
   return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Shape")));
 }
 
-bool siren_shape_install( struct RClass* sr_mSiren)
+bool siren_shape_install()
 {
   struct RClass* cls_shape = rb_define_class_under(sr_mSiren, "Shape", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_shape, MRB_TT_DATA);

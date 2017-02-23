@@ -27,7 +27,7 @@ handle<Geom_Line> siren_line_get( VALUE self)
   return line;
 }
 
-bool siren_line_install( struct RClass* sr_mSiren)
+bool siren_line_install()
 {
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_line = rb_define_class_under(sr_mSiren, "Line", cls_curve);

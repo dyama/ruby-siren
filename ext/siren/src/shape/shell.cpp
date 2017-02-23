@@ -22,7 +22,7 @@ TopoDS_Shell siren_shell_get( VALUE self)
   return shell;
 }
 
-bool siren_shell_install( struct RClass* sr_mSiren)
+bool siren_shell_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_shell = rb_define_class_under(sr_mSiren, "Shell", cls_shape);

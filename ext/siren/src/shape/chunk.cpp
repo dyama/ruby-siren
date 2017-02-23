@@ -24,7 +24,7 @@ TopoDS_CompSolid siren_chunk_get( VALUE self)
   return chunk;
 }
 
-bool siren_chunk_install( struct RClass* sr_mSiren)
+bool siren_chunk_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_chunk = rb_define_class_under(sr_mSiren, "Chunk", cls_shape);

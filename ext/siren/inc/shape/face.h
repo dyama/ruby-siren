@@ -44,7 +44,7 @@
 #include <Poly_Array1OfTriangle.hxx>
 
 static rb_data_type_t siren_face_type = { "Face", siren_shape_final };
-bool siren_face_install( struct RClass* sr_mSiren);
+bool siren_face_install();
 TopoDS_Face siren_face_get( VALUE self);
 VALUE siren_face_new( const TopoDS_Shape* src);
 VALUE siren_face_obj();

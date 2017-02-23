@@ -6,7 +6,7 @@
 #include <Geom_BSplineCurve.hxx>
 
 static rb_data_type_t siren_bscurve_type = { "BSCurve", siren_curve_final };
-bool siren_bscurve_install( struct RClass* sr_mSiren);
+bool siren_bscurve_install();
 handle<Geom_BSplineCurve> siren_bscurve_get( VALUE self);
 VALUE siren_bscurve_new( const handle<Geom_Curve>* curve);
 

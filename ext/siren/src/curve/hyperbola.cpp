@@ -27,7 +27,7 @@ handle<Geom_Hyperbola> siren_hyperbola_get( VALUE self)
   return hyperbola;
 }
 
-bool siren_hyperbola_install( struct RClass* sr_mSiren)
+bool siren_hyperbola_install()
 {
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_hyperbola = rb_define_class_under(sr_mSiren, "Hyperbola", cls_curve);

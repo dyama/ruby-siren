@@ -23,7 +23,7 @@ struct RClass* siren_bndbox_rclass()
   return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("BndBox")));
 }
 
-bool siren_bndbox_install( struct RClass* sr_mSiren)
+bool siren_bndbox_install()
 {
   struct RClass* cls_bndbox = rb_define_class_under(sr_mSiren, "BndBox", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_bndbox, MRB_TT_DATA);

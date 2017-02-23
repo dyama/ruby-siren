@@ -17,7 +17,7 @@
 #include <BRepTools_WireExplorer.hxx>
 
 static rb_data_type_t siren_wire_type = { "Wire", siren_shape_final };
-bool siren_wire_install( struct RClass* sr_mSiren);
+bool siren_wire_install();
 TopoDS_Wire siren_wire_get( VALUE self);
 VALUE siren_wire_new( const TopoDS_Shape* src);
 VALUE siren_wire_obj();

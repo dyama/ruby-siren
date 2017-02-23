@@ -30,7 +30,7 @@ VALUE siren_curve_new( const opencascade::handle<Geom_Curve>* curve)
   return obj;
 }
 
-bool siren_curve_install( struct RClass* sr_mSiren)
+bool siren_curve_install()
 {
   struct RClass* cls_curve = rb_define_class_under(sr_mSiren, "Curve", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_curve, MRB_TT_DATA);

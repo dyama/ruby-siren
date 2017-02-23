@@ -22,7 +22,7 @@ TopoDS_Solid siren_solid_get( VALUE self)
   return solid;
 }
 
-bool siren_solid_install( struct RClass* sr_mSiren)
+bool siren_solid_install()
 {
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_solid = rb_define_class_under(sr_mSiren, "Solid", cls_shape);

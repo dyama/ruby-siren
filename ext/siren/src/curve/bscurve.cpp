@@ -27,7 +27,7 @@ handle<Geom_BSplineCurve> siren_bscurve_get( VALUE self)
   return bscurve;
 }
 
-bool siren_bscurve_install( struct RClass* sr_mSiren)
+bool siren_bscurve_install()
 {
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_bscurve = rb_define_class_under(sr_mSiren, "BSCurve", cls_curve);
