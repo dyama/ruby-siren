@@ -1,8 +1,14 @@
 #include "filler.h"
 
-BRepFill_Filling* siren_filler_get( VALUE obj)
+BRepFill_Filling* siren_filler_get(VALUE obj)
 {
+#if 0
   return static_cast<BRepFill_Filling*>(_get_datatype(obj, &siren_filler_type));
+#else
+  BRepFill_Filling* m;
+  Data_Get_Struct(obj, BRepFill_Filling, m);
+  return m;
+#endif
 }
 
 bool siren_filler_install(VALUE mod_siren)
@@ -11,7 +17,7 @@ bool siren_filler_install(VALUE mod_siren)
 #if 0
   MRB_SET_INSTANCE_TT(cls_filler, MRB_TT_DATA);
 #endif
-  rb_define_method(cls_filler, "initialize", siren_filler_init,      10);
+  rb_define_method(cls_filler, "initialize", siren_filler_init,      -1);
   rb_define_method(cls_filler, "add_bound",  siren_filler_add_bound, 2);
   rb_define_method(cls_filler, "add",        siren_filler_add,       2);
   rb_define_method(cls_filler, "build",      siren_filler_build,     0);
@@ -24,32 +30,18 @@ bool siren_filler_install(VALUE mod_siren)
 }
 
 VALUE
-siren_filler_init(VALUE self,
-    VALUE degree, VALUE nbptsoncur, VALUE nbiter, VALUE anisotropie,
-    VALUE tol2d, VALUE tol3d, VALUE tolang, VALUE tolcurv, VALUE maxdeg, VALUE maxsegs
-    )
+siren_filler_init(int argc, VALUE* argv, VALUE self)
 {
-#if 0
   VALUE degree, nbptsoncur, nbiter;
   VALUE anisotropie;
   VALUE tol2d, tol3d, tolang, tolcurv;
   VALUE maxdeg, maxsegs;
-  int argc = rb_get_args("|iiibffffii",
+  // int argc = rb_get_args("|iiibffffii",
+  //     &degree, &nbptsoncur, &nbiter, &anisotropie,
+  //     &tol2d, &tol3d, &tolang, &tolcurv, &maxdeg, &maxsegs);
+  rb_scan_args(argc, argv, "19",
       &degree, &nbptsoncur, &nbiter, &anisotropie,
       &tol2d, &tol3d, &tolang, &tolcurv, &maxdeg, &maxsegs);
-#endif
-
-  int argc = 0;
-  if (!NIL_P(degree)) argc += 1;
-  if (!NIL_P(nbptsoncur)) argc += 1;
-  if (!NIL_P(nbiter)) argc += 1;
-  if (!NIL_P(anisotropie)) argc += 1;
-  if (!NIL_P(tol2d)) argc += 1;
-  if (!NIL_P(tol3d)) argc += 1;
-  if (!NIL_P(tolang)) argc += 1;
-  if (!NIL_P(tolcurv)) argc += 1;
-  if (!NIL_P(maxdeg)) argc += 1;
-  if (!NIL_P(maxsegs)) argc += 1;
 
 #if 0
   void* p = rb_malloc(sizeof(BRepFill_Filling));
@@ -101,7 +93,7 @@ siren_filler_init(VALUE self,
   }
 
   DATA_PTR(self)  = inner;
-  DATA_TYPE(self) = &siren_filler_type;
+  // DATA_TYPE(self) = &siren_filler_type;
   return self;
 }
 
