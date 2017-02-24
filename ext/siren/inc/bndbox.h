@@ -5,6 +5,8 @@
 #include <Bnd_Box.hxx>
 #include <BRepBndLib.hxx>
 
+VALUE sr_cBndBox;
+
 bool siren_bndbox_install( struct RClass* rclass);
 void siren_bndbox_final( void* p);
 static rb_data_type_t siren_bndbox_type = { "BndBox", siren_bndbox_final };
@@ -13,38 +15,38 @@ Bnd_Box* siren_bndbox_get( VALUE obj);
 struct RClass* siren_bndbox_rclass();
 #define siren_is_bndbox(obj) (DATA_TYPE(obj) == &siren_bndbox_type)
 
-VALUE siren_bndbox_init( VALUE self);
-VALUE siren_bndbox_to_s( VALUE self);
-VALUE siren_bndbox_min( VALUE self);
-VALUE siren_bndbox_max( VALUE self);
-VALUE siren_bndbox_add( VALUE self);
-VALUE siren_bndbox_is_out( VALUE self);
-VALUE siren_bndbox_center( VALUE self);
-VALUE siren_bndbox_xsize( VALUE self);
-VALUE siren_bndbox_ysize( VALUE self);
-VALUE siren_bndbox_zsize( VALUE self);
-VALUE siren_bndbox_is_void( VALUE self);
-VALUE siren_bndbox_is_whole( VALUE self);
-VALUE siren_bndbox_void_bang( VALUE self);
-VALUE siren_bndbox_whole_bang( VALUE self);
-VALUE siren_bndbox_is_xthin( VALUE self);
-VALUE siren_bndbox_is_ythin( VALUE self);
-VALUE siren_bndbox_is_zthin( VALUE self);
-VALUE siren_bndbox_is_openxmin( VALUE self);
-VALUE siren_bndbox_is_openxmax( VALUE self);
-VALUE siren_bndbox_is_openymin( VALUE self);
-VALUE siren_bndbox_is_openymax( VALUE self);
-VALUE siren_bndbox_is_openzmin( VALUE self);
-VALUE siren_bndbox_is_openzmax( VALUE self);
-VALUE siren_bndbox_openxmin_bang( VALUE self);
-VALUE siren_bndbox_openxmax_bang( VALUE self);
-VALUE siren_bndbox_openymin_bang( VALUE self);
-VALUE siren_bndbox_openymax_bang( VALUE self);
-VALUE siren_bndbox_openzmin_bang( VALUE self);
-VALUE siren_bndbox_openzmax_bang( VALUE self);
-VALUE siren_bndbox_set_gap( VALUE self);
-VALUE siren_bndbox_get_gap( VALUE self);
-VALUE siren_bndbox_dist( VALUE self);
-VALUE siren_bndbox_square( VALUE self);
+VALUE siren_bndbox_init(...);
+VALUE siren_bndbox_to_s(...);
+VALUE siren_bndbox_min(...);
+VALUE siren_bndbox_max(...);
+VALUE siren_bndbox_add(...);
+VALUE siren_bndbox_is_out(...);
+VALUE siren_bndbox_center(...);
+VALUE siren_bndbox_xsize(...);
+VALUE siren_bndbox_ysize(...);
+VALUE siren_bndbox_zsize(...);
+VALUE siren_bndbox_is_void(...);
+VALUE siren_bndbox_is_whole(...);
+VALUE siren_bndbox_void_bang(...);
+VALUE siren_bndbox_whole_bang(...);
+VALUE siren_bndbox_is_xthin(...);
+VALUE siren_bndbox_is_ythin(...);
+VALUE siren_bndbox_is_zthin(...);
+VALUE siren_bndbox_is_openxmin(...);
+VALUE siren_bndbox_is_openxmax(...);
+VALUE siren_bndbox_is_openymin(...);
+VALUE siren_bndbox_is_openymax(...);
+VALUE siren_bndbox_is_openzmin(...);
+VALUE siren_bndbox_is_openzmax(...);
+VALUE siren_bndbox_openxmin_bang(...);
+VALUE siren_bndbox_openxmax_bang(...);
+VALUE siren_bndbox_openymin_bang(...);
+VALUE siren_bndbox_openymax_bang(...);
+VALUE siren_bndbox_openzmin_bang(...);
+VALUE siren_bndbox_openzmax_bang(...);
+VALUE siren_bndbox_set_gap(...);
+VALUE siren_bndbox_get_gap(...);
+VALUE siren_bndbox_dist(...);
+VALUE siren_bndbox_square(...);
 
 #endif
