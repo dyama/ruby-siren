@@ -1,8 +1,9 @@
 #include "common.h"
 
 /* this function copied from class.c */
-VALUE rb_instance_alloc( VALUE cv)
+VALUE rb_instance_alloc(VALUE cv)
 {
+#if 0
   struct RClass *c = rb_class_ptr(cv);
   struct RObject *o;
   enum rb_vtype ttype = MRB_INSTANCE_TT(c);
@@ -13,6 +14,9 @@ VALUE rb_instance_alloc( VALUE cv)
   if (ttype == 0) ttype = MRB_TT_OBJECT;
   o = (struct RObject*)rb_obj_alloc(ttype, c);
   return rb_obj_value(o);
+#else
+  return Qnil;
+#endif
 }
 /* end of function */
 
@@ -25,8 +29,8 @@ void siren_ary_to_xyz( VALUE ary, Standard_Real& x, Standard_Real& y, Standard_R
     if (RB_FLOAT_TYPE_P(val)) {
       x = VALUE(val);
     }
-    else if (_fixnum_p(val)) {
-      x = rb_fixnum(val);
+    else if (FIXNUM_P(val)) {
+      x = NUM2DBL(val);
     }
   }
   if (len > 1) {
@@ -34,8 +38,8 @@ void siren_ary_to_xyz( VALUE ary, Standard_Real& x, Standard_Real& y, Standard_R
     if (RB_FLOAT_TYPE_P(val)) {
       y = VALUE(val);
     }
-    else if (_fixnum_p(val)) {
-      y = rb_fixnum(val);
+    else if (FIXNUM_P(val)) {
+      y = NUM2DBL(val);
     }
   }
   if (len > 2) {
@@ -43,8 +47,8 @@ void siren_ary_to_xyz( VALUE ary, Standard_Real& x, Standard_Real& y, Standard_R
     if (RB_FLOAT_TYPE_P(val)) {
       z = VALUE(val);
     }
-    else if (_fixnum_p(val)) {
-      z = rb_fixnum(val);
+    else if (FIXNUM_P(val)) {
+      z = NUM2DBL(val);
     }
   }
   return;

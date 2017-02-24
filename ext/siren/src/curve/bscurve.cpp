@@ -70,7 +70,7 @@ VALUE siren_bscurve_init( VALUE self)
     VALUE knot = RARRAY_AREF(ks, i);
     knots.SetValue(i, VALUE(knot));
     VALUE mult = RARRAY_AREF(ms, i);
-    mults.SetValue(i, (Standard_Integer)rb_fixnum(mult));
+    mults.SetValue(i, (Standard_Integer)DBL2NUM(mult));
   }
 
   handle<Geom_Curve> curve

@@ -53,20 +53,20 @@ VALUE siren_vertex_init( VALUE self)
   }
   else {
     if (len >= 1) {
-      if (_fixnum_p(a[0]))
-        x = rb_fixnum(a[0]);
+      if (FIXNUM_P(a[0]))
+        x = DBL2NUM(a[0]);
       else if VALUE_p(a[0])
         x = VALUE(a[0]);
     }
     if (len >= 2) {
-      if (_fixnum_p(a[1]))
-        y = rb_fixnum(a[1]);
+      if (FIXNUM_P(a[1]))
+        y = DBL2NUM(a[1]);
       else if (RB_FLOAT_TYPE_P(a[1]))
         y = VALUE(a[1]);
     }
     if (len >= 3) {
-      if (_fixnum_p(a[2]))
-        z = rb_fixnum(a[2]);
+      if (FIXNUM_P(a[2]))
+        z = DBL2NUM(a[2]);
       else if (RB_FLOAT_TYPE_P(a[2]))
         z = VALUE(a[2]);
     }

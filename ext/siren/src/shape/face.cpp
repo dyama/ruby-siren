@@ -323,7 +323,7 @@ VALUE siren_face_bssurf( VALUE self)
     VALUE knot = RARRAY_AREF(item, 0);
     VALUE mult = RARRAY_AREF(item, 1);
     uknots(i) = VALUE(knot);
-    umults(i) = rb_fixnum(mult);
+    umults(i) = DBL2NUM(mult);
     nbuknots_pure += umults(i);
   }
   Standard_Integer nbupoles = nbuknots_pure - udeg - 1;
@@ -338,7 +338,7 @@ VALUE siren_face_bssurf( VALUE self)
     VALUE knot = RARRAY_AREF(item, 0);
     VALUE mult = RARRAY_AREF(item, 1);
     vknots(i) = VALUE(knot);
-    vmults(i) = rb_fixnum(mult);
+    vmults(i) = DBL2NUM(mult);
     nbvknots_pure += vmults(i);
   }
   Standard_Integer nbvpoles = nbvknots_pure - vdeg - 1;
