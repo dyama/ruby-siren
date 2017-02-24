@@ -273,7 +273,7 @@ VALUE siren_shape_hashcode(int argc, VALUE* argv, VALUE self)
   VALUE upper;
   rb_scan_args(argc, argv, "1", &upper);
   TopoDS_Shape* shape = siren_shape_get(self);
-  return rb_fixnum_value(shape->HashCode(upper));
+  return INT2FIX(shape->HashCode(upper));
 }
 
 VALUE siren_shape_is_partner(int argc, VALUE* argv, VALUE self)
@@ -313,25 +313,25 @@ VALUE siren_shape_explore(int argc, VALUE* argv, VALUE self)
 
   VALUE mtype;
   TopAbs_ShapeEnum type = TopAbs_COMPOUND;
-  if (_bool(_funcall(klass, "==", 1, siren_compound_obj()))) {
+  if (rb_funcall(klass, rb_intern("=="), 1, siren_compound_obj()) == Qtrue) {
     type = TopAbs_COMPOUND;
   }
-  else if (_bool(_funcall(klass, "==", 1, siren_solid_obj()))) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, siren_solid_obj()) == Qtrue) {
     type = TopAbs_SOLID;
   }
-  else if (_bool(_funcall(klass, "==", 1, siren_shell_obj()))) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, siren_shell_obj()) == Qtrue) {
     type = TopAbs_SHELL;
   }
-  else if (_bool(_funcall(klass, "==", 1, siren_face_obj()))) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, siren_face_obj()) == Qtrue) {
     type = TopAbs_FACE;
   }
-  else if (_bool(_funcall(klass, "==", 1, siren_wire_obj()))) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, siren_wire_obj()) == Qtrue) {
     type = TopAbs_WIRE;
   }
-  else if (_bool(_funcall(klass, "==", 1, siren_edge_obj()))) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, siren_edge_obj()) == Qtrue) {
     type = TopAbs_EDGE;
   }
-  else if (_bool(_funcall(klass, "==", 1, siren_vertex_obj()))) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, siren_vertex_obj()) == Qtrue) {
     type = TopAbs_VERTEX;
   }
   else {
@@ -345,25 +345,25 @@ VALUE siren_shape_explore(int argc, VALUE* argv, VALUE self)
   else {
     VALUE mfilter;
     TopAbs_ShapeEnum avoid = TopAbs_COMPOUND;
-    if (_bool(_funcall(klassf, "==", 1, siren_compound_obj()))) {
+    if (rb_funcall(klassf, rb_intern("=="), 1, siren_compound_obj()) == Qtrue) {
       avoid = TopAbs_COMPOUND;
     }
-    else if (_bool(_funcall(klassf, "==", 1, siren_solid_obj()))) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_solid_obj()) == Qtrue) {
       avoid = TopAbs_SOLID;
     }
-    else if (_bool(_funcall(klassf, "==", 1, siren_shell_obj()))) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_shell_obj()) == Qtrue) {
       avoid = TopAbs_SHELL;
     }
-    else if (_bool(_funcall(klassf, "==", 1, siren_face_obj()))) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_face_obj()) == Qtrue) {
       avoid = TopAbs_FACE;
     }
-    else if (_bool(_funcall(klassf, "==", 1, siren_wire_obj()))) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_wire_obj()) == Qtrue) {
       avoid = TopAbs_WIRE;
     }
-    else if (_bool(_funcall(klassf, "==", 1, siren_edge_obj()))) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_edge_obj()) == Qtrue) {
       avoid = TopAbs_EDGE;
     }
-    else if (_bool(_funcall(klassf, "==", 1, siren_vertex_obj()))) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_vertex_obj()) == Qtrue) {
       avoid = TopAbs_VERTEX;
     }
     else {
@@ -376,16 +376,25 @@ VALUE siren_shape_explore(int argc, VALUE* argv, VALUE self)
     for (; ex.More(); ex.Next()) {
       VALUE argv[2];
       argv[0] = siren_shape_new(ex.Current());
-      argv[1] = rb_fixnum_value(ex.Depth());
+      argv[1] = INT2FIX(ex.Depth());
+#if 0
       rb_yield_argv(block, 2, argv);
+#else
+      // where is a block?
+      rb_yield_values2(2, argv);
+#endif
     }
     return self;
   }
   VALUE ar = rb_ary_new();
   for (; ex.More(); ex.Next()) {
+#if 0
     VALUE ai = rb_gc_arena_save();
+#endif
     rb_ary_push(ar, siren_shape_new(ex.Current()));
+#if 0
     rb_gc_arena_restore(ai);
+#endif
   }
   return ar;
 }
@@ -395,22 +404,26 @@ VALUE siren_shape_subshapes(int argc, VALUE* argv, VALUE self)
   VALUE ori, loc;
   rb_scan_args(argc, argv, "02", &ori, &loc);
   if (argc == 0) {
-    ori = TRUE;
-    loc = TRUE;
+    ori = Qtrue;
+    loc = Qtrue;
   }
   if (argc == 1) {
-    loc = TRUE;
+    loc = Qtrue;
   }
   VALUE ar = rb_ary_new();
   TopoDS_Shape* shape = siren_shape_get(self);
   if (!shape || shape->IsNull()) {
     return ar;
   }
-  TopoDS_Iterator it(*shape, (Standard_Boolean)ori, (Standard_Boolean)loc);
+  TopoDS_Iterator it(*shape, ori == Qtrue, loc == Qtrue);
   for (; it.More(); it.Next()) {
+#if 0
     VALUE ai = rb_gc_arena_save();
+#endif
     rb_ary_push(ar, siren_shape_new(it.Value()));
+#if 0
     rb_gc_arena_restore(ai);
+#endif
   }
   return ar;
 }

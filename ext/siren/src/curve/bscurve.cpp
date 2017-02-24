@@ -89,7 +89,7 @@ VALUE siren_bscurve_init( VALUE self)
 VALUE siren_bscurve_degree( VALUE self)
 {
   handle<Geom_BSplineCurve> curve = siren_bscurve_get(self);
-  return rb_fixnum_value((int)curve->Degree());
+  return INT2FIX((int)curve->Degree());
 }
 
 VALUE siren_bscurve_knots( VALUE self)
@@ -107,7 +107,7 @@ VALUE siren_bscurve_mults( VALUE self)
   handle<Geom_BSplineCurve> curve = siren_bscurve_get(self);
   VALUE mults = rb_ary_new();
   for (int i = 1; i <= curve->NbKnots(); i++) {
-    rb_ary_push(mults, rb_fixnum_value(curve->Multiplicity(i)));
+    rb_ary_push(mults, INT2FIX(curve->Multiplicity(i)));
   }
   return mults;
 }
