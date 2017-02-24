@@ -12,9 +12,9 @@
 #include <BRepProj_Projection.hxx>
 
 bool siren_bo_install();
-VALUE siren_bo_common   ( VALUE self);
-VALUE siren_bo_fuse     ( VALUE self);
-VALUE siren_bo_cut      ( VALUE self);
-VALUE siren_bo_projwire ( VALUE self);
+VALUE siren_bo_common   (...);
+VALUE siren_bo_fuse     (...);
+VALUE siren_bo_cut      (...);
+VALUE siren_bo_projwire (...);
 
 #endif

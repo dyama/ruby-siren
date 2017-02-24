@@ -2,18 +2,17 @@
 
 bool siren_bo_install()
 {
-  struct RClass* cls_shape = siren_shape_rclass();
-  rb_define_method(cls_shape, "common",     siren_bo_common,      MRB_ARGS_REQ(1));
-  rb_define_method(cls_shape, "fuse",       siren_bo_fuse,        MRB_ARGS_REQ(1));
-  rb_define_method(cls_shape, "cut",        siren_bo_cut,         MRB_ARGS_REQ(1));
-  rb_define_method(cls_shape, "projwire",   siren_bo_projwire,    MRB_ARGS_REQ(2));
+  rb_define_method(sr_cShape, "common",   siren_bo_common,   -1);
+  rb_define_method(sr_cShape, "fuse",     siren_bo_fuse,     -1);
+  rb_define_method(sr_cShape, "cut",      siren_bo_cut,      -1);
+  rb_define_method(sr_cShape, "projwire", siren_bo_projwire, -2);
   return true;
 }
 
-VALUE siren_bo_common( VALUE self)
+VALUE siren_bo_common(int argc, VALUE* argv, VALUE self)
 {
   VALUE target;
-  rb_scan_args(argc, argv, "o", &target);
+  rb_scan_args(argc, argv, "1", &target);
   TopoDS_Shape* S1 = siren_shape_get(self);
   TopoDS_Shape* S2 = siren_shape_get(target);
   BRepAlgoAPI_Common api(*S1, *S2);
@@ -24,10 +23,10 @@ VALUE siren_bo_common( VALUE self)
   return siren_shape_new(api.Shape());
 }
 
-VALUE siren_bo_fuse( VALUE self)
+VALUE siren_bo_fuse(int argc, VALUE* argv, VALUE self)
 {
   VALUE target;
-  rb_scan_args(argc, argv, "o", &target);
+  rb_scan_args(argc, argv, "1", &target);
   TopoDS_Shape* S1 = siren_shape_get(self);
   TopoDS_Shape* S2 = siren_shape_get(target);
   BRepAlgoAPI_Fuse api(*S1, *S2);
@@ -38,10 +37,10 @@ VALUE siren_bo_fuse( VALUE self)
   return siren_shape_new(api.Shape());
 }
 
-VALUE siren_bo_cut( VALUE self)
+VALUE siren_bo_cut(int argc, VALUE* argv, VALUE self)
 {
   VALUE target;
-  rb_scan_args(argc, argv, "o", &target);
+  rb_scan_args(argc, argv, "1", &target);
   TopoDS_Shape* S1 = siren_shape_get(self);
   TopoDS_Shape* S2 = siren_shape_get(target);
   BRepAlgoAPI_Cut api(*S1, *S2);
@@ -52,10 +51,10 @@ VALUE siren_bo_cut( VALUE self)
   return siren_shape_new(api.Shape());
 }
 
-VALUE siren_bo_projwire( VALUE self)
+VALUE siren_bo_projwire(int argc, VALUE* argv, VALUE self)
 {
   VALUE w, v;
-  rb_scan_args(argc, argv, "oo", &w, &v);
+  rb_scan_args(argc, argv, "2", &w, &v);
   TopoDS_Shape* wire = siren_shape_get(w);
   TopoDS_Shape* shape = siren_shape_get(self);
   gp_Vec* vec = siren_vec_get(v);
