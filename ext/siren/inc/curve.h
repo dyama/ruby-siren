@@ -5,6 +5,8 @@
 
 #include <GeomAbs_CurveType.hxx>
 
+VALUE sr_cCurve;
+
 void siren_curve_final( void* p);
 static rb_data_type_t siren_curve_type = { "Curve", siren_curve_final };
 
@@ -37,7 +39,7 @@ bool siren_curve_install( struct RClass* rclass);
 opencascade::handle<Geom_Curve>* siren_curve_get( VALUE obj);
 struct RClass* siren_curve_rclass();
 
-VALUE siren_curve_new( const opencascade::handle<Geom_Curve>* curve);
-VALUE siren_curve_init( VALUE self);
+VALUE siren_curve_new(const opencascade::handle<Geom_Curve>* curve);
+VALUE siren_curve_init(...);
 
 #endif
