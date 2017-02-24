@@ -50,7 +50,7 @@ VALUE siren_compound_init( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_scan_args("*", &a, &len);
+  rb_scan_args(argc, argv, "*", &a, &len);
 
   TopoDS_Compound comp;
   BRep_Builder B;
@@ -60,8 +60,8 @@ VALUE siren_compound_init( VALUE self)
     VALUE arg = *(a + i);
     if (_array_p(arg)) {
       VALUE subary = rb_funcall(arg, "flatten", 0);
-      for (int j = 0; j < rb_ary_len(subary); j++) {
-        TopoDS_Shape* shape = siren_shape_get(rb_ary_ref(subary, j));
+      for (int j = 0; j < RARRAY_LEN(subary); j++) {
+        TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(subary, j));
         B.Add(comp, *shape);
       }
     }
@@ -83,15 +83,15 @@ VALUE siren_compound_push( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_scan_args("*", &a, &len);
+  rb_scan_args(argc, argv, "*", &a, &len);
   TopoDS_Compound comp = siren_compound_get(self);
   BRep_Builder B;
   for (int i = 0; i < len; i++) {
     VALUE arg = *(a + i);
     if (_array_p(arg)) {
       VALUE subary = rb_funcall(arg, "flatten", 0);
-      for (int j = 0; j < rb_ary_len(subary); j++) {
-        TopoDS_Shape* shape = siren_shape_get(rb_ary_ref(subary, j));
+      for (int j = 0; j < RARRAY_LEN(subary); j++) {
+        TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(subary, j));
         B.Add(comp, *shape);
       }
     }
@@ -107,15 +107,15 @@ VALUE siren_compound_delete( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_scan_args("*", &a, &len);
+  rb_scan_args(argc, argv, "*", &a, &len);
   TopoDS_Compound comp = siren_compound_get(self);
   BRep_Builder B;
   for (int i = 0; i < len; i++) {
     VALUE arg = *(a + i);
     if (_array_p(arg)) {
       VALUE subary = rb_funcall(arg, "flatten", 0);
-      for (int j = 0; j < rb_ary_len(subary); j++) {
-        TopoDS_Shape* shape = siren_shape_get(rb_ary_ref(subary, j));
+      for (int j = 0; j < RARRAY_LEN(subary); j++) {
+        TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(subary, j));
         B.Remove(comp, *shape);
       }
     }

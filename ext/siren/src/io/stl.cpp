@@ -12,13 +12,13 @@ bool siren_stl_install()
 VALUE siren_stl_load( VALUE self)
 {
   VALUE path;
-  int argc = rb_scan_args("S", &path);
+  rb_scan_args(argc, argv, "S", &path);
 
   TopoDS_Shape shape;
   StlAPI::Read(shape, (Standard_CString)RSTRING_PTR(path));
 
   if (shape.IsNull()) {
-    rb_raisef(E_ARGUMENT_ERROR, "Failed to load STL from %S.", path);
+    rb_raisef(Qnil, "Failed to load STL from %S.", path);
   }
 
   return siren_shape_new(shape);

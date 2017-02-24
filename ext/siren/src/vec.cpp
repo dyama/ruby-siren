@@ -2,7 +2,7 @@
 
 #define rb_array_p(x) RB_TYPE_P(x, T_ARRAY)
 #define rb_fixnum_p(x) FIXNUM_P(x)
-#define rb_float_p(x) RB_FLOAT_TYPE_P(x)
+#define rbRB_FLOAT_TYPE_P(x) RB_FLOAT_TYPE_P(x)
 #define rb_fixnum(x) INT2NUM(x)
 
 gp_Vec* siren_vec_get( VALUE obj)
@@ -98,19 +98,19 @@ VALUE siren_vec_init(int argc, VALUE* argv, VALUE self)
     if (len >= 1) {
       if (rb_fixnum_p(a[0]))
         x = rb_fixnum(a[0]);
-      else if (rb_float_p(a[0]))
+      else if (rbRB_FLOAT_TYPE_P(a[0]))
         x = (a[0]);
     }
     if (len >= 2) {
       if (rb_fixnum_p(a[1]))
         y = rb_fixnum(a[1]);
-      else if (rb_float_p(a[1]))
+      else if (rbRB_FLOAT_TYPE_P(a[1]))
         y = VALUE(a[1]);
     }
     if (len >= 3) {
       if (rb_fixnum_p(a[2]))
         z = rb_fixnum(a[2]);
-      else if (rb_float_p(a[2]))
+      else if (rbRB_FLOAT_TYPE_P(a[2]))
         z = (a[2]);
     }
   }

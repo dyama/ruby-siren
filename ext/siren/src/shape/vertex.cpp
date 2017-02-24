@@ -44,7 +44,7 @@ VALUE siren_vertex_init( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_scan_args("*", &a, &len);
+  rb_scan_args(argc, argv, "*", &a, &len);
 
   Standard_Real x = 0.0, y = 0.0, z = 0.0;
   if (len > 0 && rb_array_p(a[0])) {
@@ -61,13 +61,13 @@ VALUE siren_vertex_init( VALUE self)
     if (len >= 2) {
       if (_fixnum_p(a[1]))
         y = rb_fixnum(a[1]);
-      else if (_float_p(a[1]))
+      else if (RB_FLOAT_TYPE_P(a[1]))
         y = VALUE(a[1]);
     }
     if (len >= 3) {
       if (_fixnum_p(a[2]))
         z = rb_fixnum(a[2]);
-      else if (_float_p(a[2]))
+      else if (RB_FLOAT_TYPE_P(a[2]))
         z = VALUE(a[2]);
     }
   }

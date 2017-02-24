@@ -66,7 +66,7 @@ VALUE siren_face_to_bezier( VALUE self)
   handle<Geom_Surface> gsurf  = BRep_Tool::Surface(face);
   handle<Geom_BSplineSurface> gbssurf = handle<Geom_BSplineSurface>::DownCast(gsurf);
   if (gbssurf.IsNull()) {
-    rb_raise(E_ARGUMENT_ERROR, "Specified shape is not B-Spline surface.");
+    rb_raise(Qnil, "Specified shape is not B-Spline surface.");
   }
 
   TopoDS_Compound comp;
@@ -92,7 +92,7 @@ VALUE siren_face_to_bezier( VALUE self)
 VALUE siren_face_split( VALUE self)
 {
   VALUE obj;
-  int argc = rb_scan_args("o", &obj);
+  rb_scan_args(argc, argv, "o", &obj);
 
   TopoDS_Face face = siren_face_get(self);
   BRepFeat_SplitShape splitter(face);
@@ -109,7 +109,7 @@ VALUE siren_face_split( VALUE self)
     splitter.Add(TopoDS::Compound(shape), face);
     break;
   default:
-    rb_raise(E_ARGUMENT_ERROR, "Incorrect argument specified.");
+    rb_raise(Qnil, "Incorrect argument specified.");
   }
   try {
     splitter.Build();
@@ -126,7 +126,7 @@ VALUE siren_face_split( VALUE self)
 VALUE siren_face_triangle( VALUE self)
 {
   VALUE deflection, angle;
-  int argc = rb_scan_args("ff", &deflection, &angle);
+  rb_scan_args(argc, argv, "ff", &deflection, &angle);
 
   VALUE result = rb_ary_new();
 
@@ -136,7 +136,7 @@ VALUE siren_face_triangle( VALUE self)
   BRepMesh_IncrementalMesh imesh(face, deflection, Standard_False, angle);
   imesh.Perform();
   if (!imesh.IsDone()) {
-    rb_raise(E_ARGUMENT_ERROR, "Failed to incremantal mesh.");
+    rb_raise(Qnil, "Failed to incremantal mesh.");
   }
 
   TopoDS_Face face2 = TopoDS::Face(imesh.Shape());
@@ -145,7 +145,7 @@ VALUE siren_face_triangle( VALUE self)
   // Do triangulation
   handle<Poly_Triangulation> poly = BRep_Tool::Triangulation(face2, loc);
   if (poly.IsNull()) {
-    rb_raise(E_ARGUMENT_ERROR, "Failed to triangulation.");
+    rb_raise(Qnil, "Failed to triangulation.");
   }
 
   const Poly_Array1OfTriangle& tris = poly->Triangles();
@@ -207,14 +207,14 @@ VALUE siren_face_plane( VALUE self)
 {
   VALUE pos, norm, vx;
   VALUE umin, umax, vmin, vmax;
-  int argc = rb_scan_args("AAAffff", &pos, &norm, &vx, &umin, &umax, &vmin, &vmax);
+  rb_scan_args(argc, argv, "AAAffff", &pos, &norm, &vx, &umin, &umax, &vmin, &vmax);
   try {
     gp_Pln _pln(siren_ary_to_ax2(pos, norm, vx));
     BRepBuilderAPI_MakeFace face(_pln, umin, umax, vmin, vmax);
     return siren_shape_new(face.Shape());
   }
   catch (...) {
-    rb_raise(E_ARGUMENT_ERROR, "Failed to make a plane. "
+    rb_raise(Qnil, "Failed to make a plane. "
         "vx has same value with the normal vector.");
     return Qnil;
   }
@@ -224,11 +224,11 @@ VALUE siren_face_face( VALUE self)
 {
   VALUE wire;
   VALUE force_plane;
-  int argc = rb_scan_args("ob", &wire, &force_plane);
+  rb_scan_args(argc, argv, "ob", &wire, &force_plane);
   TopoDS_Shape* s = siren_shape_get(wire);
   TopoDS_Wire w = TopoDS::Wire(*s);
   if (w.IsNull()) {
-    rb_raise(E_ARGUMENT_ERROR, "Specified shape type is not wire.");
+    rb_raise(Qnil, "Specified shape type is not wire.");
   }
   TopoDS_Face face = BRepBuilderAPI_MakeFace(w, (Standard_Boolean)force_plane);
   return siren_shape_new(face);
@@ -237,7 +237,7 @@ VALUE siren_face_face( VALUE self)
 VALUE siren_face_infplane( VALUE self)
 {
   VALUE orig, dir;
-  int argc = rb_scan_args("AA", &orig, &dir);
+  rb_scan_args(argc, argv, "AA", &orig, &dir);
   gp_Pln pln(siren_ary_to_pnt(orig), siren_ary_to_dir(dir));
   TopoDS_Face face = BRepBuilderAPI_MakeFace(pln);
   return siren_shape_new(face);
@@ -247,12 +247,12 @@ VALUE siren_face_polygon( VALUE self)
 {
   VALUE pts;
   VALUE force_plane = (_bool)Standard_True;
-  int argc = rb_scan_args("A|b", &pts, &force_plane);
+  rb_scan_args(argc, argv, "A|b", &pts, &force_plane);
 
   BRepBuilderAPI_MakePolygon mp;
 
-  for (int i=0; i<rb_ary_len(pts); i++) {
-    mp.Add(siren_ary_to_pnt(rb_ary_ref(pts, i)));
+  for (int i=0; i<RARRAY_LEN(pts); i++) {
+    mp.Add(siren_ary_to_pnt(RARRAY_AREF(pts, i)));
   }
 
   mp.Close();
@@ -260,7 +260,7 @@ VALUE siren_face_polygon( VALUE self)
   mf.Build();
 
   if (!mf.IsDone()) {
-    rb_raise(E_ARGUMENT_ERROR, "Failed to make a polygon.");
+    rb_raise(Qnil, "Failed to make a polygon.");
   }
 
   return siren_shape_new(mf.Shape());
@@ -269,17 +269,17 @@ VALUE siren_face_polygon( VALUE self)
 VALUE siren_face_bzsurf( VALUE self)
 {
   VALUE ptary, wtary;
-  int argc = rb_scan_args("A|A", &ptary, &wtary);
+  rb_scan_args(argc, argv, "A|A", &ptary, &wtary);
 
-  int rlen = rb_ary_len(ptary);
-  int clen = rb_ary_len(rb_ary_ref(ptary, 0));
+  int rlen = RARRAY_LEN(ptary);
+  int clen = RARRAY_LEN(RARRAY_AREF(ptary, 0));
 
   TColgp_Array2OfPnt poles(0, rlen-1, 0, clen-1);
 
   for (int r=0; r<rlen; r++) {
-    VALUE ar = rb_ary_ref(ptary, r);
+    VALUE ar = RARRAY_AREF(ptary, r);
     for (int c=0; c<clen; c++) {
-      poles.SetValue(r, c, siren_ary_to_pnt(rb_ary_ref(ar, c)));
+      poles.SetValue(r, c, siren_ary_to_pnt(RARRAY_AREF(ar, c)));
     }
   }
 
@@ -288,9 +288,9 @@ VALUE siren_face_bzsurf( VALUE self)
   if (argc == 2) {
     TColStd_Array2OfReal weights(0, rlen-1, 0, clen-1);
     for (int r=0; r<rlen; r++) {
-      VALUE ar = rb_ary_ref(wtary, r);
+      VALUE ar = RARRAY_AREF(wtary, r);
       for (int c=0; c<clen; c++) {
-        VALUE val = rb_ary_ref(ar, c);
+        VALUE val = RARRAY_AREF(ar, c);
         weights.SetValue(r, c, VALUE(val));
       }
     }
@@ -309,19 +309,19 @@ VALUE siren_face_bssurf( VALUE self)
   VALUE _ar_ukm, _ar_vkm;
   VALUE _pol;
   VALUE _wire;
-  int argc = rb_scan_args("iAiAA|o", &_udeg, &_ar_ukm, &_vdeg, &_ar_vkm, &_pol, &_wire);
+  rb_scan_args(argc, argv, "iAiAA|o", &_udeg, &_ar_ukm, &_vdeg, &_ar_vkm, &_pol, &_wire);
 
   bool has_contour = argc == 6;
 
   Standard_Integer udeg = _udeg;
-  Standard_Integer nbuknots = rb_ary_len(_ar_ukm);
+  Standard_Integer nbuknots = RARRAY_LEN(_ar_ukm);
   Standard_Integer nbuknots_pure = 0;
   TColStd_Array1OfReal uknots(1, nbuknots);
   TColStd_Array1OfInteger umults(1, nbuknots);
   for (int i=1; i<=nbuknots; i++) {
-    VALUE item = rb_ary_ref(_ar_ukm, i - 1);
-    VALUE knot = rb_ary_ref(item, 0);
-    VALUE mult = rb_ary_ref(item, 1);
+    VALUE item = RARRAY_AREF(_ar_ukm, i - 1);
+    VALUE knot = RARRAY_AREF(item, 0);
+    VALUE mult = RARRAY_AREF(item, 1);
     uknots(i) = VALUE(knot);
     umults(i) = rb_fixnum(mult);
     nbuknots_pure += umults(i);
@@ -329,14 +329,14 @@ VALUE siren_face_bssurf( VALUE self)
   Standard_Integer nbupoles = nbuknots_pure - udeg - 1;
 
   Standard_Integer vdeg = _vdeg;
-  Standard_Integer nbvknots = rb_ary_len(_ar_vkm);
+  Standard_Integer nbvknots = RARRAY_LEN(_ar_vkm);
   Standard_Integer nbvknots_pure = 0;
   TColStd_Array1OfReal vknots(1, nbvknots);
   TColStd_Array1OfInteger vmults(1, nbvknots);
   for (int i=1; i<=nbvknots; i++) {
-    VALUE item = rb_ary_ref(_ar_vkm, i - 1);
-    VALUE knot = rb_ary_ref(item, 0);
-    VALUE mult = rb_ary_ref(item, 1);
+    VALUE item = RARRAY_AREF(_ar_vkm, i - 1);
+    VALUE knot = RARRAY_AREF(item, 0);
+    VALUE mult = RARRAY_AREF(item, 1);
     vknots(i) = VALUE(knot);
     vmults(i) = rb_fixnum(mult);
     nbvknots_pure += vmults(i);
@@ -347,10 +347,10 @@ VALUE siren_face_bssurf( VALUE self)
   TColStd_Array2OfReal weights(1, nbupoles, 1, nbvpoles);
 
   for (int v=1; v <= nbvpoles; v++) {
-    VALUE vitem = rb_ary_ref(_pol, v - 1);
+    VALUE vitem = RARRAY_AREF(_pol, v - 1);
     for (int u=1; u <= nbupoles; u++) {
-      VALUE uitem = rb_ary_ref(vitem, u - 1);
-      poles.SetValue(u, v, siren_ary_to_pnt(rb_ary_ref(uitem, 0)));
+      VALUE uitem = RARRAY_AREF(vitem, u - 1);
+      poles.SetValue(u, v, siren_ary_to_pnt(RARRAY_AREF(uitem, 0)));
       weights.SetValue(u, v, VALUE(_ary_ref(uitem, 1)));
     }
   }

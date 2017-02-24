@@ -17,7 +17,7 @@ VALUE siren_iges_save( VALUE self)
 {
   VALUE target;
   VALUE path;
-  int argc = rb_scan_args("oS", &target, &path);
+  rb_scan_args(argc, argv, "oS", &target, &path);
 
   IGESControl_Controller::Init();
 //  IGESControl_Writer writer(Interface_Static::CVal("XSTEP.iges.unit"),
@@ -29,7 +29,7 @@ VALUE siren_iges_save( VALUE self)
 
   std::ofstream fst(RSTRING_PTR(path), std::ios_base::out);
   if (writer.Write(fst) == Standard_False) {
-    rb_raisef(E_ARGUMENT_ERROR, "Failed to save IGES to %S.", path);
+    rb_raisef(Qnil, "Failed to save IGES to %S.", path);
   }
 
   return Qnil;
@@ -39,7 +39,7 @@ VALUE siren_iges_load( VALUE self)
 {
   VALUE path;
   VALUE as_ary = FALSE;
-  int argc = rb_scan_args("S|b", &path, &as_ary);
+  rb_scan_args(argc, argv, "S|b", &path, &as_ary);
 
   IGESControl_Reader iges_reader;
   int stat = iges_reader.ReadFile((Standard_CString)RSTRING_PTR(path));
@@ -76,7 +76,7 @@ VALUE siren_iges_load( VALUE self)
     }
   }
   else {
-    rb_raisef(E_ARGUMENT_ERROR, "Failed to load IGES from %S.", path);
+    rb_raisef(Qnil, "Failed to load IGES from %S.", path);
   }
   return result;
 }

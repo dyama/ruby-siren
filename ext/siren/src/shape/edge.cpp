@@ -48,7 +48,7 @@ VALUE siren_edge_init( VALUE self)
 {
   VALUE curve;
   VALUE sp = 0.0, tp = 1.0;
-  int argc = rb_scan_args("o|ff", &curve, &sp, &tp);
+  rb_scan_args(argc, argv, "o|ff", &curve, &sp, &tp);
   opencascade::handle<Geom_Curve>* phgcurve
     = static_cast<opencascade::handle<Geom_Curve>*>(DATA_PTR(curve));
   TopoDS_Shape edge;
@@ -56,7 +56,7 @@ VALUE siren_edge_init( VALUE self)
     edge = BRepBuilderAPI_MakeEdge(*phgcurve);
   }
   else if (argc == 2) {
-    rb_raise(E_ARGUMENT_ERROR,
+    rb_raise(Qnil,
         "The start parameter specified without a terminal parameter.");
   }
   else {
@@ -102,7 +102,7 @@ VALUE siren_edge_to_pts( VALUE self)
 {
   VALUE deflect = 1.0e-7;
   VALUE lintol = 1.0e-7;
-  int argc = rb_scan_args("|ff", &deflect, &lintol);
+  rb_scan_args(argc, argv, "|ff", &deflect, &lintol);
   TopoDS_Edge edge = siren_edge_get(self);
   BRepAdaptor_Curve adaptor(edge);
   double first_param, last_param;
@@ -139,7 +139,7 @@ VALUE siren_edge_param( VALUE self)
 {
   VALUE xyz;
   VALUE tol = 1.0e-7;
-  int argc = rb_scan_args("A|f", &xyz, &tol);
+  rb_scan_args(argc, argv, "A|f", &xyz, &tol);
 
   TopoDS_Edge edge = siren_edge_get(self);
 
@@ -151,7 +151,7 @@ VALUE siren_edge_param( VALUE self)
   Standard_Real distance = ana.Project(gcurve, p, tol, pp, param);
 
   if (fabs(distance) > tol) {
-    rb_raise(E_ARGUMENT_ERROR, "Specified position is not on the edge.");
+    rb_raise(Qnil, "Specified position is not on the edge.");
   }
 
   return (param);
@@ -160,7 +160,7 @@ VALUE siren_edge_param( VALUE self)
 VALUE siren_edge_to_xyz( VALUE self)
 {
   VALUE param;
-  int argc = rb_scan_args("f", &param);
+  rb_scan_args(argc, argv, "f", &param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -171,7 +171,7 @@ VALUE siren_edge_to_xyz( VALUE self)
 VALUE siren_edge_curvature( VALUE self)
 {
   VALUE param;
-  int argc = rb_scan_args("f", &param);
+  rb_scan_args(argc, argv, "f", &param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -182,7 +182,7 @@ VALUE siren_edge_curvature( VALUE self)
 VALUE siren_edge_tangent( VALUE self)
 {
   VALUE param;
-  int argc = rb_scan_args("f", &param);
+  rb_scan_args(argc, argv, "f", &param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -218,10 +218,10 @@ VALUE siren_edge_curve( VALUE self)
 VALUE siren_edge_extrema( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
   TopoDS_Edge e2 = siren_edge_get(other);
   if (e2.IsNull()) {
-    rb_raise(E_ARGUMENT_ERROR, "Specified shape type is not edge.");
+    rb_raise(Qnil, "Specified shape type is not edge.");
   }
   TopoDS_Edge e1 = siren_edge_get(self);
   BRepExtrema_ExtCC ext(e1, e2);
@@ -244,12 +244,12 @@ VALUE siren_edge_extrema( VALUE self)
 VALUE siren_edge_split( VALUE self)
 {
   VALUE param;
-  int argc = rb_scan_args("f", &param);
+  rb_scan_args(argc, argv, "f", &param);
   Standard_Real first, last;
   TopoDS_Edge e = siren_edge_get(self);
   handle<Geom_Curve> gc  = BRep_Tool::Curve(e, first, last);
   if (param <= first || param >= last) {
-    rb_raise(E_ARGUMENT_ERROR, "Specified parameter is out of range of curve parameter.");
+    rb_raise(Qnil, "Specified parameter is out of range of curve parameter.");
   }
   TopoDS_Edge e1 = BRepBuilderAPI_MakeEdge(gc, first, param);
   TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(gc, param, last);
@@ -260,9 +260,9 @@ VALUE siren_edge_split( VALUE self)
 VALUE siren_edge_trim( VALUE self)
 {
   VALUE first2, last2;
-  int argc = rb_scan_args("ff", &first2, &last2);
+  rb_scan_args(argc, argv, "ff", &first2, &last2);
   if (first2 == last2) {
-    rb_raise(E_ARGUMENT_ERROR, "Specified parameter has same value.");
+    rb_raise(Qnil, "Specified parameter has same value.");
   }
   Standard_Real first, last;
   TopoDS_Edge e = siren_edge_get(self);
@@ -276,12 +276,12 @@ VALUE siren_edge_length( VALUE self)
   Standard_Real res = 0.0;
   VALUE ary = siren_edge_to_pts(self);
   gp_Pnt prev;
-  for (int i=0; i < rb_ary_len(ary); i++) {
+  for (int i=0; i < RARRAY_LEN(ary); i++) {
     if (i == 0) {
-      prev = siren_ary_to_pnt(rb_ary_ref(ary, i));
+      prev = siren_ary_to_pnt(RARRAY_AREF(ary, i));
     }
     else {
-      gp_Pnt curr = siren_ary_to_pnt(rb_ary_ref(ary, i));
+      gp_Pnt curr = siren_ary_to_pnt(RARRAY_AREF(ary, i));
       res += curr.Distance(prev);
       prev = curr;
     }

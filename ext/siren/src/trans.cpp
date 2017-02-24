@@ -107,7 +107,7 @@ VALUE siren_trans_to_s( VALUE self)
 VALUE siren_trans_translate_bang( VALUE self)
 {
   VALUE v;
-  int argc = rb_scan_args("A", &v);
+  rb_scan_args(argc, argv, "A", &v);
   gp_Vec vec = siren_ary_to_vec(v); 
   gp_Trsf* trans = siren_trans_get(self);
   trans->SetTranslation(vec);
@@ -118,7 +118,7 @@ VALUE siren_trans_rotate_bang( VALUE self)
 {
   VALUE op, norm;
   VALUE angle;
-  int argc = rb_scan_args("AAf", &op, &norm, &angle);
+  rb_scan_args(argc, argv, "AAf", &op, &norm, &angle);
   gp_Trsf* trans = siren_trans_get(self);
   trans->SetRotation(siren_ary_to_ax1(op, norm), angle);
   return self;
@@ -149,7 +149,7 @@ VALUE siren_trans_scale_bang( VALUE self)
 {
   VALUE op;
   VALUE factor;
-  int argc = rb_scan_args("Af", &op, &factor);
+  rb_scan_args(argc, argv, "Af", &op, &factor);
   gp_Trsf* trans  = siren_trans_get(self);
   trans->SetScale(siren_ary_to_pnt(op), factor);
   return self;
@@ -165,7 +165,7 @@ VALUE siren_trans_scalef( VALUE self)
 VALUE siren_trans_set_scalef( VALUE self)
 {
   VALUE f;
-  int argc = rb_scan_args("f", &f);
+  rb_scan_args(argc, argv, "f", &f);
   gp_Trsf* trans  = siren_trans_get(self);
   trans->SetScaleFactor(f);
   return (f);
@@ -174,7 +174,7 @@ VALUE siren_trans_set_scalef( VALUE self)
 VALUE siren_trans_mirror_bang( VALUE self)
 {
   VALUE op, norm, vx;
-  int argc = rb_scan_args("A|AA", &op, &norm, &vx);
+  rb_scan_args(argc, argv, "A|AA", &op, &norm, &vx);
   switch (argc) {
   case 1:
     siren_trans_get(self)->SetMirror(siren_ary_to_pnt(op));
@@ -192,7 +192,7 @@ VALUE siren_trans_mirror_bang( VALUE self)
 VALUE siren_trans_multiply( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
   gp_Trsf* trans_me = siren_trans_get(self);
   gp_Trsf* trans_other = siren_trans_get(other);
   gp_Trsf t = trans_me->Multiplied(*trans_other);
@@ -202,7 +202,7 @@ VALUE siren_trans_multiply( VALUE self)
 VALUE siren_trans_multiply_bang( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
   gp_Trsf* trans_me = siren_trans_get(self);
   gp_Trsf* trans_other = siren_trans_get(other);
   trans_me->Multiply(*trans_other);
@@ -212,14 +212,14 @@ VALUE siren_trans_multiply_bang( VALUE self)
 VALUE siren_trans_power( VALUE self)
 {
   VALUE n;
-  int argc = rb_scan_args("i", &n);
+  rb_scan_args(argc, argv, "i", &n);
   return siren_trans_new(siren_trans_get(self)->Powered(n));
 }
 
 VALUE siren_trans_power_bang( VALUE self)
 {
   VALUE n;
-  int argc = rb_scan_args("i", &n);
+  rb_scan_args(argc, argv, "i", &n);
   siren_trans_get(self)->Power(n);
   return self;
 }
@@ -244,7 +244,7 @@ VALUE siren_trans_transform_bang( VALUE self)
 {
   VALUE pos1, norm1, vdir1;
   VALUE pos2, norm2, vdir2;
-  int argc = rb_scan_args("AAA|AAA", &pos1, &norm1, &vdir1, &pos2, &norm2, &vdir2);
+  rb_scan_args(argc, argv, "AAA|AAA", &pos1, &norm1, &vdir1, &pos2, &norm2, &vdir2);
   gp_Trsf* trans = siren_trans_get(self);
   if (argc == 3) {
     trans->SetTransformation(siren_ary_to_ax3(pos1, norm1, vdir1));
@@ -253,7 +253,7 @@ VALUE siren_trans_transform_bang( VALUE self)
     trans->SetTransformation(siren_ary_to_ax3(pos1, norm1, vdir1), siren_ary_to_ax3(pos2, norm2, vdir2));
   }
   else {
-    rb_raise(E_ARGUMENT_ERROR, "Number of arguments is wrong.");
+    rb_raise(Qnil, "Number of arguments is wrong.");
   }
   return self;
 }
@@ -274,14 +274,14 @@ VALUE siren_trans_matrix( VALUE self)
 VALUE siren_trans_set_matrix( VALUE self)
 {
   VALUE ary;
-  int argc = rb_scan_args("A", &ary);
+  rb_scan_args(argc, argv, "A", &ary);
   if (_ary_len(ary) != 4) {
-    rb_raise(E_ARGUMENT_ERROR, "Number of items of specified array is wrong.");
+    rb_raise(Qnil, "Number of items of specified array is wrong.");
   }
-  gp_Vec x = siren_ary_to_vec(rb_ary_ref(ary, 0));
-  gp_Vec y = siren_ary_to_vec(rb_ary_ref(ary, 1));
-  gp_Vec z = siren_ary_to_vec(rb_ary_ref(ary, 2));
-  gp_Vec t = siren_ary_to_vec(rb_ary_ref(ary, 3));
+  gp_Vec x = siren_ary_to_vec(RARRAY_AREF(ary, 0));
+  gp_Vec y = siren_ary_to_vec(RARRAY_AREF(ary, 1));
+  gp_Vec z = siren_ary_to_vec(RARRAY_AREF(ary, 2));
+  gp_Vec t = siren_ary_to_vec(RARRAY_AREF(ary, 3));
   gp_Trsf* trans = siren_trans_get(self);
   trans->SetValues(
       x.X(), y.X(), z.X(), t.X(), 
@@ -300,7 +300,7 @@ VALUE siren_trans_translatef( VALUE self)
 VALUE siren_trans_set_translatef( VALUE self)
 {
   VALUE v;
-  int argc = rb_scan_args("o", &v);
+  rb_scan_args(argc, argv, "o", &v);
   siren_trans_get(self)->SetTranslationPart(siren_ary_to_vec(v));
   return Qnil;
 }
@@ -308,7 +308,7 @@ VALUE siren_trans_set_translatef( VALUE self)
 VALUE siren_trans_move_point( VALUE self)
 {
   VALUE ary;
-  int argc = rb_scan_args("A", &ary);
+  rb_scan_args(argc, argv, "A", &ary);
   gp_Pnt point = siren_ary_to_pnt(ary);
   gp_Trsf* trans = siren_trans_get(self);
   point.Transform(*trans);

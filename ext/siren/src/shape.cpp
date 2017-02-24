@@ -28,7 +28,7 @@ VALUE siren_shape_new( const TopoDS_Shape& shape)
     case TopAbs_COMPOUND:  return siren_compound_new(&shape); break;
     default: break;
   }
-  rb_raise(E_ARGUMENT_ERROR, "Failed to make Shape object.");
+  rb_raise(Qnil, "Failed to make Shape object.");
   return Qnil;
 }
 
@@ -177,7 +177,7 @@ VALUE siren_shape_first_datum( VALUE self)
 VALUE siren_shape_set_trans( VALUE self)
 {
   VALUE obj;
-  int argc = rb_scan_args("o", &obj);
+  rb_scan_args(argc, argv, "o", &obj);
   gp_Trsf* trans = siren_trans_get(obj);
   TopLoc_Location loc(*trans);
   siren_shape_get(self)->Location(loc);
@@ -193,7 +193,7 @@ VALUE siren_shape_bndbox( VALUE self)
 VALUE siren_shape_translate_bang( VALUE self)
 {
   VALUE vec;
-  int argc = rb_scan_args("A", &vec);
+  rb_scan_args(argc, argv, "A", &vec);
   gp_Trsf trsf;
   trsf.SetTranslation(siren_ary_to_vec(vec));
   siren_shape_get(self)->Move(trsf);
@@ -204,7 +204,7 @@ VALUE siren_shape_rotate_bang( VALUE self)
 {
   VALUE op, norm;
   VALUE ang;
-  int argc = rb_scan_args("AAf", &op, &norm, &ang);
+  rb_scan_args(argc, argv, "AAf", &op, &norm, &ang);
   gp_Trsf trsf;
   trsf.SetRotation(siren_ary_to_ax1(op, norm), ang);
   siren_shape_get(self)->Move(trsf);
@@ -215,7 +215,7 @@ VALUE siren_shape_scale_bang( VALUE self)
 {
   VALUE op;
   VALUE factor;
-  int argc = rb_scan_args("Af", &op, &factor);
+  rb_scan_args(argc, argv, "Af", &op, &factor);
   gp_Trsf trsf;
   trsf.SetScale(siren_ary_to_pnt(op), factor);
   siren_shape_get(self)->Move(trsf);
@@ -225,7 +225,7 @@ VALUE siren_shape_scale_bang( VALUE self)
 VALUE siren_shape_mirror_bang( VALUE self)
 {
   VALUE op, norm;
-  int argc = rb_scan_args("AA", &op, &norm);
+  rb_scan_args(argc, argv, "AA", &op, &norm);
   gp_Trsf trsf;
   trsf.SetMirror(siren_ary_to_ax2(op, norm));
   siren_shape_get(self)->Move(trsf);
@@ -235,7 +235,7 @@ VALUE siren_shape_mirror_bang( VALUE self)
 VALUE siren_shape_move_bang( VALUE self)
 {
   VALUE trans;
-  int argc = rb_scan_args("o", &trans);
+  rb_scan_args(argc, argv, "o", &trans);
   gp_Trsf* t = siren_trans_get(trans);
   siren_shape_get(self)->Move(*t);
   return self;
@@ -244,7 +244,7 @@ VALUE siren_shape_move_bang( VALUE self)
 VALUE siren_shape_translate( VALUE self)
 {
   VALUE vec;
-  int argc = rb_scan_args("A", &vec);
+  rb_scan_args(argc, argv, "A", &vec);
   gp_Trsf trsf;
   trsf.SetTranslation(siren_ary_to_vec(vec));
   return siren_shape_new(siren_shape_get(self)->Moved(trsf));
@@ -254,7 +254,7 @@ VALUE siren_shape_rotate( VALUE self)
 {
   VALUE op, norm;
   VALUE ang;
-  int argc = rb_scan_args("AAf", &op, &norm, &ang);
+  rb_scan_args(argc, argv, "AAf", &op, &norm, &ang);
   gp_Trsf trsf;
   trsf.SetRotation(siren_ary_to_ax1(op, norm), ang);
   return siren_shape_new(siren_shape_get(self)->Moved(trsf));
@@ -264,7 +264,7 @@ VALUE siren_shape_scale( VALUE self)
 {
   VALUE op;
   VALUE factor;
-  int argc = rb_scan_args("Af", &op, &factor);
+  rb_scan_args(argc, argv, "Af", &op, &factor);
   gp_Trsf trsf;
   trsf.SetScale(siren_ary_to_pnt(op), factor);
   return siren_shape_new(siren_shape_get(self)->Moved(trsf));
@@ -273,7 +273,7 @@ VALUE siren_shape_scale( VALUE self)
 VALUE siren_shape_mirror( VALUE self)
 {
   VALUE op, norm;
-  int argc = rb_scan_args("AA", &op, &norm);
+  rb_scan_args(argc, argv, "AA", &op, &norm);
   gp_Trsf trsf;
   trsf.SetMirror(siren_ary_to_ax2(op, norm));
   return siren_shape_new(siren_shape_get(self)->Moved(trsf));
@@ -282,7 +282,7 @@ VALUE siren_shape_mirror( VALUE self)
 VALUE siren_shape_move( VALUE self)
 {
   VALUE trans;
-  int argc = rb_scan_args("o", &trans);
+  rb_scan_args(argc, argv, "o", &trans);
   gp_Trsf* t = siren_trans_get(trans);
   return siren_shape_new(siren_shape_get(self)->Moved(*t));
 }
@@ -290,7 +290,7 @@ VALUE siren_shape_move( VALUE self)
 VALUE siren_shape_hashcode( VALUE self)
 {
   VALUE upper;
-  int argc = rb_scan_args("i", &upper);
+  rb_scan_args(argc, argv, "i", &upper);
   TopoDS_Shape* shape = siren_shape_get(self);
   return rb_fixnum_value(shape->HashCode(upper));
 }
@@ -298,7 +298,7 @@ VALUE siren_shape_hashcode( VALUE self)
 VALUE siren_shape_is_partner( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
   TopoDS_Shape* shape_self  = siren_shape_get(self);
   TopoDS_Shape* shape_other = siren_shape_get(other);
   return shape_self->IsPartner(*shape_other) ? Qtrue : Qfalse;
@@ -307,7 +307,7 @@ VALUE siren_shape_is_partner( VALUE self)
 VALUE siren_shape_is_same( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
   TopoDS_Shape* shape_self  = siren_shape_get(self);
   TopoDS_Shape* shape_other = siren_shape_get(other);
   return shape_self->IsSame(*shape_other) ? Qtrue : Qfalse;
@@ -316,7 +316,7 @@ VALUE siren_shape_is_same( VALUE self)
 VALUE siren_shape_is_equal( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
   TopoDS_Shape* shape_self  = siren_shape_get(self);
   TopoDS_Shape* shape_other = siren_shape_get(other);
   return shape_self->IsEqual(*shape_other) ? Qtrue : Qfalse;
@@ -327,7 +327,7 @@ VALUE siren_shape_explore( VALUE self)
   VALUE klass;
   VALUE klassf;
   VALUE block;
-  int argc = rb_scan_args("C|C&", &klass, &klassf, &block);
+  rb_scan_args(argc, argv, "C|C&", &klass, &klassf, &block);
 
   VALUE mtype;
   TopAbs_ShapeEnum type = TopAbs_COMPOUND;
@@ -353,7 +353,7 @@ VALUE siren_shape_explore( VALUE self)
     type = TopAbs_VERTEX;
   }
   else {
-    rb_raise(E_ARGUMENT_ERROR, "Type error.");
+    rb_raise(Qnil, "Type error.");
   }
 
   TopExp_Explorer ex;
@@ -385,12 +385,12 @@ VALUE siren_shape_explore( VALUE self)
       avoid = TopAbs_VERTEX;
     }
     else {
-      rb_raise(E_ARGUMENT_ERROR, "Type error.");
+      rb_raise(Qnil, "Type error.");
     }
     ex.Init(*siren_shape_get(self), type, avoid);
   }
 
-  if (!rb_nil_p(block)) {
+  if (!rbNIL_P(block)) {
     for (; ex.More(); ex.Next()) {
       VALUE argv[2];
       argv[0] = siren_shape_new(ex.Current());
@@ -411,7 +411,7 @@ VALUE siren_shape_explore( VALUE self)
 VALUE siren_shape_subshapes( VALUE self)
 {
   VALUE ori, loc;
-  int argc = rb_scan_args("|bb", &ori, &loc);
+  rb_scan_args(argc, argv, "|bb", &ori, &loc);
   if (argc == 0) {
     ori = TRUE;
     loc = TRUE;
@@ -436,7 +436,7 @@ VALUE siren_shape_subshapes( VALUE self)
 VALUE siren_shape_section( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
 
   TopoDS_Shape* S1 = siren_shape_get(self);
   TopoDS_Shape* S2 = siren_shape_get(other);
@@ -447,7 +447,7 @@ VALUE siren_shape_section( VALUE self)
   api.Build();
 
   if (!api.IsDone()) {
-    rb_raise(E_ARGUMENT_ERROR, "Failed to intersection.");
+    rb_raise(Qnil, "Failed to intersection.");
   }
 
   return siren_shape_new(api.Shape());
@@ -491,7 +491,7 @@ VALUE siren_shape_is_lock( VALUE self)
 VALUE siren_shape_set_lock( VALUE self)
 {
   VALUE flag;
-  int argc = rb_scan_args("b", &flag);
+  rb_scan_args(argc, argv, "b", &flag);
   siren_shape_get(self)->Locked((Standard_Boolean)flag);
   return self;
 }
@@ -505,7 +505,7 @@ VALUE siren_shape_is_modify( VALUE self)
 VALUE siren_shape_set_modify( VALUE self)
 {
   VALUE flag;
-  int argc = rb_scan_args("b", &flag);
+  rb_scan_args(argc, argv, "b", &flag);
   siren_shape_get(self)->Modified((Standard_Boolean)flag);
   return self;
 }
@@ -519,7 +519,7 @@ VALUE siren_shape_is_check( VALUE self)
 VALUE siren_shape_set_check( VALUE self)
 {
   VALUE flag;
-  int argc = rb_scan_args("b", &flag);
+  rb_scan_args(argc, argv, "b", &flag);
   siren_shape_get(self)->Checked((Standard_Boolean)flag);
   return self;
 }
@@ -533,7 +533,7 @@ VALUE siren_shape_is_orientable( VALUE self)
 VALUE siren_shape_set_orientable( VALUE self)
 {
   VALUE flag;
-  int argc = rb_scan_args("b", &flag);
+  rb_scan_args(argc, argv, "b", &flag);
   siren_shape_get(self)->Orientable((Standard_Boolean)flag);
   return self;
 }
@@ -547,7 +547,7 @@ VALUE siren_shape_is_close( VALUE self)
 VALUE siren_shape_set_close( VALUE self)
 {
   VALUE flag;
-  int argc = rb_scan_args("b", &flag);
+  rb_scan_args(argc, argv, "b", &flag);
   siren_shape_get(self)->Closed((Standard_Boolean)flag);
   return self;
 }
@@ -561,7 +561,7 @@ VALUE siren_shape_is_infinite( VALUE self)
 VALUE siren_shape_set_infinite( VALUE self)
 {
   VALUE flag;
-  int argc = rb_scan_args("b", &flag);
+  rb_scan_args(argc, argv, "b", &flag);
   siren_shape_get(self)->Infinite((Standard_Boolean)flag);
   return self;
 }
@@ -575,7 +575,7 @@ VALUE siren_shape_is_convex( VALUE self)
 VALUE siren_shape_set_convex( VALUE self)
 {
   VALUE flag;
-  int argc = rb_scan_args("b", &flag);
+  rb_scan_args(argc, argv, "b", &flag);
   siren_shape_get(self)->Convex((Standard_Boolean)flag);
   return self;
 }

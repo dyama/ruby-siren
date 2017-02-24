@@ -54,7 +54,7 @@ VALUE siren_circle_radius( VALUE self)
 VALUE siren_circle_radius_set( VALUE self)
 {
   VALUE r;
-  int argc = rb_scan_args("f", &r);
+  rb_scan_args(argc, argv, "f", &r);
   siren_circle_get(self)->SetRadius(r);
   return Qnil;
 }
@@ -68,7 +68,7 @@ VALUE siren_circle_center( VALUE self)
 VALUE siren_circle_center_set( VALUE self)
 {
   VALUE pos;
-  int argc = rb_scan_args("A", &pos);
+  rb_scan_args(argc, argv, "A", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -102,7 +102,7 @@ VALUE siren_circle_normal( VALUE self)
 VALUE siren_circle_normal_set( VALUE self)
 {
   VALUE norm;
-  int argc = rb_scan_args("A", &norm);
+  rb_scan_args(argc, argv, "A", &norm);
   gp_Dir dir = siren_ary_to_dir(norm);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -123,7 +123,7 @@ VALUE siren_circle_dir( VALUE self)
 VALUE siren_circle_dir_set( VALUE self)
 {
   VALUE val;
-  int argc = rb_scan_args("A", &val);
+  rb_scan_args(argc, argv, "A", &val);
   gp_Dir dir = siren_ary_to_dir(val);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -138,7 +138,7 @@ VALUE siren_circle_dir_set( VALUE self)
 VALUE siren_circle_dist( VALUE self)
 {
   VALUE pos;
-  int argc = rb_scan_args("A", &pos);
+  rb_scan_args(argc, argv, "A", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -148,7 +148,7 @@ VALUE siren_circle_dist( VALUE self)
 VALUE siren_circle_distdist( VALUE self)
 {
   VALUE pos;
-  int argc = rb_scan_args("A", &pos);
+  rb_scan_args(argc, argv, "A", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -159,7 +159,7 @@ VALUE siren_circle_contain( VALUE self)
 {
   VALUE pos;
   VALUE lintol = 1.0e-7;
-  int argc = rb_scan_args("A|f", &pos, &lintol);
+  rb_scan_args(argc, argv, "A|f", &pos, &lintol);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();

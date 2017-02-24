@@ -45,16 +45,16 @@ VALUE siren_bscurve_init( VALUE self)
 {
   VALUE d;
   VALUE ks, ms, ps, ws;
-  int argc = rb_scan_args("iAAA|A", &d, &ks, &ms, &ps, &ws);
+  rb_scan_args(argc, argv, "iAAA|A", &d, &ks, &ms, &ps, &ws);
 
-  int plen = rb_ary_len(ps);
+  int plen = RARRAY_LEN(ps);
 
   TColgp_Array1OfPnt poles(0, plen - 1);
   TColStd_Array1OfReal weights(0, plen - 1);
   for (int i=0; i < plen; i++) {
-    poles.SetValue(i, siren_ary_to_pnt(rb_ary_ref(ps, i)));
+    poles.SetValue(i, siren_ary_to_pnt(RARRAY_AREF(ps, i)));
     if (argc >= 5) {
-      VALUE w = rb_ary_ref(ws, i);
+      VALUE w = RARRAY_AREF(ws, i);
       weights.SetValue(i, VALUE(w));
     }
     else {
@@ -62,14 +62,14 @@ VALUE siren_bscurve_init( VALUE self)
     }
   }
 
-  int klen = rb_ary_len(ks);
+  int klen = RARRAY_LEN(ks);
   TColStd_Array1OfReal knots(0, klen - 1);
   TColStd_Array1OfInteger mults(0, klen - 1);
 
   for (int i=0; i < klen; i++) {
-    VALUE knot = rb_ary_ref(ks, i);
+    VALUE knot = RARRAY_AREF(ks, i);
     knots.SetValue(i, VALUE(knot));
-    VALUE mult = rb_ary_ref(ms, i);
+    VALUE mult = RARRAY_AREF(ms, i);
     mults.SetValue(i, (Standard_Integer)rb_fixnum(mult));
   }
 

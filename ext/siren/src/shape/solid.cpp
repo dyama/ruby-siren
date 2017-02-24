@@ -61,9 +61,9 @@ VALUE siren_solid_init( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_scan_args("*", &a, &len);
+  rb_scan_args(argc, argv, "*", &a, &len);
   if (len == 0) {
-    rb_raise(E_ARGUMENT_ERROR, "No shapes specified.");
+    rb_raise(Qnil, "No shapes specified.");
   }
   BRepBuilderAPI_MakeSolid solid_maker;
   for (int i = 0; i < len; i++) {
@@ -88,7 +88,7 @@ VALUE siren_solid_init( VALUE self)
 VALUE siren_solid_box( VALUE self)
 {
   VALUE size, pos;
-  int argc = rb_scan_args("|AA", &size, &pos);
+  rb_scan_args(argc, argv, "|AA", &size, &pos);
 
   Standard_Real sx, sy, sz;
   if (argc >= 1) {
@@ -108,7 +108,7 @@ VALUE siren_solid_box( VALUE self)
     op = gp_Pnt(0., 0., 0.);
   }
   if (std::fabs(sx * sy * sz) == 0.0) {
-    rb_raise(E_ARGUMENT_ERROR,
+    rb_raise(Qnil,
       "Failed to make solid. Incorrect size specified.");
   }
   BRepPrimAPI_MakeBox api(op, sx, sy, sz);
@@ -118,7 +118,7 @@ VALUE siren_solid_box( VALUE self)
 VALUE siren_solid_box2p( VALUE self)
 {
   VALUE p1, p2;
-  int argc = rb_scan_args("|AA", &p1, &p2);
+  rb_scan_args(argc, argv, "|AA", &p1, &p2);
 
   Standard_Real x1 = 0.0, y1 = 0.0, z1 = 0.0;
   Standard_Real x2 = 1.0, y2 = 1.0, z2 = 1.0;
@@ -140,7 +140,7 @@ VALUE siren_solid_box2p( VALUE self)
 VALUE siren_solid_boxax( VALUE self)
 {
   VALUE size, pos, dir;
-  int argc = rb_scan_args("AAA", &size, &pos, &dir);
+  rb_scan_args(argc, argv, "AAA", &size, &pos, &dir);
 
   Standard_Real sx, sy, sz;
   siren_ary_to_xyz(size, sx, sy, sz);
@@ -161,7 +161,7 @@ VALUE siren_solid_sphere( VALUE self)
 {
   VALUE r = 1.0;
   VALUE pos;
-  int argc = rb_scan_args("|fA", &r, &pos);
+  rb_scan_args(argc, argv, "|fA", &r, &pos);
 
   gp_Pnt op;
   if (argc == 2) {
@@ -174,7 +174,7 @@ VALUE siren_solid_sphere( VALUE self)
   }
 
   if (r < 0) {
-    rb_raise(E_ARGUMENT_ERROR, "Failed to make solid."
+    rb_raise(Qnil, "Failed to make solid."
       " Specified radius value below 0.");
   }
 
@@ -186,7 +186,7 @@ VALUE siren_solid_cylinder( VALUE self)
 {
   VALUE pos, norm;
   VALUE r, h, a;
-  int argc = rb_scan_args("AAfff", &pos, &norm, &r, &h, &a);
+  rb_scan_args(argc, argv, "AAfff", &pos, &norm, &r, &h, &a);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
@@ -199,7 +199,7 @@ VALUE siren_solid_cone( VALUE self)
 {
   VALUE pos, norm;
   VALUE r1, r2, h, ang;
-  int argc = rb_scan_args("AAffff", &pos, &norm, &r1, &r2, &h, &ang);
+  rb_scan_args(argc, argv, "AAffff", &pos, &norm, &r1, &r2, &h, &ang);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
@@ -211,7 +211,7 @@ VALUE siren_solid_torus( VALUE self)
 {
   VALUE r1, r2, ang;
   VALUE pos, norm;
-  int argc = rb_scan_args("AAfff", &pos, &norm, &r1, &r2, &ang);
+  rb_scan_args(argc, argv, "AAfff", &pos, &norm, &r1, &r2, &ang);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
@@ -222,10 +222,10 @@ VALUE siren_solid_torus( VALUE self)
 VALUE siren_solid_halfspace( VALUE self)
 {
   VALUE surf, refpnt;
-  int argc = rb_scan_args("oA", &surf, &refpnt);
+  rb_scan_args(argc, argv, "oA", &surf, &refpnt);
   TopoDS_Shape* shape = siren_shape_get(surf);
   if (shape == nullptr || shape->IsNull()) {
-    rb_raise(E_ARGUMENT_ERROR, "Specified shape is incorrect.");
+    rb_raise(Qnil, "Specified shape is incorrect.");
   }
   TopoDS_Solid solid;
   gp_Pnt pnt = siren_ary_to_pnt(refpnt);
@@ -236,7 +236,7 @@ VALUE siren_solid_halfspace( VALUE self)
     solid = BRepPrimAPI_MakeHalfSpace(TopoDS::Shell(*shape), pnt);
   }
   else {
-    rb_raise(E_ARGUMENT_ERROR, "Specified shape type is not FACE or SHELL.");
+    rb_raise(Qnil, "Specified shape type is not FACE or SHELL.");
   }
   return siren_shape_new(solid);
 }
@@ -262,14 +262,14 @@ VALUE siren_solid_revolution( VALUE self)
 VALUE siren_solid_wedge( VALUE self)
 {
   VALUE dx = 1.0, dy = 1.0, dz = 1.0, x = 0.5, z = 0.5, X = 0.5, Z = 0.5;
-  int argc = rb_scan_args("|fffffff", &dx, &dy, &dz, &x, &z, &X, &Z);
+  rb_scan_args(argc, argv, "|fffffff", &dx, &dy, &dz, &x, &z, &X, &Z);
   try {
     BRepPrimAPI_MakeWedge api(dx, dy, dz, x, z, X, Z);
     TopoDS_Shape s = api.Shape();
     return siren_shape_new(s);
   }
   catch (...) {
-    rb_raise(E_ARGUMENT_ERROR, "Failed to make a wedge.");
+    rb_raise(Qnil, "Failed to make a wedge.");
   }
   return Qnil;
 }

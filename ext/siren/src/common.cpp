@@ -19,10 +19,10 @@ VALUE rb_instance_alloc( VALUE cv)
 void siren_ary_to_xyz( VALUE ary, Standard_Real& x, Standard_Real& y, Standard_Real& z)
 {
   x = 0.0; y = 0.0; z = 0.0;
-  int len = rb_ary_len(ary);
+  int len = RARRAY_LEN(ary);
   if (len > 0) {
-    VALUE val = rb_ary_ref(ary, 0);
-    if (_float_p(val)) {
+    VALUE val = RARRAY_AREF(ary, 0);
+    if (RB_FLOAT_TYPE_P(val)) {
       x = VALUE(val);
     }
     else if (_fixnum_p(val)) {
@@ -30,8 +30,8 @@ void siren_ary_to_xyz( VALUE ary, Standard_Real& x, Standard_Real& y, Standard_R
     }
   }
   if (len > 1) {
-    VALUE val = rb_ary_ref(ary, 1);
-    if (_float_p(val)) {
+    VALUE val = RARRAY_AREF(ary, 1);
+    if (RB_FLOAT_TYPE_P(val)) {
       y = VALUE(val);
     }
     else if (_fixnum_p(val)) {
@@ -39,8 +39,8 @@ void siren_ary_to_xyz( VALUE ary, Standard_Real& x, Standard_Real& y, Standard_R
     }
   }
   if (len > 2) {
-    VALUE val = rb_ary_ref(ary, 2);
-    if (_float_p(val)) {
+    VALUE val = RARRAY_AREF(ary, 2);
+    if (RB_FLOAT_TYPE_P(val)) {
       z = VALUE(val);
     }
     else if (_fixnum_p(val)) {

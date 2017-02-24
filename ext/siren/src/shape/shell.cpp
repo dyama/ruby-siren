@@ -51,15 +51,15 @@ VALUE siren_shell_make( VALUE self)
 {
   VALUE ary;
   VALUE tol;
-  int argc = rb_scan_args("A|f", &ary, &tol);
+  rb_scan_args(argc, argv, "A|f", &ary, &tol);
   BRepBuilderAPI_Sewing sewer;
   sewer.Init();
   if (argc == 2 && tol >= 0) {
     sewer.SetTolerance(tol);
   }
-  int len = rb_ary_len(ary);
+  int len = RARRAY_LEN(ary);
   for (int i=0; i < len; i++) {
-    VALUE item = rb_ary_ref(ary, i);
+    VALUE item = RARRAY_AREF(ary, i);
     TopoDS_Shape* shape = siren_shape_get(item);
     if (shape->IsNull()) {
       continue;

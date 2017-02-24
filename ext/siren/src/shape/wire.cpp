@@ -58,8 +58,8 @@ VALUE siren_wire_curves( VALUE self)
 {
   VALUE res = rb_ary_new();
   VALUE edges = rb_funcall(self, "edges", 0);
-  for (int i = 0; i < rb_ary_len(edges); i++) {
-    VALUE edge = rb_ary_ref(edges, i);
+  for (int i = 0; i < RARRAY_LEN(edges); i++) {
+    VALUE edge = RARRAY_AREF(edges, i);
     VALUE curve = rb_funcall(edge, "curve", 0);
     rb_ary_push(res, curve);
   }
@@ -76,15 +76,15 @@ VALUE siren_wire_make( VALUE self)
 {
   VALUE objs;
   VALUE tol;
-  int argc = rb_scan_args("A|f", &objs, &tol);
+  rb_scan_args(argc, argv, "A|f", &objs, &tol);
   BRepBuilderAPI_MakeWire api;
 #ifdef USE_WIRE_FIX
   ShapeFix_Wire sfw;
   handle<ShapeExtend_WireData> wd = new ShapeExtend_WireData();
   ShapeFix_ShapeTolerance FTol;
-  int osize = rb_ary_len(objs);
+  int osize = RARRAY_LEN(objs);
   for (int i = 0; i < osize ; i++) {
-    VALUE obj = rb_ary_ref(objs, i);
+    VALUE obj = RARRAY_AREF(objs, i);
     TopoDS_Shape* s = siren_shape_get(obj);
     if (s->IsNull()) {
       continue;
@@ -108,8 +108,8 @@ VALUE siren_wire_make( VALUE self)
 #else
   ShapeFix_ShapeTolerance fixtol;
   bool has_tol = argc == 2;
-  for (int i = 0; i < rb_ary_len(objs); i++) {
-    TopoDS_Shape* shape = siren_shape_get(rb_ary_ref(objs, i));
+  for (int i = 0; i < RARRAY_LEN(objs); i++) {
+    TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(objs, i));
     if (shape->ShapeType() == TopAbs_EDGE) {
       if (has_tol) {
         fixtol.SetTolerance(*shape, tol, TopAbs_VERTEX);
@@ -128,13 +128,13 @@ VALUE siren_wire_make( VALUE self)
   if (!api.IsDone()) {
     switch (api.Error()) {
       case BRepBuilderAPI_EmptyWire:
-        rb_raise(E_ARGUMENT_ERROR, "Failed to make a wire. (Empty wire)");
+        rb_raise(Qnil, "Failed to make a wire. (Empty wire)");
         break;
       case BRepBuilderAPI_DisconnectedWire:
-        rb_raise(E_ARGUMENT_ERROR, "Failed to make a wire. (Disconnected wire)");
+        rb_raise(Qnil, "Failed to make a wire. (Disconnected wire)");
         break;
       case BRepBuilderAPI_NonManifoldWire:
-        rb_raise(E_ARGUMENT_ERROR, "Failed to make a wire. (Non manifold wire)");
+        rb_raise(Qnil, "Failed to make a wire. (Non manifold wire)");
         break;
       default: break;
     }

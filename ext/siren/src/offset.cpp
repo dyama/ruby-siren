@@ -24,7 +24,7 @@ bool siren_offset_install()
 VALUE siren_offset_sweep_vec( VALUE self)
 {
   VALUE target, vec;
-  int argc = rb_scan_args("oA", &target, &vec);
+  rb_scan_args(argc, argv, "oA", &target, &vec);
 
   TopoDS_Shape* profile = siren_shape_get(target);
 
@@ -45,7 +45,7 @@ VALUE siren_offset_sweep_path( VALUE self)
   VALUE target, pathwire;
   VALUE cont, corr;
   VALUE scale_first, scale_last;
-  int argc = rb_scan_args("oo|bbff", &target, &pathwire, &cont, &corr, &scale_first, &scale_last);
+  rb_scan_args(argc, argv, "oo|bbff", &target, &pathwire, &cont, &corr, &scale_first, &scale_last);
 
   TopoDS_Shape* shape_profile = siren_shape_get(target);
   TopoDS_Shape* shape_path = siren_shape_get(pathwire);
@@ -59,7 +59,7 @@ VALUE siren_offset_sweep_path( VALUE self)
     path = TopoDS::Wire(*shape_path);
   }
   else {
-    rb_raise(E_ARGUMENT_ERROR, "Type of path is not Edge or Wire.");
+    rb_raise(Qnil, "Type of path is not Edge or Wire.");
   }
 
   VALUE result = Qnil;
@@ -123,11 +123,11 @@ VALUE siren_offset_loft( VALUE self)
 {
   VALUE objs;
   VALUE smooth, is_solid, is_ruled;
-  int argc = rb_scan_args("A|bbb", &objs, &smooth,  &is_solid, &is_ruled);
-  int lsize = rb_ary_len(objs);
+  rb_scan_args(argc, argv, "A|bbb", &objs, &smooth,  &is_solid, &is_ruled);
+  int lsize = RARRAY_LEN(objs);
 
   if (lsize < 2) {
-    rb_raise(E_ARGUMENT_ERROR, "Number of shapes must be over 2 wires.");
+    rb_raise(Qnil, "Number of shapes must be over 2 wires.");
   }
 
   Standard_Boolean is_sm, is_s, is_r;
@@ -138,7 +138,7 @@ VALUE siren_offset_loft( VALUE self)
   BRepOffsetAPI_ThruSections ts(is_s, is_r);
 
   for (int i=0; i<lsize; i++) {
-    VALUE line = rb_ary_ref(objs, i);
+    VALUE line = RARRAY_AREF(objs, i);
     TopoDS_Shape* shape = siren_shape_get(line);
     TopoDS_Wire w = TopoDS::Wire(*shape);
     ts.AddWire(w);
@@ -154,7 +154,7 @@ VALUE siren_offset_offset_geomsurf( VALUE self)
 {
   VALUE target;
   VALUE offset, tol;
-  int argc = rb_scan_args("of|f", &target, &offset, &tol);
+  rb_scan_args(argc, argv, "of|f", &target, &offset, &tol);
   if (argc < 3)
     tol = 1.0;
 
@@ -185,7 +185,7 @@ VALUE siren_offset_offset( VALUE self)
   VALUE intersect = false, self_intersect = false;
   VALUE join = (int)GeomAbs_Arc;
   VALUE thickening = false;
-  int argc = rb_scan_args("off|ibbib", &target, &offset, &tol, &mode,
+  rb_scan_args(argc, argv, "off|ibbib", &target, &offset, &tol, &mode,
       &intersect, &self_intersect, &join, &thickening);
 
   TopoDS_Shape* shape = siren_shape_get(target);
@@ -212,7 +212,7 @@ VALUE siren_offset_offset_shape( VALUE self)
   VALUE mode = (int)BRepOffset_Skin;
   VALUE intersect = false, self_intersect = false;
   VALUE join = (int)GeomAbs_Arc;
-  int argc = rb_scan_args("off|ibbi", &target, &offset, &tol, &mode,
+  rb_scan_args(argc, argv, "off|ibbi", &target, &offset, &tol, &mode,
       &intersect, &self_intersect, &join);
 
   TopoDS_Shape* shape = siren_shape_get(target);
@@ -228,13 +228,13 @@ VALUE siren_offset_pipe( VALUE self)
   VALUE profile, path;
   VALUE mode;
   VALUE force_approx_c1;
-  int argc = rb_scan_args("oo|ib", &profile, &path, &mode, &force_approx_c1);
+  rb_scan_args(argc, argv, "oo|ib", &profile, &path, &mode, &force_approx_c1);
 
   TopoDS_Shape* shape_profile = siren_shape_get(profile);
   TopoDS_Shape* shape_path = siren_shape_get(path);
 
   if (shape_path->ShapeType() != TopAbs_WIRE) {
-    rb_raise(E_ARGUMENT_ERROR, "Type of path is not Edge or Wire.");
+    rb_raise(Qnil, "Type of path is not Edge or Wire.");
   }
 
   TopoDS_Wire wire = TopoDS::Wire(*shape_path);

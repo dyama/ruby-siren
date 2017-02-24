@@ -36,7 +36,7 @@ siren_filler_init(int argc, VALUE* argv, VALUE self)
   VALUE anisotropie;
   VALUE tol2d, tol3d, tolang, tolcurv;
   VALUE maxdeg, maxsegs;
-  // int argc = rb_scan_args("|iiibffffii",
+  // rb_scan_args(argc, argv, "|iiibffffii",
   //     &degree, &nbptsoncur, &nbiter, &anisotropie,
   //     &tol2d, &tol3d, &tolang, &tolcurv, &maxdeg, &maxsegs);
   rb_scan_args(argc, argv, "19",
@@ -108,7 +108,7 @@ VALUE siren_filler_add_bound(VALUE self, VALUE edge, VALUE order)
 #if 0
   VALUE edge;
   VALUE order;
-  int argc = rb_scan_args("oi", &edge, &order);
+  rb_scan_args(argc, argv, "oi", &edge, &order);
 #endif
   TopoDS_Shape* s = siren_shape_get(edge);
   TopoDS_Edge e = TopoDS::Edge(*s);
@@ -122,7 +122,7 @@ VALUE siren_filler_add(VALUE self, VALUE obj, VALUE order)
 #if 0
   VALUE obj;
   VALUE order;
-  int argc = rb_scan_args("o|i", &obj, &order);
+  rb_scan_args(argc, argv, "o|i", &obj, &order);
   if (argc == 2) {
 #endif
   if (order != Qnil) {
@@ -160,7 +160,7 @@ VALUE siren_filler_g0error(VALUE self, VALUE index)
 {
 #if 0
   VALUE index;
-  int argc = rb_scan_args("|i", &index);
+  rb_scan_args(argc, argv, "|i", &index);
 #endif
   Standard_Real value;
   if (index != Qnil) {
@@ -176,7 +176,7 @@ VALUE siren_filler_g1error(VALUE self, VALUE index)
 {
 #if 0
   VALUE index;
-  int argc = rb_scan_args("|i", &index);
+  rb_scan_args(argc, argv, "|i", &index);
 #endif
   Standard_Real value;
   if (index != Qnil) {
@@ -192,7 +192,7 @@ VALUE siren_filler_g2error(VALUE self, VALUE index)
 {
 #if 0
   VALUE index;
-  int argc = rb_scan_args("|i", &index);
+  rb_scan_args(argc, argv, "|i", &index);
 #endif
   Standard_Real value;
   if (index != Qnil) {

@@ -17,14 +17,14 @@ VALUE siren_brep_save( VALUE self)
 {
   VALUE target;
   VALUE path;
-  int argc = rb_scan_args("oS", &target, &path);
+  rb_scan_args(argc, argv, "oS", &target, &path);
   TopoDS_Shape* shape = siren_shape_get(target);
   try {
     std::ofstream fst(RSTRING_PTR(path), std::ios_base::out);
     BRepTools::Write(*shape, fst);
   }
   catch (...) {
-    rb_raisef(E_ARGUMENT_ERROR, "Failed to save BRep to %S.", path);
+    rb_raisef(Qnil, "Failed to save BRep to %S.", path);
   }
   return Qnil;
 }
@@ -32,7 +32,7 @@ VALUE siren_brep_save( VALUE self)
 VALUE siren_brep_load( VALUE self)
 {
   VALUE path;
-  int argc = rb_scan_args("S", &path);
+  rb_scan_args(argc, argv, "S", &path);
   BRep_Builder B;
   TopoDS_Shape shape;
   try {
@@ -40,7 +40,7 @@ VALUE siren_brep_load( VALUE self)
     BRepTools::Read(shape, fst, B);
   }
   catch (...) {
-    rb_raisef(E_ARGUMENT_ERROR, "Failed to load BRep from %S.", path);
+    rb_raisef(Qnil, "Failed to load BRep from %S.", path);
   }
   return siren_shape_new(shape);
 }
@@ -48,7 +48,7 @@ VALUE siren_brep_load( VALUE self)
 VALUE siren_brep_dump( VALUE self)
 {
   VALUE target;
-  int argc = rb_scan_args("o", &target);
+  rb_scan_args(argc, argv, "o", &target);
   TopoDS_Shape* shape = siren_shape_get(target);
   BRepTools::Dump(*shape, std::cout);
   return Qnil;

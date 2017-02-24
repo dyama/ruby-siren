@@ -50,7 +50,7 @@ VALUE siren_chunk_init( VALUE self)
 {
   VALUE* a;
   VALUE len;
-  int argc = rb_scan_args("*", &a, &len);
+  rb_scan_args(argc, argv, "*", &a, &len);
 
   TopoDS_CompSolid cs;
   TopoDS_Builder builder;
@@ -58,8 +58,8 @@ VALUE siren_chunk_init( VALUE self)
 
   for (int i = 0; i < len; i++) {
     if (_array_p(a[i])) {
-      for (int j = 0; j < rb_ary_len(a[i]); j++) {
-        auto solid = siren_solid_get(rb_ary_ref(a[i], j));
+      for (int j = 0; j < RARRAY_LEN(a[i]); j++) {
+        auto solid = siren_solid_get(RARRAY_AREF(a[i], j));
         builder.Add(cs, solid);
       }
     }

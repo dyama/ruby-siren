@@ -39,17 +39,17 @@ bool siren_bzcurve_install()
 VALUE siren_bzcurve_init( VALUE self)
 {
   VALUE ps, ws;
-  int argc = rb_scan_args("A|A", &ps, &ws);
+  rb_scan_args(argc, argv, "A|A", &ps, &ws);
   bool has_weight = argc == 2;
-  int plen = rb_ary_len(ps);
+  int plen = RARRAY_LEN(ps);
   TColgp_Array1OfPnt poles(1, plen);
   TColStd_Array1OfReal weights(1, plen);
   // Start index of weights must be 1. Crash construction of Geom_BezierCurve
   // if another index specified.
   for (int i = 0; i < plen; i++) {
-    poles.SetValue(i + 1, siren_ary_to_pnt(rb_ary_ref(ps, i)));
+    poles.SetValue(i + 1, siren_ary_to_pnt(RARRAY_AREF(ps, i)));
     if (has_weight) {
-      VALUE w = rb_ary_ref(ws, i);
+      VALUE w = RARRAY_AREF(ws, i);
       weights.SetValue(i + 1, VALUE(w));
     }
   }
@@ -63,7 +63,7 @@ VALUE siren_bzcurve_init( VALUE self)
     }
   }
   catch (...) {
-    rb_raise(E_ARGUMENT_ERROR, "Failed to make a BzCurve.");
+    rb_raise(Qnil, "Failed to make a BzCurve.");
   }
   void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();

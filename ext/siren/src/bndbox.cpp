@@ -127,7 +127,7 @@ VALUE siren_bndbox_max( VALUE self)
 VALUE siren_bndbox_add( VALUE self)
 {
   VALUE obj;
-  int argc = rb_scan_args("o", &obj);
+  rb_scan_args(argc, argv, "o", &obj);
 
   Bnd_Box* b = siren_bndbox_get(self);
 
@@ -149,7 +149,7 @@ VALUE siren_bndbox_add( VALUE self)
 VALUE siren_bndbox_is_out( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
   Bnd_Box* b = siren_bndbox_get(self);
   // return b->IsOut(siren_pnt_get(other)) == Standard_True ? Qtrue : Qfalse;
   return b->IsOut(*siren_bndbox_get(other)) == Standard_True ? Qtrue : Qfalse;
@@ -228,7 +228,7 @@ VALUE siren_bndbox_whole_bang( VALUE self)
 VALUE siren_bndbox_is_xthin( VALUE self)
 {
   VALUE tol;
-  int argc = rb_scan_args("|f", &tol);
+  rb_scan_args(argc, argv, "|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
   return b->IsXThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
@@ -236,7 +236,7 @@ VALUE siren_bndbox_is_xthin( VALUE self)
 VALUE siren_bndbox_is_ythin( VALUE self)
 {
   VALUE tol;
-  int argc = rb_scan_args("|f", &tol);
+  rb_scan_args(argc, argv, "|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
   return b->IsYThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
@@ -244,7 +244,7 @@ VALUE siren_bndbox_is_ythin( VALUE self)
 VALUE siren_bndbox_is_zthin( VALUE self)
 {
   VALUE tol;
-  int argc = rb_scan_args("|f", &tol);
+  rb_scan_args(argc, argv, "|f", &tol);
   Bnd_Box* b = siren_bndbox_get(self);
   return b->IsZThin(argc ? tol : 0.0) ? Qtrue : Qfalse;
 }
@@ -318,7 +318,7 @@ VALUE siren_bndbox_openzmax_bang( VALUE self)
 VALUE siren_bndbox_set_gap( VALUE self)
 {
   VALUE tol;
-  int argc = rb_scan_args("f", &tol);
+  rb_scan_args(argc, argv, "f", &tol);
   siren_bndbox_get(self)->SetGap(tol);
   return Qnil;
 }
@@ -332,7 +332,7 @@ VALUE siren_bndbox_get_gap( VALUE self)
 VALUE siren_bndbox_dist( VALUE self)
 {
   VALUE other;
-  int argc = rb_scan_args("o", &other);
+  rb_scan_args(argc, argv, "o", &other);
   Bnd_Box* b = siren_bndbox_get(self);
   Bnd_Box* bb= siren_bndbox_get(other);
   if (b->IsVoid() || bb->IsVoid()) {
