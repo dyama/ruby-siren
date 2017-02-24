@@ -2,6 +2,7 @@
 
 bool siren_offset_install()
 {
+#if 0
   // Class method
   rb_define_class_method(sr_mSiren, "sweep_vec",       siren_offset_sweep_vec,       MRB_ARGS_REQ(2));
   rb_define_class_method(sr_mSiren, "sweep_path",      siren_offset_sweep_path,      MRB_ARGS_REQ(2) | MRB_ARGS_OPT(4));
@@ -10,21 +11,22 @@ bool siren_offset_install()
   rb_define_class_method(sr_mSiren, "offset",          siren_offset_offset,          MRB_ARGS_REQ(3) | MRB_ARGS_OPT(5));
   rb_define_class_method(sr_mSiren, "offset_shape",    siren_offset_offset_shape,    MRB_ARGS_REQ(3) | MRB_ARGS_OPT(4));
   rb_define_class_method(sr_mSiren, "pipe",            siren_offset_pipe,            MRB_ARGS_REQ(2) | MRB_ARGS_OPT(2));
+#endif
   // For mix-in
-  rb_define_method      (sr_mSiren, "sweep_vec",       siren_offset_sweep_vec,       MRB_ARGS_REQ(2));
-  rb_define_method      (sr_mSiren, "sweep_path",      siren_offset_sweep_path,      MRB_ARGS_REQ(2) | MRB_ARGS_OPT(4));
-  rb_define_method      (sr_mSiren, "loft",            siren_offset_loft,            MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
-  rb_define_method      (sr_mSiren, "offset_geomsurf", siren_offset_offset_geomsurf, MRB_ARGS_REQ(2) | MRB_ARGS_OPT(1));
-  rb_define_method      (sr_mSiren, "offset",          siren_offset_offset,          MRB_ARGS_REQ(3) | MRB_ARGS_OPT(5));
-  rb_define_method      (sr_mSiren, "offset_shape",    siren_offset_offset_shape,    MRB_ARGS_REQ(3) | MRB_ARGS_OPT(4));
-  rb_define_method      (sr_mSiren, "pipe",            siren_offset_pipe,            MRB_ARGS_REQ(2) | MRB_ARGS_OPT(2));
+  rb_define_method(sr_mSiren, "sweep_vec",       siren_offset_sweep_vec,       -1);
+  rb_define_method(sr_mSiren, "sweep_path",      siren_offset_sweep_path,      -1);
+  rb_define_method(sr_mSiren, "loft",            siren_offset_loft,            -1);
+  rb_define_method(sr_mSiren, "offset_geomsurf", siren_offset_offset_geomsurf, -1);
+  rb_define_method(sr_mSiren, "offset",          siren_offset_offset,          -1);
+  rb_define_method(sr_mSiren, "offset_shape",    siren_offset_offset_shape,    -1);
+  rb_define_method(sr_mSiren, "pipe",            siren_offset_pipe,            -1);
   return true;
 }
 
-VALUE siren_offset_sweep_vec( VALUE self)
+VALUE siren_offset_sweep_vec(int argc, VALUE* argv, VALUE self)
 {
   VALUE target, vec;
-  rb_scan_args(argc, argv, "oA", &target, &vec);
+  rb_scan_args(argc, argv, "2", &target, &vec);
 
   TopoDS_Shape* profile = siren_shape_get(target);
 
@@ -40,12 +42,12 @@ VALUE siren_offset_sweep_vec( VALUE self)
   return siren_shape_new(mp.Shape());
 }
 
-VALUE siren_offset_sweep_path( VALUE self)
+VALUE siren_offset_sweep_path(int argc, VALUE* argv, VALUE self)
 {
   VALUE target, pathwire;
   VALUE cont, corr;
   VALUE scale_first, scale_last;
-  rb_scan_args(argc, argv, "oo|bbff", &target, &pathwire, &cont, &corr, &scale_first, &scale_last);
+  rb_scan_args(argc, argv, "24", &target, &pathwire, &cont, &corr, &scale_first, &scale_last);
 
   TopoDS_Shape* shape_profile = siren_shape_get(target);
   TopoDS_Shape* shape_path = siren_shape_get(pathwire);
@@ -119,11 +121,11 @@ VALUE siren_offset_sweep_path( VALUE self)
   return result;
 }
 
-VALUE siren_offset_loft( VALUE self)
+VALUE siren_offset_loft(int argc, VALUE* argv, VALUE self)
 {
   VALUE objs;
   VALUE smooth, is_solid, is_ruled;
-  rb_scan_args(argc, argv, "A|bbb", &objs, &smooth,  &is_solid, &is_ruled);
+  rb_scan_args(argc, argv, "13", &objs, &smooth,  &is_solid, &is_ruled);
   int lsize = RARRAY_LEN(objs);
 
   if (lsize < 2) {
@@ -150,11 +152,11 @@ VALUE siren_offset_loft( VALUE self)
   return siren_shape_new(ts.Shape());
 }
 
-VALUE siren_offset_offset_geomsurf( VALUE self)
+VALUE siren_offset_offset_geomsurf(int argc, VALUE* argv, VALUE self)
 {
   VALUE target;
   VALUE offset, tol;
-  rb_scan_args(argc, argv, "of|f", &target, &offset, &tol);
+  rb_scan_args(argc, argv, "21", &target, &offset, &tol);
   if (argc < 3)
     tol = 1.0;
 
@@ -177,7 +179,7 @@ VALUE siren_offset_offset_geomsurf( VALUE self)
   return siren_shape_new(comp);
 }
 
-VALUE siren_offset_offset( VALUE self)
+VALUE siren_offset_offset(int argc, VALUE* argv, VALUE self)
 {
   VALUE target;
   VALUE offset, tol;
@@ -185,7 +187,7 @@ VALUE siren_offset_offset( VALUE self)
   VALUE intersect = false, self_intersect = false;
   VALUE join = (int)GeomAbs_Arc;
   VALUE thickening = false;
-  rb_scan_args(argc, argv, "off|ibbib", &target, &offset, &tol, &mode,
+  rb_scan_args(argc, argv, "35", &target, &offset, &tol, &mode,
       &intersect, &self_intersect, &join, &thickening);
 
   TopoDS_Shape* shape = siren_shape_get(target);
@@ -205,14 +207,14 @@ VALUE siren_offset_offset( VALUE self)
   return Qnil;
 }
 
-VALUE siren_offset_offset_shape( VALUE self)
+VALUE siren_offset_offset_shape(int argc, VALUE* argv, VALUE self)
 {
   VALUE target;
   VALUE offset, tol;
   VALUE mode = (int)BRepOffset_Skin;
   VALUE intersect = false, self_intersect = false;
   VALUE join = (int)GeomAbs_Arc;
-  rb_scan_args(argc, argv, "off|ibbi", &target, &offset, &tol, &mode,
+  rb_scan_args(argc, argv, "34", &target, &offset, &tol, &mode,
       &intersect, &self_intersect, &join);
 
   TopoDS_Shape* shape = siren_shape_get(target);
@@ -223,12 +225,12 @@ VALUE siren_offset_offset_shape( VALUE self)
   return siren_shape_new(result);
 }
 
-VALUE siren_offset_pipe( VALUE self)
+VALUE siren_offset_pipe(int argc, VALUE* argv, VALUE self)
 {
   VALUE profile, path;
   VALUE mode;
   VALUE force_approx_c1;
-  rb_scan_args(argc, argv, "oo|ib", &profile, &path, &mode, &force_approx_c1);
+  rb_scan_args(argc, argv, "22", &profile, &path, &mode, &force_approx_c1);
 
   TopoDS_Shape* shape_profile = siren_shape_get(profile);
   TopoDS_Shape* shape_path = siren_shape_get(path);
@@ -245,10 +247,10 @@ VALUE siren_offset_pipe( VALUE self)
     return siren_shape_new(mp.Shape());
   }
   if (argc == 3) {
-    force_approx_c1 = FALSE;
+    force_approx_c1 = Qfalse;
   }
 
-  BRepOffsetAPI_MakePipe mp(wire, *shape_profile, (GeomFill_Trihedron)mode, force_approx_c1);
+  BRepOffsetAPI_MakePipe mp(wire, *shape_profile, (GeomFill_Trihedron)mode, force_approx_c1 == Qtrue);
   mp.Build();
   return siren_shape_new(mp.Shape());
 }
