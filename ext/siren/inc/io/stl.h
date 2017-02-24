@@ -7,7 +7,7 @@
 
 #include <StlAPI.hxx>
 
-bool siren_stl_install( struct RClass* rclass);
+bool siren_stl_install();
 VALUE siren_stl_load( VALUE self);
 
 #endif

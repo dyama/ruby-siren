@@ -42,32 +42,32 @@ extern "C" {
     sr_mSiren  = rb_define_module("Siren");
 
     // Class
-    siren_bndbox_install (sr_mSiren);
-    siren_curve_install  (sr_mSiren);
-    siren_shape_install  (sr_mSiren);
-    siren_trans_install  (sr_mSiren);
-    siren_vec_install    (sr_mSiren);
+    siren_bndbox_install ();
+    siren_curve_install  ();
+    siren_shape_install  ();
+    siren_trans_install  ();
+    siren_vec_install    ();
 
     // API class
-    siren_filler_install (sr_mSiren);
+    siren_filler_install ();
 
     // Method
-    siren_topalgo_install(sr_mSiren);
-    siren_brep_install   (sr_mSiren);
+    siren_topalgo_install();
+    siren_brep_install   ();
 #ifdef SIREN_ENABLE_OFFSET
-    siren_offset_install (sr_mSiren);
+    siren_offset_install ();
 #endif
 #ifdef SIREN_ENABLE_BO
-    siren_bo_install     (sr_mSiren);
+    siren_bo_install     ();
 #endif
 #ifdef SIREN_ENABLE_IGES
-    siren_iges_install   (sr_mSiren);
+    siren_iges_install   ();
 #endif
 #ifdef SIREN_ENABLE_STL
-    siren_stl_install    (sr_mSiren);
+    siren_stl_install    ();
 #endif
 #ifdef SIREN_ENABLE_STEP
-    siren_step_install   (sr_mSiren);
+    siren_step_install   ();
 #endif
 
     return;
@@ -79,4 +79,4 @@ extern "C" {
     return;
   }
 
-MRB_END_DECL
+} // extern "C" {

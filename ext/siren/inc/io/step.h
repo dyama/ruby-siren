@@ -10,7 +10,7 @@
 #include <STEPControl_Writer.hxx>
 #include <Interface_Static.hxx>
 
-bool siren_step_install( struct RClass* rclass);
+bool siren_step_install();
 
 VALUE siren_step_save( VALUE self);
 VALUE siren_step_load( VALUE self);

@@ -35,7 +35,7 @@ inline GeomAbs_CurveType siren_curve_geomtype_native(opencascade::handle<Geom_Cu
   return GeomAbs_OtherCurve;
 }
 
-bool siren_curve_install( struct RClass* rclass);
+bool siren_curve_install();
 opencascade::handle<Geom_Curve>* siren_curve_get( VALUE obj);
 struct RClass* siren_curve_rclass();
 

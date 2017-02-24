@@ -5,7 +5,7 @@
 
 VALUE sr_cVec;
 
-bool siren_vec_install( struct RClass* rclass);
+bool siren_vec_install();
 void siren_vec_final( void* p);
 static rb_data_type_t siren_vec_type = { "Vec", siren_vec_final };
 gp_Vec* siren_vec_get( VALUE obj);

@@ -8,7 +8,7 @@
 #include <BRepTools.hxx>
 #include <BRep_Builder.hxx>
 
-bool siren_brep_install( struct RClass* rclass);
+bool siren_brep_install();
 
 VALUE siren_brep_save( VALUE self);
 VALUE siren_brep_load( VALUE self);

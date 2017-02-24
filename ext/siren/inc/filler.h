@@ -7,7 +7,7 @@
 
 VALUE sr_cFiller;
 
-bool siren_filler_install( struct RClass* rclass);
+bool siren_filler_install();
 void siren_filler_final( void* p);
 static rb_data_type_t siren_filler_type = { "Filler", siren_filler_final };
 

@@ -32,7 +32,7 @@
 #include <GC_MakeArcOfCircle.hxx>
 #include <GC_MakeCircle.hxx>
 
-bool siren_topalgo_install( struct RClass* rclass);
+bool siren_topalgo_install();
 
 VALUE siren_topalgo_copy(...);
 

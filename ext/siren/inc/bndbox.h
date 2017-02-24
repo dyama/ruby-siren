@@ -7,7 +7,7 @@
 
 VALUE sr_cBndBox;
 
-bool siren_bndbox_install( struct RClass* rclass);
+bool siren_bndbox_install();
 void siren_bndbox_final( void* p);
 static rb_data_type_t siren_bndbox_type = { "BndBox", siren_bndbox_final };
 VALUE siren_bndbox_new( const TopoDS_Shape& shape);

@@ -36,7 +36,7 @@ static rb_data_type_t siren_shape_type = { "Shape", siren_shape_final };
 
 #include <BRepAlgoAPI_Section.hxx>
 
-bool siren_shape_install( struct RClass* rclass);
+bool siren_shape_install();
 TopoDS_Shape* siren_shape_get( VALUE obj);
 VALUE siren_shape_new( const TopoDS_Shape& shape);
 struct RClass* siren_shape_rclass();

@@ -10,7 +10,7 @@
 #include <gp_Ax3.hxx>
 #include <gp_Trsf.hxx>
 
-bool siren_trans_install( struct RClass* rclass);
+bool siren_trans_install();
 void siren_trans_final( void* p);
 static rb_data_type_t siren_trans_type = { "Trans", siren_trans_final };
 gp_Trsf* siren_trans_get( VALUE obj);
