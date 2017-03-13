@@ -8,6 +8,8 @@
 #include <TopoDS.hxx>
 #include <TopoDS_CompSolid.hxx>
 
+VALUE sr_cChunk;
+
 static rb_data_type_t siren_chunk_type = { "Chunk", siren_shape_final };
 bool siren_chunk_install();
 TopoDS_CompSolid siren_chunk_get( VALUE self);

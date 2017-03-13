@@ -14,6 +14,8 @@
 #include <BRepPrimAPI_MakeHalfSpace.hxx>
 #include <BRepPrimAPI_MakeWedge.hxx>
 
+VALUE sr_cSolid;
+
 static rb_data_type_t siren_solid_type = { "Solid", siren_shape_final };
 bool siren_solid_install();
 TopoDS_Solid siren_solid_get( VALUE self);

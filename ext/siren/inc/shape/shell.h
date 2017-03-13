@@ -7,6 +7,8 @@
 #include <TopoDS_Shell.hxx>
 #include <BRepBuilderAPI_Sewing.hxx>
 
+VALUE sr_cShell;
+
 static rb_data_type_t siren_shell_type = { "Shell", siren_shape_final };
 bool siren_shell_install();
 TopoDS_Shell siren_shell_get( VALUE self);

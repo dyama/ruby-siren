@@ -7,6 +7,8 @@
 #include <TopoDS_Vertex.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 
+VALUE sr_cVertex;
+
 static rb_data_type_t siren_vertex_type = { "Vertex", siren_shape_final };
 bool siren_vertex_install();
 TopoDS_Vertex siren_vertex_get( VALUE self);
