@@ -11,8 +11,7 @@ bool siren_bndbox_install();
 void siren_bndbox_final( void* p);
 static rb_data_type_t siren_bndbox_type = { "BndBox", siren_bndbox_final };
 VALUE siren_bndbox_new( const TopoDS_Shape& shape);
-Bnd_Box* siren_bndbox_get( VALUE obj);
-struct RClass* siren_bndbox_rclass();
+Bnd_Box* siren_bndbox_get(VALUE obj);
 #define siren_is_bndbox(obj) (DATA_TYPE(obj) == &siren_bndbox_type)
 
 VALUE siren_bndbox_init(...);

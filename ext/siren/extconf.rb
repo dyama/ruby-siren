@@ -1,7 +1,7 @@
 require "mkmf"
 require 'pathname'
 
-dir = "ext/siren"
+dir = File.expand_path(File.dirname(__FILE__))
 siren_incdir   = "#{dir}/inc"
 siren_incpaths = []
 siren_incpaths << siren_incdir

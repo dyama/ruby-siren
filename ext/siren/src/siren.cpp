@@ -33,6 +33,8 @@
   #include "io/step.h"
 #endif
 
+VALUE sr_mSiren;
+
 extern "C" {
 
   // initializer
