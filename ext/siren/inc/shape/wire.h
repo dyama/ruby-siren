@@ -20,13 +20,11 @@ VALUE sr_cWire;
 
 static rb_data_type_t siren_wire_type = { "Wire", siren_shape_final };
 bool siren_wire_install();
-TopoDS_Wire siren_wire_get( VALUE self);
+TopoDS_Wire siren_wire_get(VALUE self);
 VALUE siren_wire_new( const TopoDS_Shape* src);
-VALUE siren_wire_obj();
-struct RClass* siren_wire_rclass();
 
-VALUE siren_wire_make( VALUE self);
-VALUE siren_wire_ordered_edges( VALUE self);
-VALUE siren_wire_curves( VALUE self);
+VALUE siren_wire_make(...);
+VALUE siren_wire_ordered_edges(...);
+VALUE siren_wire_curves(...);
 
 #endif

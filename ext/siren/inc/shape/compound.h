@@ -11,13 +11,11 @@ VALUE sr_cCompound;
 
 static rb_data_type_t siren_compound_type = { "Compound", siren_shape_final };
 bool siren_compound_install();
-TopoDS_Compound siren_compound_get( VALUE self);
+TopoDS_Compound siren_compound_get(VALUE self);
 VALUE siren_compound_new( const TopoDS_Shape* src);
-VALUE siren_compound_obj();
-struct RClass* siren_compound_rclass();
 
-VALUE siren_compound_init( VALUE self);
-VALUE siren_compound_push( VALUE self);
-VALUE siren_compound_delete( VALUE self);
+VALUE siren_compound_init(...);
+VALUE siren_compound_push(...);
+VALUE siren_compound_delete(...);
 
 #endif

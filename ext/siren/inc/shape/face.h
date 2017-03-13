@@ -47,21 +47,19 @@ VALUE sr_cFace;
 
 static rb_data_type_t siren_face_type = { "Face", siren_shape_final };
 bool siren_face_install();
-TopoDS_Face siren_face_get( VALUE self);
+TopoDS_Face siren_face_get(VALUE self);
 VALUE siren_face_new( const TopoDS_Shape* src);
-VALUE siren_face_obj();
-struct RClass* siren_face_rclass();
 
-VALUE siren_face_plane( VALUE self);
-VALUE siren_face_face( VALUE self);
-VALUE siren_face_infplane( VALUE self);
-VALUE siren_face_polygon( VALUE self);
-VALUE siren_face_bzsurf( VALUE self);
-VALUE siren_face_bssurf( VALUE self);
+VALUE siren_face_plane(...);
+VALUE siren_face_face(...);
+VALUE siren_face_infplane(...);
+VALUE siren_face_polygon(...);
+VALUE siren_face_bzsurf(...);
+VALUE siren_face_bssurf(...);
 
-VALUE siren_face_normal( VALUE self);
-VALUE siren_face_to_bezier( VALUE self);
-VALUE siren_face_split( VALUE self);
-VALUE siren_face_triangle( VALUE self);
+VALUE siren_face_normal(...);
+VALUE siren_face_to_bezier(...);
+VALUE siren_face_split(...);
+VALUE siren_face_triangle(...);
 
 #endif

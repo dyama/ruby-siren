@@ -12,13 +12,11 @@ VALUE sr_cChunk;
 
 static rb_data_type_t siren_chunk_type = { "Chunk", siren_shape_final };
 bool siren_chunk_install();
-TopoDS_CompSolid siren_chunk_get( VALUE self);
+TopoDS_CompSolid siren_chunk_get(VALUE self);
 VALUE siren_chunk_new( const TopoDS_Shape* src);
-VALUE siren_chunk_obj();
-struct RClass* siren_chunk_rclass();
 
-VALUE siren_chunk_init( VALUE self);
-VALUE siren_chunk_to_solid( VALUE self);
+VALUE siren_chunk_init(...);
+VALUE siren_chunk_to_solid(...);
 
 #endif
 

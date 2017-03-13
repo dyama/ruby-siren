@@ -2,35 +2,36 @@
 
 VALUE siren_compound_new( const TopoDS_Shape* src)
 {
-  VALUE obj;
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Compound")));
+  VALUE obj = rb_instance_alloc(sr_cCompound);
   void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(obj) = &siren_compound_type;
+//  DATA_TYPE(obj) = &siren_compound_type;
   return obj;
 }
 
-TopoDS_Compound siren_compound_get( VALUE self)
+TopoDS_Compound siren_compound_get(VALUE self)
 {
+#if 0
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_compound_type));
   TopoDS_Compound compound = TopoDS::Compound(*shape);
-  if (compound.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Compound."); }
+  if (compound.IsNull()) { rb_raise(Qnil, "The geometry type is not Compound."); }
   return compound;
+#endif
 }
 
 bool siren_compound_install()
 {
+#if 0
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_compound = rb_define_class_under(sr_mSiren, "Compound", cls_shape);
   MRB_SET_INSTANCE_TT(cls_compound, MRB_TT_DATA);
-  rb_define_method(cls_compound, "initialize", siren_compound_init,   MRB_ARGS_NONE());
-  rb_define_method(cls_compound, "push",       siren_compound_push,   MRB_ARGS_NONE());
-  rb_define_method(cls_compound, "<<",         siren_compound_push,   MRB_ARGS_NONE());
-  rb_define_method(cls_compound, "delete",     siren_compound_delete, MRB_ARGS_NONE());
+#endif
+  rb_define_method(sr_cCompound, "initialize", siren_compound_init,   -1);
+  rb_define_method(sr_cCompound, "push",       siren_compound_push,   -1);
+  rb_define_method(sr_cCompound, "<<",         siren_compound_push,   -1);
+  rb_define_method(sr_cCompound, "delete",     siren_compound_delete, -1);
   return true;
 }
 
@@ -46,7 +47,7 @@ VALUE siren_compound_obj()
   return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Compound"));
 }
 
-VALUE siren_compound_init( VALUE self)
+VALUE siren_compound_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE* a;
   VALUE len;
@@ -75,11 +76,11 @@ VALUE siren_compound_init( VALUE self)
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = comp; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(self) = &siren_compound_type;
+//  DATA_TYPE(self) = &siren_compound_type;
   return self;
 }
 
-VALUE siren_compound_push( VALUE self)
+VALUE siren_compound_push(int argc, VALUE* argv, VALUE self)
 {
   VALUE* a;
   VALUE len;
@@ -103,7 +104,7 @@ VALUE siren_compound_push( VALUE self)
   return self;
 }
 
-VALUE siren_compound_delete( VALUE self)
+VALUE siren_compound_delete(int argc, VALUE* argv, VALUE self)
 {
   VALUE* a;
   VALUE len;

@@ -18,24 +18,22 @@ VALUE sr_cSolid;
 
 static rb_data_type_t siren_solid_type = { "Solid", siren_shape_final };
 bool siren_solid_install();
-TopoDS_Solid siren_solid_get( VALUE self);
+TopoDS_Solid siren_solid_get(VALUE self);
 VALUE siren_solid_new( const TopoDS_Shape* src);
-VALUE siren_solid_obj();
-struct RClass* siren_solid_rclass();
 
-VALUE siren_solid_init( VALUE self);
+VALUE siren_solid_init(...);
 
-VALUE siren_solid_box        ( VALUE self);
-VALUE siren_solid_box2p      ( VALUE self);
-VALUE siren_solid_boxax      ( VALUE self);
-VALUE siren_solid_sphere     ( VALUE self);
-VALUE siren_solid_cylinder   ( VALUE self);
-VALUE siren_solid_cone       ( VALUE self);
-VALUE siren_solid_torus      ( VALUE self);
-VALUE siren_solid_halfspace  ( VALUE self);
-VALUE siren_solid_prism      ( VALUE self);
-VALUE siren_solid_revol      ( VALUE self);
-VALUE siren_solid_revolution ( VALUE self);
-VALUE siren_solid_wedge      ( VALUE self);
+VALUE siren_solid_box        (...);
+VALUE siren_solid_box2p      (...);
+VALUE siren_solid_boxax      (...);
+VALUE siren_solid_sphere     (...);
+VALUE siren_solid_cylinder   (...);
+VALUE siren_solid_cone       (...);
+VALUE siren_solid_torus      (...);
+VALUE siren_solid_halfspace  (...);
+VALUE siren_solid_prism      (...);
+VALUE siren_solid_revol      (...);
+VALUE siren_solid_revolution (...);
+VALUE siren_solid_wedge      (...);
 
 #endif

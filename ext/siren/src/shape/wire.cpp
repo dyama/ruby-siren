@@ -2,48 +2,41 @@
 
 VALUE siren_wire_new( const TopoDS_Shape* src)
 {
-  VALUE obj;
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Wire")));
+  VALUE obj = rb_instance_alloc(sr_cWire);
   void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(obj) = &siren_wire_type;
+//  DATA_TYPE(obj) = &siren_wire_type;
   return obj;
 }
 
-TopoDS_Wire siren_wire_get( VALUE self)
+TopoDS_Wire siren_wire_get(VALUE self)
 {
+#if 0
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_wire_type));
   TopoDS_Wire wire = TopoDS::Wire(*shape);
-  if (wire.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Wire."); }
+  if (wire.IsNull()) { rb_raise(Qnil, "The geometry type is not Wire."); }
   return wire;
+#endif
 }
 
 bool siren_wire_install()
 {
+#if 0
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_wire = rb_define_class_under(sr_mSiren, "Wire", cls_shape);
   MRB_SET_INSTANCE_TT(cls_wire, MRB_TT_DATA);
-  rb_define_method(cls_wire, "initialize",    siren_shape_init,         MRB_ARGS_NONE());
-  rb_define_method(cls_wire, "ordered_edges", siren_wire_ordered_edges, MRB_ARGS_NONE());
-  rb_define_method(cls_wire, "curves",        siren_wire_curves,        MRB_ARGS_NONE());
-
-  auto obj_wire = rb_obj_ptr(siren_wire_obj());
-  rb_define_singleton_method(obj_wire, "make", siren_wire_make, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_singleton_method(obj_wire, "join", siren_wire_make, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+#endif
+  rb_define_method(sr_cWire, "initialize",    siren_shape_init,         -1);
+  rb_define_method(sr_cWire, "ordered_edges", siren_wire_ordered_edges, -1);
+  rb_define_method(sr_cWire, "curves",        siren_wire_curves,        -1);
+  rb_define_singleton_method(sr_cWire, "make", siren_wire_make, -1);
+  rb_define_singleton_method(sr_cWire, "join", siren_wire_make, -1);
   return true;
 }
 
-struct RClass* siren_wire_rclass()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Wire")));
-}
-
-VALUE siren_wire_ordered_edges( VALUE self)
+VALUE siren_wire_ordered_edges(int argc, VALUE* argv, VALUE self)
 {
   TopoDS_Wire wire = siren_wire_get(self);
   VALUE res = rb_ary_new();
@@ -54,25 +47,19 @@ VALUE siren_wire_ordered_edges( VALUE self)
   return res;
 }
 
-VALUE siren_wire_curves( VALUE self)
+VALUE siren_wire_curves(int argc, VALUE* argv, VALUE self)
 {
   VALUE res = rb_ary_new();
-  VALUE edges = rb_funcall(self, "edges", 0);
+  VALUE edges = rb_funcall(self, rb_intern("edges"), 0);
   for (int i = 0; i < RARRAY_LEN(edges); i++) {
     VALUE edge = RARRAY_AREF(edges, i);
-    VALUE curve = rb_funcall(edge, "curve", 0);
+    VALUE curve = rb_funcall(edge, rb_intern("curve"), 0);
     rb_ary_push(res, curve);
   }
   return res;
 }
 
-VALUE siren_wire_obj()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Wire"));
-}
-
-VALUE siren_wire_make( VALUE self)
+VALUE siren_wire_make(int argc, VALUE* argv, VALUE self)
 {
   VALUE objs;
   VALUE tol;

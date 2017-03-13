@@ -4,33 +4,34 @@
 
 VALUE siren_chunk_new( const TopoDS_Shape* src)
 {
-  VALUE obj;
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Chunk")));
+  VALUE obj = rb_instance_alloc(sr_cChunk);
   void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(obj) = &siren_chunk_type;
+//  DATA_TYPE(obj) = &siren_chunk_type;
   return obj;
 }
 
-TopoDS_CompSolid siren_chunk_get( VALUE self)
+TopoDS_CompSolid siren_chunk_get(VALUE self)
 {
+#if 0
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_chunk_type));
   TopoDS_CompSolid chunk = TopoDS::CompSolid(*shape);
-  if (chunk.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Chunk."); }
+  if (chunk.IsNull()) { rb_raise(Qnil, "The geometry type is not Chunk."); }
   return chunk;
+#endif
 }
 
 bool siren_chunk_install()
 {
+#if 0
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_chunk = rb_define_class_under(sr_mSiren, "Chunk", cls_shape);
   MRB_SET_INSTANCE_TT(cls_chunk, MRB_TT_DATA);
-  rb_define_method(cls_chunk, "initialize", siren_chunk_init,   MRB_ARGS_NONE());
-  rb_define_method(cls_chunk, "to_solid",  siren_chunk_to_solid, MRB_ARGS_NONE());
+#endif
+  rb_define_method(sr_cChunk, "initialize", siren_chunk_init,   -1);
+  rb_define_method(sr_cChunk, "to_solid",  siren_chunk_to_solid, -1);
   return true;
 }
 
@@ -46,7 +47,7 @@ VALUE siren_chunk_obj()
   return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Chunk"));
 }
 
-VALUE siren_chunk_init( VALUE self)
+VALUE siren_chunk_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE* a;
   VALUE len;
@@ -73,11 +74,11 @@ VALUE siren_chunk_init( VALUE self)
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = cs; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(self) = &siren_chunk_type;
+//  DATA_TYPE(self) = &siren_chunk_type;
   return self;
 }
 
-VALUE siren_chunk_to_solid( VALUE self)
+VALUE siren_chunk_to_solid(int argc, VALUE* argv, VALUE self)
 {
   auto cs = siren_chunk_get(self);
   auto solid = BRepBuilderAPI_MakeSolid(cs);

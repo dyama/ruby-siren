@@ -2,52 +2,39 @@
 
 VALUE siren_shell_new( const TopoDS_Shape* src)
 {
-  VALUE obj;
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Shell")));
+  VALUE obj = rb_instance_alloc(sr_cShell);
   void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(obj) = &siren_shell_type;
+//  DATA_TYPE(obj) = &siren_shell_type;
   return obj;
 }
 
-TopoDS_Shell siren_shell_get( VALUE self)
+TopoDS_Shell siren_shell_get(VALUE self)
 {
+#if 0
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_shell_type));
   TopoDS_Shell shell = TopoDS::Shell(*shape);
-  if (shell.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Shell."); }
+  if (shell.IsNull()) { rb_raise(Qnil, "The geometry type is not Shell."); }
   return shell;
+#endif
 }
 
 bool siren_shell_install()
 {
+#if 0
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_shell = rb_define_class_under(sr_mSiren, "Shell", cls_shape);
   MRB_SET_INSTANCE_TT(cls_shell, MRB_TT_DATA);
-  rb_define_method(cls_shell, "initialize", siren_shape_init,  MRB_ARGS_NONE());
-
-  auto obj_shell = rb_obj_ptr(siren_shell_obj());
-  rb_define_singleton_method(obj_shell, "make", siren_shell_make, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_singleton_method(obj_shell, "sew",  siren_shell_make, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+#endif
+  rb_define_method(sr_cShell, "initialize", siren_shape_init,  -1);
+  rb_define_singleton_method(sr_cShell, "make", siren_shell_make, -1);
+  rb_define_singleton_method(sr_cShell, "sew",  siren_shell_make, -1);
   return true;
 }
 
-struct RClass* siren_shell_rclass()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Shell")));
-}
-
-VALUE siren_shell_obj()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Shell"));
-}
-
-VALUE siren_shell_make( VALUE self)
+VALUE siren_shell_make(int argc, VALUE* argv, VALUE self)
 {
   VALUE ary;
   VALUE tol;

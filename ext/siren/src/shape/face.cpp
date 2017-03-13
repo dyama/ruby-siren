@@ -2,54 +2,47 @@
 
 VALUE siren_face_new( const TopoDS_Shape* src)
 {
-  VALUE obj;
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Face")));
+  VALUE obj = rb_instance_alloc(sr_cFace);
   void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(obj) = &siren_face_type;
+//  DATA_TYPE(obj) = &siren_face_type;
   return obj;
 }
 
-TopoDS_Face siren_face_get( VALUE self)
+TopoDS_Face siren_face_get(VALUE self)
 {
+#if 0
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_face_type));
   TopoDS_Face face = TopoDS::Face(*shape);
-  if (face.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Face."); }
+  if (face.IsNull()) { rb_raise(Qnil, "The geometry type is not Face."); }
   return face;
+#endif
 }
 
 bool siren_face_install()
 {
+#if 0
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_face = rb_define_class_under(sr_mSiren, "Face", cls_shape);
   MRB_SET_INSTANCE_TT(cls_face, MRB_TT_DATA);
-  rb_define_method(cls_face, "initialize", siren_shape_init,     MRB_ARGS_NONE());
-  rb_define_method(cls_face, "normal",     siren_face_normal,    MRB_ARGS_NONE());
-  rb_define_method(cls_face, "to_bezier",  siren_face_to_bezier, MRB_ARGS_NONE());
-  rb_define_method(cls_face, "split",      siren_face_split,     MRB_ARGS_REQ(1));
-  rb_define_method(cls_face, "triangle",   siren_face_triangle,  MRB_ARGS_REQ(2));
-
-  auto obj_face = rb_obj_ptr(siren_face_obj());
-  rb_define_singleton_method(obj_face, "plane",    siren_face_plane,    MRB_ARGS_REQ(7));
-  rb_define_singleton_method(obj_face, "face",     siren_face_face,     MRB_ARGS_REQ(2));
-  rb_define_singleton_method(obj_face, "infplane", siren_face_infplane, MRB_ARGS_REQ(2));
-  rb_define_singleton_method(obj_face, "polygon",  siren_face_polygon,  MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_singleton_method(obj_face, "bzsurf",   siren_face_bzsurf,   MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_singleton_method(obj_face, "bssurf",   siren_face_bssurf,   MRB_ARGS_REQ(5) | MRB_ARGS_OPT(1));
+#endif
+  rb_define_method(sr_cFace, "initialize", siren_shape_init,     -1);
+  rb_define_method(sr_cFace, "normal",     siren_face_normal,    -1);
+  rb_define_method(sr_cFace, "to_bezier",  siren_face_to_bezier, -1);
+  rb_define_method(sr_cFace, "split",      siren_face_split,     -1);
+  rb_define_method(sr_cFace, "triangle",   siren_face_triangle,  -1);
+  rb_define_singleton_method(sr_cFace, "plane",    siren_face_plane,    -1);
+  rb_define_singleton_method(sr_cFace, "face",     siren_face_face,     -1);
+  rb_define_singleton_method(sr_cFace, "infplane", siren_face_infplane, -1);
+  rb_define_singleton_method(sr_cFace, "polygon",  siren_face_polygon,  -1);
+  rb_define_singleton_method(sr_cFace, "bzsurf",   siren_face_bzsurf,   -1);
+  rb_define_singleton_method(sr_cFace, "bssurf",   siren_face_bssurf,   -1);
   return true;
 }
 
-struct RClass* siren_face_rclass()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Face")));
-}
-
-VALUE siren_face_normal( VALUE self)
+VALUE siren_face_normal(int argc, VALUE* argv, VALUE self)
 {
   TopoDS_Face f = siren_face_get(self);
   Standard_Real umin, umax, vmin, vmax;
@@ -60,7 +53,7 @@ VALUE siren_face_normal( VALUE self)
   return siren_vec_new(n.X(), n.Y(), n.Z());
 }
 
-VALUE siren_face_to_bezier( VALUE self)
+VALUE siren_face_to_bezier(int argc, VALUE* argv, VALUE self)
 {
   TopoDS_Face face = siren_face_get(self);
   handle<Geom_Surface> gsurf  = BRep_Tool::Surface(face);
@@ -89,7 +82,7 @@ VALUE siren_face_to_bezier( VALUE self)
   return siren_shape_new(comp);
 }
 
-VALUE siren_face_split( VALUE self)
+VALUE siren_face_split(int argc, VALUE* argv, VALUE self)
 {
   VALUE obj;
   rb_scan_args(argc, argv, "o", &obj);
@@ -115,15 +108,15 @@ VALUE siren_face_split( VALUE self)
     splitter.Build();
   }
   catch (...) {
-    rb_raise(E_RUNTIME_ERROR, "Failed to split the face.");
+    rb_raise(Qnil, "Failed to split the face.");
   }
   if (!splitter.IsDone()) {
-    rb_raise(E_RUNTIME_ERROR, "Failed to split the face.");
+    rb_raise(Qnil, "Failed to split the face.");
   }
   return siren_shape_new(splitter.Shape());
 }
 
-VALUE siren_face_triangle( VALUE self)
+VALUE siren_face_triangle(int argc, VALUE* argv, VALUE self)
 {
   VALUE deflection, angle;
   rb_scan_args(argc, argv, "ff", &deflection, &angle);
@@ -197,13 +190,7 @@ VALUE siren_face_triangle( VALUE self)
   return result;
 }
 
-VALUE siren_face_obj()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Face"));
-}
-
-VALUE siren_face_plane( VALUE self)
+VALUE siren_face_plane(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos, norm, vx;
   VALUE umin, umax, vmin, vmax;
@@ -220,7 +207,7 @@ VALUE siren_face_plane( VALUE self)
   }
 }
 
-VALUE siren_face_face( VALUE self)
+VALUE siren_face_face(int argc, VALUE* argv, VALUE self)
 {
   VALUE wire;
   VALUE force_plane;
@@ -234,7 +221,7 @@ VALUE siren_face_face( VALUE self)
   return siren_shape_new(face);
 }
 
-VALUE siren_face_infplane( VALUE self)
+VALUE siren_face_infplane(int argc, VALUE* argv, VALUE self)
 {
   VALUE orig, dir;
   rb_scan_args(argc, argv, "AA", &orig, &dir);
@@ -243,10 +230,10 @@ VALUE siren_face_infplane( VALUE self)
   return siren_shape_new(face);
 }
 
-VALUE siren_face_polygon( VALUE self)
+VALUE siren_face_polygon(int argc, VALUE* argv, VALUE self)
 {
   VALUE pts;
-  VALUE force_plane = (_bool)Standard_True;
+  VALUE force_plane = Qfalse;
   rb_scan_args(argc, argv, "A|b", &pts, &force_plane);
 
   BRepBuilderAPI_MakePolygon mp;
@@ -266,7 +253,7 @@ VALUE siren_face_polygon( VALUE self)
   return siren_shape_new(mf.Shape());
 }
 
-VALUE siren_face_bzsurf( VALUE self)
+VALUE siren_face_bzsurf(int argc, VALUE* argv, VALUE self)
 {
   VALUE ptary, wtary;
   rb_scan_args(argc, argv, "A|A", &ptary, &wtary);
@@ -303,7 +290,7 @@ VALUE siren_face_bzsurf( VALUE self)
   return siren_shape_new(BRepBuilderAPI_MakeFace(s, 1.0e-7));
 }
 
-VALUE siren_face_bssurf( VALUE self)
+VALUE siren_face_bssurf(int argc, VALUE* argv, VALUE self)
 {
   VALUE _udeg, _vdeg;
   VALUE _ar_ukm, _ar_vkm;
@@ -351,7 +338,7 @@ VALUE siren_face_bssurf( VALUE self)
     for (int u=1; u <= nbupoles; u++) {
       VALUE uitem = RARRAY_AREF(vitem, u - 1);
       poles.SetValue(u, v, siren_ary_to_pnt(RARRAY_AREF(uitem, 0)));
-      weights.SetValue(u, v, VALUE(_ary_ref(uitem, 1)));
+      weights.SetValue(u, v, VALUE(RARRAY_AREF(uitem, 1)));
     }
   }
 

@@ -2,49 +2,50 @@
 
 VALUE siren_edge_new( const TopoDS_Shape* src)
 {
-  VALUE obj;
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Edge")));
+  VALUE obj = rb_instance_alloc(sr_cEdge);
   void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = *src; // Copy to inner native member
   DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(obj) = &siren_edge_type;
+//  DATA_TYPE(obj) = &siren_edge_type;
   return obj;
 }
 
-TopoDS_Edge siren_edge_get( VALUE self)
+TopoDS_Edge siren_edge_get(VALUE self)
 {
+#if 0
   TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_edge_type));
   TopoDS_Edge edge = TopoDS::Edge(*shape);
-  if (edge.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Edge."); }
+  if (edge.IsNull()) { rb_raise(Qnil, "The geometry type is not Edge."); }
   return edge;
+#endif
 }
 
 bool siren_edge_install()
 {
+#if 0
   struct RClass* cls_shape = siren_shape_rclass();
   struct RClass* cls_edge = rb_define_class_under(sr_mSiren, "Edge", cls_shape);
   MRB_SET_INSTANCE_TT(cls_edge, MRB_TT_DATA);
-  rb_define_method(cls_edge, "initialize", siren_edge_init,      MRB_ARGS_NONE());
-  rb_define_method(cls_edge, "sp",         siren_edge_sp,        MRB_ARGS_NONE());
-  rb_define_method(cls_edge, "tp",         siren_edge_tp,        MRB_ARGS_NONE());
-  rb_define_method(cls_edge, "to_pts",     siren_edge_to_pts,    MRB_ARGS_OPT(2));
-  rb_define_method(cls_edge, "param",      siren_edge_param,     MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
-  rb_define_method(cls_edge, "to_xyz",     siren_edge_to_xyz,    MRB_ARGS_REQ(1));
-  rb_define_method(cls_edge, "curvature",  siren_edge_curvature, MRB_ARGS_REQ(1));
-  rb_define_method(cls_edge, "tangent",    siren_edge_tangent,   MRB_ARGS_REQ(1));
-  rb_define_method(cls_edge, "extrema",    siren_edge_extrema,   MRB_ARGS_REQ(1));
-  rb_define_method(cls_edge, "split",      siren_edge_split,     MRB_ARGS_REQ(1));
-  rb_define_method(cls_edge, "trim",       siren_edge_trim,      MRB_ARGS_REQ(2));
-  rb_define_method(cls_edge, "terms",      siren_edge_terms,     MRB_ARGS_NONE());
-  rb_define_method(cls_edge, "length",     siren_edge_length,    MRB_ARGS_NONE());
-  rb_define_method(cls_edge, "curve",      siren_edge_curve,     MRB_ARGS_NONE());
+#endif
+  rb_define_method(sr_cEdge, "initialize", siren_edge_init,      -1);
+  rb_define_method(sr_cEdge, "sp",         siren_edge_sp,        -1);
+  rb_define_method(sr_cEdge, "tp",         siren_edge_tp,        -1);
+  rb_define_method(sr_cEdge, "to_pts",     siren_edge_to_pts,    -1);
+  rb_define_method(sr_cEdge, "param",      siren_edge_param,     -1);
+  rb_define_method(sr_cEdge, "to_xyz",     siren_edge_to_xyz,    -1);
+  rb_define_method(sr_cEdge, "curvature",  siren_edge_curvature, -1);
+  rb_define_method(sr_cEdge, "tangent",    siren_edge_tangent,   -1);
+  rb_define_method(sr_cEdge, "extrema",    siren_edge_extrema,   -1);
+  rb_define_method(sr_cEdge, "split",      siren_edge_split,     -1);
+  rb_define_method(sr_cEdge, "trim",       siren_edge_trim,      -1);
+  rb_define_method(sr_cEdge, "terms",      siren_edge_terms,     -1);
+  rb_define_method(sr_cEdge, "length",     siren_edge_length,    -1);
+  rb_define_method(sr_cEdge, "curve",      siren_edge_curve,     -1);
   return true;
 }
 
-VALUE siren_edge_init( VALUE self)
+VALUE siren_edge_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE curve;
   VALUE sp = 0.0, tp = 1.0;
@@ -63,42 +64,36 @@ VALUE siren_edge_init( VALUE self)
     try {
       edge = BRepBuilderAPI_MakeEdge(*phgcurve, sp, tp);
       if (edge.IsNull()) {
-        rb_raise(E_RUNTIME_ERROR, "Failed to make Edge from the Curve.");
+        rb_raise(Qnil, "Failed to make Edge from the Curve.");
       }
     }
     catch (...) {
-      rb_raise(E_RUNTIME_ERROR, "Failed to make Edge from the Curve.");
+      rb_raise(Qnil, "Failed to make Edge from the Curve.");
     }
   }
   void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
   TopoDS_Shape* inner = new(p) TopoDS_Shape();
   *inner = edge; // Copy to inner native member
   DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
-  DATA_TYPE(self) = &siren_edge_type;
+//  DATA_TYPE(self) = &siren_edge_type;
   return self;
 }
 
-struct RClass* siren_edge_rclass()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Edge")));
-}
-
-VALUE siren_edge_sp( VALUE self)
+VALUE siren_edge_sp(int argc, VALUE* argv, VALUE self)
 {
   BRepAdaptor_Curve bracurve(siren_edge_get(self));
   gp_Pnt sp = bracurve.Value(bracurve.FirstParameter());
   return siren_pnt_to_ary(sp);
 }
 
-VALUE siren_edge_tp( VALUE self)
+VALUE siren_edge_tp(int argc, VALUE* argv, VALUE self)
 {
   BRepAdaptor_Curve bracurve(siren_edge_get(self));
   gp_Pnt tp = bracurve.Value(bracurve.LastParameter());
   return siren_pnt_to_ary(tp);
 }
 
-VALUE siren_edge_to_pts( VALUE self)
+VALUE siren_edge_to_pts(int argc, VALUE* argv, VALUE self)
 {
   VALUE deflect = 1.0e-7;
   VALUE lintol = 1.0e-7;
@@ -135,7 +130,7 @@ VALUE siren_edge_to_pts( VALUE self)
   return line;
 }
 
-VALUE siren_edge_param( VALUE self)
+VALUE siren_edge_param(int argc, VALUE* argv, VALUE self)
 {
   VALUE xyz;
   VALUE tol = 1.0e-7;
@@ -157,7 +152,7 @@ VALUE siren_edge_param( VALUE self)
   return (param);
 }
 
-VALUE siren_edge_to_xyz( VALUE self)
+VALUE siren_edge_to_xyz(int argc, VALUE* argv, VALUE self)
 {
   VALUE param;
   rb_scan_args(argc, argv, "f", &param);
@@ -168,7 +163,7 @@ VALUE siren_edge_to_xyz( VALUE self)
   return siren_pnt_to_ary(p);
 }
 
-VALUE siren_edge_curvature( VALUE self)
+VALUE siren_edge_curvature(int argc, VALUE* argv, VALUE self)
 {
   VALUE param;
   rb_scan_args(argc, argv, "f", &param);
@@ -179,7 +174,7 @@ VALUE siren_edge_curvature( VALUE self)
   return siren_vec_new(v2.X(), v2.Y(), v2.Z());
 }
 
-VALUE siren_edge_tangent( VALUE self)
+VALUE siren_edge_tangent(int argc, VALUE* argv, VALUE self)
 {
   VALUE param;
   rb_scan_args(argc, argv, "f", &param);
@@ -190,7 +185,7 @@ VALUE siren_edge_tangent( VALUE self)
   return siren_vec_new(v1.X(), v1.Y(), v1.Z());
 }
 
-VALUE siren_edge_terms( VALUE self)
+VALUE siren_edge_terms(int argc, VALUE* argv, VALUE self)
 {
   TopoDS_Edge edge = siren_edge_get(self);
   Standard_Real first, last;
@@ -201,7 +196,7 @@ VALUE siren_edge_terms( VALUE self)
   return res;
 }
 
-VALUE siren_edge_curve( VALUE self)
+VALUE siren_edge_curve(int argc, VALUE* argv, VALUE self)
 {
   TopoDS_Edge edge = siren_edge_get(self);
   // // set property
@@ -215,7 +210,7 @@ VALUE siren_edge_curve( VALUE self)
   return siren_curve_new(&hgcurve);
 }
 
-VALUE siren_edge_extrema( VALUE self)
+VALUE siren_edge_extrema(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
   rb_scan_args(argc, argv, "o", &other);
@@ -226,7 +221,7 @@ VALUE siren_edge_extrema( VALUE self)
   TopoDS_Edge e1 = siren_edge_get(self);
   BRepExtrema_ExtCC ext(e1, e2);
   if (!ext.IsDone()) {
-    rb_raise(E_RUNTIME_ERROR, "Failed to get extrema points.");
+    rb_raise(Qnil, "Failed to get extrema points.");
   }
   else if (ext.IsParallel()) {
     return Qnil;
@@ -241,7 +236,7 @@ VALUE siren_edge_extrema( VALUE self)
   return rb_ary_new_from_values(2, res);
 }
 
-VALUE siren_edge_split( VALUE self)
+VALUE siren_edge_split(int argc, VALUE* argv, VALUE self)
 {
   VALUE param;
   rb_scan_args(argc, argv, "f", &param);
@@ -257,7 +252,7 @@ VALUE siren_edge_split( VALUE self)
   return rb_ary_new_from_values(2, res);
 }
 
-VALUE siren_edge_trim( VALUE self)
+VALUE siren_edge_trim(int argc, VALUE* argv, VALUE self)
 {
   VALUE first2, last2;
   rb_scan_args(argc, argv, "ff", &first2, &last2);
@@ -271,7 +266,7 @@ VALUE siren_edge_trim( VALUE self)
   return siren_shape_new(edge);
 }
 
-VALUE siren_edge_length( VALUE self)
+VALUE siren_edge_length(int argc, VALUE* argv, VALUE self)
 {
   Standard_Real res = 0.0;
   VALUE ary = siren_edge_to_pts(self);
@@ -289,8 +284,3 @@ VALUE siren_edge_length( VALUE self)
   return (res);
 }
 
-VALUE siren_edge_obj()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Edge"));
-}
