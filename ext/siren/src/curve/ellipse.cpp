@@ -5,6 +5,8 @@
 
 #include "curve.h"
 
+VALUE sr_cEllipse;
+
 VALUE siren_ellipse_new( const handle<Geom_Curve>* curve)
 {
   VALUE obj;

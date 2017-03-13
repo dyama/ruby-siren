@@ -5,7 +5,7 @@
 
 #include <Geom_BSplineCurve.hxx>
 
-VALUE sr_cBSCurve;
+extern VALUE sr_cBSCurve;
 
 static rb_data_type_t siren_bscurve_type = { "BSCurve", siren_curve_final };
 bool siren_bscurve_install();

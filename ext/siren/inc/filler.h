@@ -5,7 +5,7 @@
 
 #include <BRepFill_Filling.hxx>
 
-VALUE sr_cFiller;
+extern VALUE sr_cFiller;
 
 bool siren_filler_install();
 void siren_filler_final( void* p);

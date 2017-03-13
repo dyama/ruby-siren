@@ -1,5 +1,7 @@
 #include "shape/wire.h"
 
+VALUE sr_cWire;
+
 VALUE siren_wire_new( const TopoDS_Shape* src)
 {
   VALUE obj = rb_instance_alloc(sr_cWire);

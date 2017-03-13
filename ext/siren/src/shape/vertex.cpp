@@ -1,5 +1,9 @@
 #include "shape/vertex.h"
 
+#define rb_array_p(x) RB_TYPE_P(x, T_ARRAY)
+
+VALUE sr_cVertex;
+
 VALUE siren_vertex_new( const TopoDS_Shape* src)
 {
   VALUE obj = rb_instance_alloc(sr_cVertex);
@@ -50,7 +54,7 @@ VALUE siren_vertex_init(int argc, VALUE* argv, VALUE self)
     if (len >= 1) {
       if (FIXNUM_P(a[0]))
         x = DBL2NUM(a[0]);
-      else if VALUE_p(a[0])
+      else if (RB_FLOAT_TYPE_P(a[0]))
         x = VALUE(a[0]);
     }
     if (len >= 2) {

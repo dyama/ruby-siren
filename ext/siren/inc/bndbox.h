@@ -5,7 +5,7 @@
 #include <Bnd_Box.hxx>
 #include <BRepBndLib.hxx>
 
-VALUE sr_cBndBox;
+extern VALUE sr_cBndBox;
 
 bool siren_bndbox_install();
 void siren_bndbox_final( void* p);

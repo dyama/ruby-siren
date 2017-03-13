@@ -1,5 +1,7 @@
 #include "bndbox.h"
 
+VALUE sr_cBndbox;
+
 VALUE siren_bndbox_new( const TopoDS_Shape& shape)
 {
   VALUE obj;

@@ -2,6 +2,8 @@
 
 #include "shape/chunk.h"
 
+VALUE sr_cChunk;
+
 VALUE siren_chunk_new( const TopoDS_Shape* src)
 {
   VALUE obj = rb_instance_alloc(sr_cChunk);

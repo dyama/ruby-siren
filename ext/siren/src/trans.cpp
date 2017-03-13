@@ -1,5 +1,7 @@
 #include "trans.h"
 
+VALUE sr_cTrans;
+
 gp_Trsf* siren_trans_get( VALUE obj)
 {
 #if 0

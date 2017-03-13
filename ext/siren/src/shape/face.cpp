@@ -1,5 +1,7 @@
 #include "shape/face.h"
 
+VALUE sr_cFace;
+
 VALUE siren_face_new( const TopoDS_Shape* src)
 {
   VALUE obj = rb_instance_alloc(sr_cFace);

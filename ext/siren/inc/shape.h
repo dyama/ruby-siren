@@ -10,7 +10,7 @@
   #include "heal.h"
 #endif
 
-VALUE sr_cShape;
+extern VALUE sr_cShape;
 
 void siren_shape_final( void* p);
 static rb_data_type_t siren_shape_type = { "Shape", siren_shape_final };

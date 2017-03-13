@@ -5,7 +5,7 @@
 
 #include <Geom_OffsetCurve.hxx>
 
-VALUE sr_cOffsetCurve;
+extern VALUE sr_cOffsetCurve;
 
 static rb_data_type_t siren_offsetcurve_type = { "OffsetCurve", siren_curve_final };
 bool siren_offsetcurve_install();

@@ -5,7 +5,7 @@
 
 #include <Geom_Hyperbola.hxx>
 
-VALUE sr_cHyperbola;
+extern VALUE sr_cHyperbola;
 
 static rb_data_type_t siren_hyperbola_type = { "Hyperbola", siren_curve_final };
 bool siren_hyperbola_install();

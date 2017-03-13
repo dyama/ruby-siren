@@ -5,7 +5,7 @@
 
 #include <Geom_Line.hxx>
 
-VALUE sr_cLine;
+extern VALUE sr_cLine;
 
 static rb_data_type_t siren_line_type = { "Line", siren_curve_final };
 bool siren_line_install();

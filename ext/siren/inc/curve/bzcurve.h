@@ -5,7 +5,7 @@
 
 #include <Geom_BezierCurve.hxx>
 
-VALUE sr_cBzCurve;
+extern VALUE sr_cBzCurve;
 
 static rb_data_type_t siren_bzcurve_type = { "BzCurve", siren_curve_final };
 bool siren_bzcurve_install();

@@ -5,7 +5,7 @@
 
 #include <Geom_Parabola.hxx>
 
-VALUE sr_cParabola;
+extern VALUE sr_cParabola;
 
 static rb_data_type_t siren_parabola_type = { "Palabora", siren_curve_final };
 bool siren_parabola_install();

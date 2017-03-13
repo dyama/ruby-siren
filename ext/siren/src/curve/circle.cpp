@@ -1,5 +1,7 @@
 #include "curve.h"
 
+VALUE sr_cCircle;
+
 VALUE siren_circle_new(const handle<Geom_Curve>* curve)
 {
   VALUE obj;

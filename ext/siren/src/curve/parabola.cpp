@@ -5,6 +5,8 @@
 
 #include "curve.h"
 
+VALUE sr_cParabola;
+
 VALUE siren_parabola_new( const handle<Geom_Curve>* curve)
 {
   VALUE obj;

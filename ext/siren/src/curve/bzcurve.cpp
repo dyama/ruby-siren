@@ -4,6 +4,8 @@
 
 #include "curve.h"
 
+VALUE sr_cBzCurve;
+
 VALUE siren_bzcurve_new( const handle<Geom_Curve>* curve)
 {
   VALUE obj;

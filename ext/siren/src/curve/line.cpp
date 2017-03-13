@@ -5,6 +5,8 @@
 
 #include "curve.h"
 
+VALUE sr_cLine;
+
 VALUE siren_line_new( const handle<Geom_Curve>* curve)
 {
   VALUE obj;

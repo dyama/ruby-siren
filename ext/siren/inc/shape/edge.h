@@ -22,7 +22,7 @@
 
 #include <BRepExtrema_ExtCC.hxx>
 
-VALUE sr_cEdge;
+extern VALUE sr_cEdge;
 
 static rb_data_type_t siren_edge_type = { "Edge", siren_shape_final };
 bool siren_edge_install();

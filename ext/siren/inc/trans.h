@@ -10,7 +10,7 @@
 #include <gp_Ax3.hxx>
 #include <gp_Trsf.hxx>
 
-VALUE sr_cTrans;
+extern VALUE sr_cTrans;
 
 bool siren_trans_install();
 void siren_trans_final( void* p);

@@ -1,5 +1,7 @@
 #include "shape/shell.h"
 
+VALUE sr_cShell;
+
 VALUE siren_shell_new( const TopoDS_Shape* src)
 {
   VALUE obj = rb_instance_alloc(sr_cShell);

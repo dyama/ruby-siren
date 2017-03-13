@@ -32,7 +32,7 @@
 
 using namespace opencascade;
 
-VALUE sr_mSiren;
+extern VALUE sr_mSiren;
 
 #include "common.h"
 

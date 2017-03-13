@@ -1,5 +1,9 @@
 #include "shape/compound.h"
 
+#define rb_array_p(x) RB_TYPE_P(x, T_ARRAY)
+
+VALUE sr_cCompound;
+
 VALUE siren_compound_new( const TopoDS_Shape* src)
 {
   VALUE obj = rb_instance_alloc(sr_cCompound);
@@ -35,18 +39,6 @@ bool siren_compound_install()
   return true;
 }
 
-struct RClass* siren_compound_rclass()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Compound")));
-}
-
-VALUE siren_compound_obj()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Compound"));
-}
-
 VALUE siren_compound_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE* a;
@@ -59,8 +51,8 @@ VALUE siren_compound_init(int argc, VALUE* argv, VALUE self)
 
   for (int i = 0; i < len; i++) {
     VALUE arg = *(a + i);
-    if (_array_p(arg)) {
-      VALUE subary = rb_funcall(arg, "flatten", 0);
+    if (rb_array_p(arg)) {
+      VALUE subary = rb_funcall(arg, rb_intern("flatten"), 0);
       for (int j = 0; j < RARRAY_LEN(subary); j++) {
         TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(subary, j));
         B.Add(comp, *shape);
@@ -89,8 +81,8 @@ VALUE siren_compound_push(int argc, VALUE* argv, VALUE self)
   BRep_Builder B;
   for (int i = 0; i < len; i++) {
     VALUE arg = *(a + i);
-    if (_array_p(arg)) {
-      VALUE subary = rb_funcall(arg, "flatten", 0);
+    if (rb_array_p(arg)) {
+      VALUE subary = rb_funcall(arg, rb_intern("flatten"), 0);
       for (int j = 0; j < RARRAY_LEN(subary); j++) {
         TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(subary, j));
         B.Add(comp, *shape);
@@ -113,8 +105,8 @@ VALUE siren_compound_delete(int argc, VALUE* argv, VALUE self)
   BRep_Builder B;
   for (int i = 0; i < len; i++) {
     VALUE arg = *(a + i);
-    if (_array_p(arg)) {
-      VALUE subary = rb_funcall(arg, "flatten", 0);
+    if (rb_array_p(arg)) {
+      VALUE subary = rb_funcall(arg, rb_intern("flatten"), 0);
       for (int j = 0; j < RARRAY_LEN(subary); j++) {
         TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(subary, j));
         B.Remove(comp, *shape);

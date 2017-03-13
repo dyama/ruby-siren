@@ -1,5 +1,7 @@
 #include "shape/edge.h"
 
+VALUE sr_cEdge;
+
 VALUE siren_edge_new( const TopoDS_Shape* src)
 {
   VALUE obj = rb_instance_alloc(sr_cEdge);

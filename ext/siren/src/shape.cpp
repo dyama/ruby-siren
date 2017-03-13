@@ -5,6 +5,8 @@
 
 #include "shape.h"
 
+VALUE sr_cShape;
+
 TopoDS_Shape* siren_shape_get( VALUE obj)
 {
   // return static_cast<TopoDS_Shape*>(_get_datatype(obj, &siren_shape_type));
@@ -313,25 +315,30 @@ VALUE siren_shape_explore(int argc, VALUE* argv, VALUE self)
 
   VALUE mtype;
   TopAbs_ShapeEnum type = TopAbs_COMPOUND;
-  if (rb_funcall(klass, rb_intern("=="), 1, siren_compound_obj()) == Qtrue) {
+  if (rb_funcall(klass, rb_intern("=="), 1, sr_cCompound) == Qtrue) {
     type = TopAbs_COMPOUND;
   }
-  else if (rb_funcall(klass, rb_intern("=="), 1, siren_solid_obj()) == Qtrue) {
+#ifdef SIREN_ENABLE_CHUNK
+  else if (rb_funcall(klass, rb_intern("=="), 1, sr_cChunk) == Qtrue) {
+    type = TopAbs_COMPSOLID;
+  }
+#endif
+  else if (rb_funcall(klass, rb_intern("=="), 1, sr_cSolid) == Qtrue) {
     type = TopAbs_SOLID;
   }
-  else if (rb_funcall(klass, rb_intern("=="), 1, siren_shell_obj()) == Qtrue) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, sr_cShell) == Qtrue) {
     type = TopAbs_SHELL;
   }
-  else if (rb_funcall(klass, rb_intern("=="), 1, siren_face_obj()) == Qtrue) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, sr_cFace) == Qtrue) {
     type = TopAbs_FACE;
   }
-  else if (rb_funcall(klass, rb_intern("=="), 1, siren_wire_obj()) == Qtrue) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, sr_cWire) == Qtrue) {
     type = TopAbs_WIRE;
   }
-  else if (rb_funcall(klass, rb_intern("=="), 1, siren_edge_obj()) == Qtrue) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, sr_cEdge) == Qtrue) {
     type = TopAbs_EDGE;
   }
-  else if (rb_funcall(klass, rb_intern("=="), 1, siren_vertex_obj()) == Qtrue) {
+  else if (rb_funcall(klass, rb_intern("=="), 1, sr_cVertex) == Qtrue) {
     type = TopAbs_VERTEX;
   }
   else {
@@ -345,25 +352,30 @@ VALUE siren_shape_explore(int argc, VALUE* argv, VALUE self)
   else {
     VALUE mfilter;
     TopAbs_ShapeEnum avoid = TopAbs_COMPOUND;
-    if (rb_funcall(klassf, rb_intern("=="), 1, siren_compound_obj()) == Qtrue) {
+    if (rb_funcall(klassf, rb_intern("=="), 1, sr_cCompound) == Qtrue) {
       avoid = TopAbs_COMPOUND;
     }
-    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_solid_obj()) == Qtrue) {
+#ifdef SIREN_ENABLE_CHUNK
+    else if (rb_funcall(klassf, rb_intern("=="), 1, sr_cChunk) == Qtrue) {
+      avoid = TopAbs_COMPSOLID;
+    }
+#endif
+    else if (rb_funcall(klassf, rb_intern("=="), 1, sr_cSolid) == Qtrue) {
       avoid = TopAbs_SOLID;
     }
-    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_shell_obj()) == Qtrue) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, sr_cShell) == Qtrue) {
       avoid = TopAbs_SHELL;
     }
-    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_face_obj()) == Qtrue) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, sr_cFace) == Qtrue) {
       avoid = TopAbs_FACE;
     }
-    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_wire_obj()) == Qtrue) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, sr_cWire) == Qtrue) {
       avoid = TopAbs_WIRE;
     }
-    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_edge_obj()) == Qtrue) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, sr_cEdge) == Qtrue) {
       avoid = TopAbs_EDGE;
     }
-    else if (rb_funcall(klassf, rb_intern("=="), 1, siren_vertex_obj()) == Qtrue) {
+    else if (rb_funcall(klassf, rb_intern("=="), 1, sr_cVertex) == Qtrue) {
       avoid = TopAbs_VERTEX;
     }
     else {

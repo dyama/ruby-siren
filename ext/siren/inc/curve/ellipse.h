@@ -5,7 +5,7 @@
 
 #include <Geom_Ellipse.hxx>
 
-VALUE sr_cEllipse;
+extern VALUE sr_cEllipse;
 
 static rb_data_type_t siren_ellipse_type = { "Ellipse", siren_curve_final };
 bool siren_ellipse_install();

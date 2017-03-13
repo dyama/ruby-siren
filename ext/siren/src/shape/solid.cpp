@@ -1,5 +1,7 @@
 #include "shape/solid.h"
 
+VALUE sr_cSolid;
+
 VALUE siren_solid_new( const TopoDS_Shape* src)
 {
   VALUE obj = rb_instance_alloc(sr_cSolid);

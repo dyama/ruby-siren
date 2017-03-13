@@ -5,7 +5,7 @@
 
 #include <GeomAbs_CurveType.hxx>
 
-VALUE sr_cCurve;
+extern VALUE sr_cCurve;
 
 void siren_curve_final( void* p);
 static rb_data_type_t siren_curve_type = { "Curve", siren_curve_final };

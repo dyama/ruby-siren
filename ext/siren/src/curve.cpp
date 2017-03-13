@@ -5,6 +5,8 @@
 
 #include "curve.h"
 
+VALUE sr_cCurve;
+
 VALUE siren_curve_new( const opencascade::handle<Geom_Curve>* curve)
 {
   GeomAbs_CurveType type = siren_curve_geomtype_native(*curve);

@@ -5,6 +5,8 @@
 
 #include "curve.h"
 
+VALUE sr_cHyperbola;
+
 VALUE siren_hyperbola_new( const handle<Geom_Curve>* curve)
 {
   VALUE obj;

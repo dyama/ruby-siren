@@ -5,7 +5,7 @@
 
 #include <Geom_Circle.hxx>
 
-VALUE sr_cCircle;
+extern VALUE sr_cCircle;
 
 static rb_data_type_t siren_circle_type = { "Circle", siren_curve_final };
 bool siren_circle_install();

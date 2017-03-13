@@ -5,6 +5,8 @@
 
 #include "curve.h"
 
+VALUE sr_cOffsetCurve;
+
 VALUE siren_offsetcurve_new( const handle<Geom_Curve>* curve)
 {
   VALUE obj;

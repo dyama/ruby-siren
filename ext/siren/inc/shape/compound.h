@@ -7,7 +7,7 @@
 #include <TopoDS_Compound.hxx>
 #include <BRep_Builder.hxx>
 
-VALUE sr_cCompound;
+extern VALUE sr_cCompound;
 
 static rb_data_type_t siren_compound_type = { "Compound", siren_shape_final };
 bool siren_compound_install();

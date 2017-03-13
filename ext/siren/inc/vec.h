@@ -3,7 +3,7 @@
 
 #include "siren.h"
 
-VALUE sr_cVec;
+extern VALUE sr_cVec;
 
 bool siren_vec_install();
 void siren_vec_final(void* p);

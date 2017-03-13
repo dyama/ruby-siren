@@ -5,6 +5,8 @@
 #define rbRB_FLOAT_TYPE_P(x) RB_FLOAT_TYPE_P(x)
 #define DBL2NUM(x) INT2NUM(x)
 
+VALUE sr_cVec;
+
 gp_Vec* siren_vec_get( VALUE obj)
 {
 #if 0
