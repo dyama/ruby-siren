@@ -14,7 +14,7 @@ VALUE siren_circle_new(const handle<Geom_Curve>* curve)
   return obj;
 }
 
-handle<Geom_Circle> siren_circle_get(VALUE obj)
+handle<Geom_Circle> siren_circle_get(VALUE self)
 {
 #if 0
   handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_circle_type));
@@ -28,7 +28,7 @@ handle<Geom_Circle> siren_circle_get(VALUE obj)
   return circle;
 #else
   handle<Geom_Curve> hgc;
-  Data_Get_Struct(obj, Geom_Curve, hgc);
+  Data_Get_Struct(self, Geom_Curve, hgc);
   if (hgc.IsNull()) {
     rb_raise(Qnil, "The geometry type is not Curve.");
   }
