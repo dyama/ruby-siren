@@ -4,48 +4,64 @@
 
 #include "curve.h"
 
-VALUE siren_bscurve_new( const handle<Geom_Curve>* curve)
+VALUE siren_bscurve_new(const handle<Geom_Curve>* curve)
 {
-  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("BSCurve")));
+  obj = rb_instance_alloc(sr_cBSCurve);
   void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
+#if 0
   DATA_TYPE(obj) = &siren_bscurve_type;
+#endif
   return obj;
 }
 
-handle<Geom_BSplineCurve> siren_bscurve_get( VALUE self)
+handle<Geom_BSplineCurve> siren_bscurve_get(VALUE self)
 {
+#if 0
   handle<Geom_Curve> hgc
     = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_bscurve_type));
   if (hgc.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Curve."); }
   handle<Geom_BSplineCurve> bscurve = handle<Geom_BSplineCurve>::DownCast(hgc);
   if (bscurve.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not BSCurve."); }
   return bscurve;
+#else
+  handle<Geom_Curve> hgc;
+  Data_Get_Struct(self, Geom_Curve, hgc);
+  if (hgc.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Curve.");
+  }
+  handle<Geom_BSplineCurve> bsc = handle<Geom_BSplineCurve>::DownCast(hgc);
+  if (bsc.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not BSCurve.");
+  }
+  return bsc;
+#endif
 }
 
 bool siren_bscurve_install()
 {
+#if 0
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_bscurve = rb_define_class_under(sr_mSiren, "BSCurve", cls_curve);
   MRB_SET_INSTANCE_TT(cls_bscurve, MRB_TT_DATA);
-  rb_define_method(cls_bscurve, "initialize", siren_bscurve_init,    MRB_ARGS_REQ(4) | MRB_ARGS_OPT(1));
-  rb_define_method(cls_bscurve, "degree",     siren_bscurve_degree,  MRB_ARGS_NONE());
-  rb_define_method(cls_bscurve, "knots",      siren_bscurve_knots,   MRB_ARGS_NONE());
-  rb_define_method(cls_bscurve, "mults",      siren_bscurve_mults,   MRB_ARGS_NONE());
-  rb_define_method(cls_bscurve, "poles",      siren_bscurve_poles,   MRB_ARGS_NONE());
-  rb_define_method(cls_bscurve, "weights",    siren_bscurve_weights, MRB_ARGS_NONE());
+#endif
+  rb_define_method(sr_cBSCurve, "initialize", siren_bscurve_init,    -1);
+  rb_define_method(sr_cBSCurve, "degree",     siren_bscurve_degree,  -1);
+  rb_define_method(sr_cBSCurve, "knots",      siren_bscurve_knots,   -1);
+  rb_define_method(sr_cBSCurve, "mults",      siren_bscurve_mults,   -1);
+  rb_define_method(sr_cBSCurve, "poles",      siren_bscurve_poles,   -1);
+  rb_define_method(sr_cBSCurve, "weights",    siren_bscurve_weights, -1);
   return true;
 }
 
-VALUE siren_bscurve_init( VALUE self)
+VALUE siren_bscurve_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE d;
   VALUE ks, ms, ps, ws;
-  rb_scan_args(argc, argv, "iAAA|A", &d, &ks, &ms, &ps, &ws);
+  rb_scan_args(argc, argv, "41", &d, &ks, &ms, &ps, &ws);
 
   int plen = RARRAY_LEN(ps);
 
@@ -82,17 +98,19 @@ VALUE siren_bscurve_init( VALUE self)
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = curve;
   DATA_PTR(self) = hgcurve;
+#if 0
   DATA_TYPE(self) = &siren_bscurve_type;
+#endif
   return self;
 }
 
-VALUE siren_bscurve_degree( VALUE self)
+VALUE siren_bscurve_degree(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_BSplineCurve> curve = siren_bscurve_get(self);
   return INT2FIX((int)curve->Degree());
 }
 
-VALUE siren_bscurve_knots( VALUE self)
+VALUE siren_bscurve_knots(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_BSplineCurve> curve = siren_bscurve_get(self);
   VALUE knots = rb_ary_new();
@@ -102,7 +120,7 @@ VALUE siren_bscurve_knots( VALUE self)
   return knots;
 }
 
-VALUE siren_bscurve_mults( VALUE self)
+VALUE siren_bscurve_mults(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_BSplineCurve> curve = siren_bscurve_get(self);
   VALUE mults = rb_ary_new();
@@ -112,7 +130,7 @@ VALUE siren_bscurve_mults( VALUE self)
   return mults;
 }
 
-VALUE siren_bscurve_poles( VALUE self)
+VALUE siren_bscurve_poles(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_BSplineCurve> curve = siren_bscurve_get(self);
   VALUE poles = rb_ary_new();
@@ -126,7 +144,7 @@ VALUE siren_bscurve_poles( VALUE self)
   return poles;
 }
 
-VALUE siren_bscurve_weights( VALUE self)
+VALUE siren_bscurve_weights(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_BSplineCurve> curve = siren_bscurve_get(self);
   VALUE weights = rb_ary_new();
