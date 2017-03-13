@@ -2,14 +2,16 @@
 
 bool siren_stl_install()
 {
+#if 0
   // Class method
   rb_define_class_method(sr_mSiren, "load_stl", siren_stl_load, MRB_ARGS_REQ(1));
+#endif
   // For mix-in
-  rb_define_method      (sr_mSiren, "load_stl", siren_stl_load, MRB_ARGS_REQ(1));
+  rb_define_method(sr_mSiren, "load_stl", siren_stl_load, -1);
   return true;
 }
 
-VALUE siren_stl_load( VALUE self)
+VALUE siren_stl_load(int argc, VALUE* argv, VALUE self)
 {
   VALUE path;
   rb_scan_args(argc, argv, "S", &path);
@@ -18,7 +20,7 @@ VALUE siren_stl_load( VALUE self)
   StlAPI::Read(shape, (Standard_CString)RSTRING_PTR(path));
 
   if (shape.IsNull()) {
-    rb_raisef(Qnil, "Failed to load STL from %S.", path);
+    rb_raise(Qnil, "Failed to load STL from %S.", path);
   }
 
   return siren_shape_new(shape);
