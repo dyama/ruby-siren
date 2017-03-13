@@ -5,9 +5,11 @@
 
 #include <Geom_Ellipse.hxx>
 
+VALUE sr_cEllipse;
+
 static rb_data_type_t siren_ellipse_type = { "Ellipse", siren_curve_final };
 bool siren_ellipse_install();
-handle<Geom_Ellipse> siren_ellipse_get( VALUE self);
+handle<Geom_Ellipse> siren_ellipse_get(VALUE self);
 VALUE siren_ellipse_new( const handle<Geom_Curve>* curve);
 
 #endif
