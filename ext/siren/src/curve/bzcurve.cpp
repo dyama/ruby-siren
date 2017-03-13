@@ -6,40 +6,55 @@
 
 VALUE siren_bzcurve_new( const handle<Geom_Curve>* curve)
 {
-  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("BzCurve")));
+  obj = rb_instance_alloc(sr_cBzCurve);
   void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
+#if 0
   DATA_TYPE(obj) = &siren_bzcurve_type;
+#endif
   return obj;
 }
 
-handle<Geom_BezierCurve> siren_bzcurve_get( VALUE self)
+handle<Geom_BezierCurve> siren_bzcurve_get(int argc, VALUE* argv, VALUE self)
 {
+#if 0
   handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_bzcurve_type));
   if (hgc.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Curve."); }
   handle<Geom_BezierCurve> bzcurve = handle<Geom_BezierCurve>::DownCast(hgc);
   if (bzcurve.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not BzCurve."); }
   return bzcurve;
+#else
+  handle<Geom_Curve> hgc;
+  Data_Get_Struct(self, Geom_Curve, hgc);
+  if (hgc.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Curve.");
+  }
+  handle<Geom_BezierCurve> bzc = handle<Geom_BezierCurve>::DownCast(hgc);
+  if (bzc.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not BSCurve.");
+  }
+  return bzc;
+#endif
 }
 
 bool siren_bzcurve_install()
 {
+#if 0
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_bzcurve = rb_define_class_under(sr_mSiren, "BzCurve", cls_curve);
   MRB_SET_INSTANCE_TT(cls_bzcurve, MRB_TT_DATA);
-  rb_define_method(cls_bzcurve, "initialize", siren_bzcurve_init,   MRB_ARGS_NONE());
-  // rb_define_method(cls_bzcurve, "degree",     siren_bzcurve_degree, MRB_ARGS_NONE());
+#endif
+  rb_define_method(sr_cBzCurve, "initialize", siren_bzcurve_init, -1);
   return true;
 }
 
-VALUE siren_bzcurve_init( VALUE self)
+VALUE siren_bzcurve_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE ps, ws;
-  rb_scan_args(argc, argv, "A|A", &ps, &ws);
+  rb_scan_args(argc, argv, "11", &ps, &ws);
   bool has_weight = argc == 2;
   int plen = RARRAY_LEN(ps);
   TColgp_Array1OfPnt poles(1, plen);
@@ -69,7 +84,9 @@ VALUE siren_bzcurve_init( VALUE self)
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = curve;
   DATA_PTR(self) = hgcurve;
+#if 0
   DATA_TYPE(self) = &siren_bzcurve_type;
+#endif
   return self;
 }
 
