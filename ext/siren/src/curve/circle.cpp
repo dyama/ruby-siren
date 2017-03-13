@@ -1,74 +1,94 @@
 #include "curve.h"
 
-VALUE siren_circle_new( const handle<Geom_Curve>* curve)
+VALUE siren_circle_new(const handle<Geom_Curve>* curve)
 {
-  struct RClass* sr_mSiren = rb_module_get("Siren");
   VALUE obj;
-  obj = rb_instance_alloc(rb_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Circle")));
+  obj = rb_instance_alloc(sr_cCircle);
   void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
   handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
   *hgcurve = *curve;
   DATA_PTR(obj) = hgcurve;
+#if 0
   DATA_TYPE(obj) = &siren_circle_type;
+#endif
   return obj;
 }
 
-handle<Geom_Circle> siren_circle_get( VALUE self)
+handle<Geom_Circle> siren_circle_get(VALUE obj)
 {
+#if 0
   handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_circle_type));
-  if (hgc.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Curve."); }
+  if (hgc.IsNull()) {
+    rb_raisef(Qnil, "The geometry type is not Curve.");
+  }
   handle<Geom_Circle> circle = handle<Geom_Circle>::DownCast(hgc);
-  if (circle.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Circle."); }
+  if (circle.IsNull()) {
+    rb_raisef(Qnil, "The geometry type is not Circle.");
+  }
   return circle;
+#else
+  handle<Geom_Curve> hgc;
+  Data_Get_Struct(obj, Geom_Curve, hgc);
+  if (hgc.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Curve.");
+  }
+  handle<Geom_Circle> circle = handle<Geom_Circle>::DownCast(hgc);
+  if (circle.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Circle.");
+  }
+  return circle;
+#endif
 }
 
 bool siren_circle_install()
 {
+#if 0
   struct RClass* cls_curve = siren_curve_rclass();
   struct RClass* cls_circle = rb_define_class_under(sr_mSiren, "Circle", rb_cObject);
   MRB_SET_INSTANCE_TT(cls_circle, MRB_TT_DATA);
-  rb_define_method(cls_circle, "initialize", siren_curve_init, MRB_ARGS_NONE());
+#endif
 
-  rb_define_method(cls_circle, "radius",   siren_circle_radius,     MRB_ARGS_NONE());
-  rb_define_method(cls_circle, "radius=",  siren_circle_radius_set, MRB_ARGS_REQ(1));
-  rb_define_method(cls_circle, "center",   siren_circle_center,     MRB_ARGS_NONE());
-  rb_define_method(cls_circle, "center=",  siren_circle_center_set, MRB_ARGS_REQ(1));
-  rb_define_method(cls_circle, "area",     siren_circle_area,       MRB_ARGS_NONE());
-  rb_define_method(cls_circle, "length",   siren_circle_length,     MRB_ARGS_NONE());
-  rb_define_method(cls_circle, "normal",   siren_circle_normal,     MRB_ARGS_NONE());
-  rb_define_method(cls_circle, "normal=",  siren_circle_normal_set, MRB_ARGS_REQ(1));
-  rb_define_method(cls_circle, "dir",      siren_circle_dir,        MRB_ARGS_NONE());
-  rb_define_method(cls_circle, "dir=",     siren_circle_dir_set,    MRB_ARGS_REQ(1));
-  rb_define_method(cls_circle, "dist",     siren_circle_dist,       MRB_ARGS_REQ(1));
-  rb_define_method(cls_circle, "distdist", siren_circle_distdist,   MRB_ARGS_REQ(1));
-  rb_define_method(cls_circle, "contain",  siren_circle_contain,    MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  rb_define_method(sr_cCircle, "initialize", siren_curve_init,        -1);
+  rb_define_method(sr_cCircle, "radius",     siren_circle_radius,     -1);
+  rb_define_method(sr_cCircle, "radius=",    siren_circle_radius_set, -1);
+  rb_define_method(sr_cCircle, "center",     siren_circle_center,     -1);
+  rb_define_method(sr_cCircle, "center=",    siren_circle_center_set, -1);
+  rb_define_method(sr_cCircle, "area",       siren_circle_area,       -1);
+  rb_define_method(sr_cCircle, "length",     siren_circle_length,     -1);
+  rb_define_method(sr_cCircle, "normal",     siren_circle_normal,     -1);
+  rb_define_method(sr_cCircle, "normal=",    siren_circle_normal_set, -1);
+  rb_define_method(sr_cCircle, "dir",        siren_circle_dir,        -1);
+  rb_define_method(sr_cCircle, "dir=",       siren_circle_dir_set,    -1);
+  rb_define_method(sr_cCircle, "dist",       siren_circle_dist,       -1);
+  rb_define_method(sr_cCircle, "distdist",   siren_circle_distdist,   -1);
+  rb_define_method(sr_cCircle, "contain",    siren_circle_contain,    -1);
   return true;
 }
 
-VALUE siren_circle_radius( VALUE self)
+VALUE siren_circle_radius(int argc, VALUE* argv, VALUE self)
 {
   Standard_Real r = siren_circle_get(self)->Radius();
   return (r);
 }
 
-VALUE siren_circle_radius_set( VALUE self)
+VALUE siren_circle_radius_set(int argc, VALUE* argv, VALUE self)
 {
   VALUE r;
-  rb_scan_args(argc, argv, "f", &r);
+  rb_scan_args(argc, argv, "1", &r);
   siren_circle_get(self)->SetRadius(r);
   return Qnil;
 }
 
-VALUE siren_circle_center( VALUE self)
+VALUE siren_circle_center(int argc, VALUE* argv, VALUE self)
 {
   gp_Pnt center = siren_circle_get(self)->Circ().Location();
   return siren_pnt_to_ary(center);
 }
 
-VALUE siren_circle_center_set( VALUE self)
+VALUE siren_circle_center_set(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos;
-  rb_scan_args(argc, argv, "A", &pos);
+  rb_scan_args(argc, argv, "1", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -77,19 +97,19 @@ VALUE siren_circle_center_set( VALUE self)
   return pos;
 }
 
-VALUE siren_circle_area( VALUE self)
+VALUE siren_circle_area(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_Circle> circle = siren_circle_get(self);
   return (circle->Circ().Area());
 }
 
-VALUE siren_circle_length( VALUE self)
+VALUE siren_circle_length(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_Circle> circle = siren_circle_get(self);
   return (circle->Circ().Length());
 }
 
-VALUE siren_circle_normal( VALUE self)
+VALUE siren_circle_normal(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_Circle> circle = siren_circle_get(self);
   // Returns the main axis of the circle.
@@ -99,10 +119,10 @@ VALUE siren_circle_normal( VALUE self)
   return siren_dir_to_ary(axis.Direction());
 }
 
-VALUE siren_circle_normal_set( VALUE self)
+VALUE siren_circle_normal_set(int argc, VALUE* argv, VALUE self)
 {
   VALUE norm;
-  rb_scan_args(argc, argv, "A", &norm);
+  rb_scan_args(argc, argv, "1", &norm);
   gp_Dir dir = siren_ary_to_dir(norm);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -113,17 +133,17 @@ VALUE siren_circle_normal_set( VALUE self)
   return norm;
 }
 
-VALUE siren_circle_dir( VALUE self)
+VALUE siren_circle_dir(int argc, VALUE* argv, VALUE self)
 {
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Ax1 axis = circle->Circ().XAxis();
   return siren_dir_to_ary(axis.Direction());
 }
 
-VALUE siren_circle_dir_set( VALUE self)
+VALUE siren_circle_dir_set(int argc, VALUE* argv, VALUE self)
 {
   VALUE val;
-  rb_scan_args(argc, argv, "A", &val);
+  rb_scan_args(argc, argv, "1", &val);
   gp_Dir dir = siren_ary_to_dir(val);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
@@ -135,31 +155,31 @@ VALUE siren_circle_dir_set( VALUE self)
   return val;
 }
 
-VALUE siren_circle_dist( VALUE self)
+VALUE siren_circle_dist(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos;
-  rb_scan_args(argc, argv, "A", &pos);
+  rb_scan_args(argc, argv, "1", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
   return (circ.Distance(p));
 }
 
-VALUE siren_circle_distdist( VALUE self)
+VALUE siren_circle_distdist(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos;
-  rb_scan_args(argc, argv, "A", &pos);
+  rb_scan_args(argc, argv, "1", &pos);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
   return (circ.SquareDistance(p));
 }
 
-VALUE siren_circle_contain( VALUE self)
+VALUE siren_circle_contain(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos;
   VALUE lintol = 1.0e-7;
-  rb_scan_args(argc, argv, "A|f", &pos, &lintol);
+  rb_scan_args(argc, argv, "11", &pos, &lintol);
   gp_Pnt p = siren_ary_to_pnt(pos);
   handle<Geom_Circle> circle = siren_circle_get(self);
   gp_Circ circ = circle->Circ();
