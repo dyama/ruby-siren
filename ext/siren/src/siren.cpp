@@ -38,7 +38,7 @@ VALUE sr_mSiren;
 extern "C" {
 
   // initializer
-  void rb_mruby_siren_gem_init()
+  void Init_siren()
   {
     // Siren module
     sr_mSiren  = rb_define_module("Siren");
