@@ -9,12 +9,10 @@ class SirenTest < Minitest::Test
   end
 
   def test_vec
+
     # initialize method
     assert Vec.new.to_a == [0.0, 0.0, 0.0]
     assert Vec.new(1.0, 2.to_i, 3.to_f).to_a ==  Vec.new([1.0, 2.to_i, 3.to_f]).to_a
-    assert Vec.new.x == 0.0
-    assert Vec.new.y == 0.0
-    assert Vec.new.z == 0.0
     assert Vec.new([1.0, 2, 3.to_f]).to_a == [1.0, 2.0, 3.0]
 
     # class methods
@@ -37,6 +35,25 @@ class SirenTest < Minitest::Test
     assert (Vec.new(1, 2, 3) == Vec.new(1, 2, 3)) == true
     assert (Vec.new(1, 2, 3) != Vec.new(1, 2, 3)) == false
     assert (-Vec.new(1, 2, 3)).to_a == [-1, -2, -3]
+    assert (Vec.new(1, 0, 0) + Vec.new(1, 0, 0)).to_a == [2, 0, 0]
+    assert (Vec.new(1, 0, 0) - Vec.new(1, 0, 0)).to_a == [0, 0, 0]
+    assert (Vec.new(1, 0, 0) * 2).to_a == [2, 0, 0]
+    assert (Vec.new(1, 0, 0) / 2).to_a == [0.5, 0, 0]
+
+    assert Vec.new.x == 0
+    assert Vec.new.y == 0
+    assert Vec.new.z == 0
+    assert (Vec.new.x = 1) == 1
+    assert (Vec.new.y = 2) == 2
+    assert (Vec.new.z = 3) == 3
+
+    assert Vec.new(1, 2, 3).to_ary == [1, 2, 3]
+    # assert Vec.new(1, 2, 3).xyz == [1, 2, 3]
+
+    mag_tol = 0.01
+    ang_tol = 0.01 * Math::PI / 180.0
+
+    assert Vec.new(1, 0, 0).equal?(Vec.new(1.0 - 1.0e-7, 0, 0), mag_tol, ang_tol)
 
 
     # ...

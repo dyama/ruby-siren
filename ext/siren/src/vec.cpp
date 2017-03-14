@@ -169,19 +169,14 @@ VALUE siren_vec_to_a(int argc, VALUE* argv, VALUE self)
   return siren_vec_to_ary(*vec);
 }
 
-VALUE siren_vec_xyz(int argc, VALUE* argv, VALUE self)
-{
-  return siren_vec_to_a(0, nullptr, self);
-}
-
 VALUE siren_vec_is_equal(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
   VALUE lintol, angtol;
-  rb_scan_args(argc, argv, "off", &other, &lintol, &angtol);
+  rb_scan_args(argc, argv, "3", &other, &lintol, &angtol);
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
-  Standard_Boolean res = me->IsEqual(*o, lintol, angtol);
+  Standard_Boolean res = me->IsEqual(*o, NUM2DBL(lintol), NUM2DBL(angtol));
   return res ? Qtrue : Qfalse;
 }
 
@@ -285,7 +280,7 @@ VALUE siren_vec_eq(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_plus(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   gp_Vec ans = *siren_vec_get(self) + *siren_vec_get(other);
   return siren_vec_new(ans.X(), ans.Y(), ans.Z());
 }
@@ -293,7 +288,7 @@ VALUE siren_vec_plus(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_minus(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   gp_Vec ans = *siren_vec_get(self) - *siren_vec_get(other);
   return siren_vec_new(ans.X(), ans.Y(), ans.Z());
 }
@@ -301,16 +296,16 @@ VALUE siren_vec_minus(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_multiply_scalar(int argc, VALUE* argv, VALUE self)
 {
   VALUE factor;
-  rb_scan_args(argc, argv, "f", &factor);
-  gp_Vec ans = *siren_vec_get(self) * factor;
+  rb_scan_args(argc, argv, "1", &factor);
+  gp_Vec ans = *siren_vec_get(self) * NUM2DBL(factor);
   return siren_vec_new(ans.X(), ans.Y(), ans.Z());
 }
 
 VALUE siren_vec_devide_scalar(int argc, VALUE* argv, VALUE self)
 {
   VALUE factor;
-  rb_scan_args(argc, argv, "f", &factor);
-  gp_Vec ans = *siren_vec_get(self) / factor;
+  rb_scan_args(argc, argv, "1", &factor);
+  gp_Vec ans = *siren_vec_get(self) / NUM2DBL(factor);
   return siren_vec_new(ans.X(), ans.Y(), ans.Z());
 }
 
