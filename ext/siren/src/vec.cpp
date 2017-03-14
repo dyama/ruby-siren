@@ -6,18 +6,14 @@
 
 VALUE sr_cVec;
 
-gp_Vec* siren_vec_get( VALUE obj)
+gp_Vec* siren_vec_get(VALUE obj)
 {
-#if 0
-  return static_cast<gp_Vec*>(_get_datatype(obj, &siren_vec_type));
-#else
   gp_Vec* m;
   Data_Get_Struct(obj, gp_Vec, m);
   return m;
-#endif
 }
 
-VALUE siren_vec_new( double x, double y, double z)
+VALUE siren_vec_new(double x, double y, double z)
 {
   VALUE arg = rb_ary_new();
   rb_ary_push(arg, (x));
@@ -26,14 +22,24 @@ VALUE siren_vec_new( double x, double y, double z)
   return rb_class_new_instance(1, &arg, sr_mSiren);
 }
 
-VALUE siren_vec_new( const gp_Vec& vec)
+VALUE siren_vec_new(const gp_Vec& vec)
 {
   return siren_vec_new(vec.X(), vec.Y(), vec.Z());
+}
+
+static VALUE siren_vec_allocate(VALUE klass)
+{
+  void* p = ruby_xmalloc(sizeof(gp_Vec));
+  new(p) gp_Vec(0., 0., 0.);
+  return Data_Wrap_Struct(klass, NULL, siren_vec_final, p);
 }
 
 bool siren_vec_install()
 {
   sr_cVec = rb_define_class_under(sr_mSiren, "Vec", rb_cObject);
+
+  rb_define_alloc_func(sr_cVec, siren_vec_allocate);
+
   // MRB_SET_INSTANCE_TT(sr_cVec, MRB_TT_DATA);
   rb_define_method(sr_cVec, "initialize",       RUBY_METHOD_FUNC(siren_vec_init),             -1);
   rb_define_method(sr_cVec, "x",                RUBY_METHOD_FUNC(siren_vec_x),                -1);
@@ -86,40 +92,27 @@ bool siren_vec_install()
 
 VALUE siren_vec_init(int argc, VALUE* argv, VALUE self)
 {
-  VALUE* a;
-  VALUE len;
-  rb_scan_args(argc, argv, "*", &a, &len);
+  VALUE xx, yy, zz;
+  rb_scan_args(argc, argv, "03", &xx, &yy, &zz);
+  int len = argc;
 
   Standard_Real x = 0.0, y = 0.0, z = 0.0;
-  if (len > 0 && rb_array_p(a[0])) {
-    gp_Pnt p = siren_ary_to_pnt(a[0]);
+  if (rb_array_p(xx)) {
+    gp_Pnt p = siren_ary_to_pnt(xx);
     x = p.X(); y = p.Y(); z = p.Z();
   }
   else {
-    if (len >= 1) {
-      if (rb_fixnum_p(a[0]))
-        x = DBL2NUM(a[0]);
-      else if (rb_float_p(a[0]))
-        x = (a[0]);
-    }
-    if (len >= 2) {
-      if (rb_fixnum_p(a[1]))
-        y = DBL2NUM(a[1]);
-      else if (rb_float_p(a[1]))
-        y = VALUE(a[1]);
-    }
-    if (len >= 3) {
-      if (rb_fixnum_p(a[2]))
-        z = DBL2NUM(a[2]);
-      else if (rb_float_p(a[2]))
-        z = (a[2]);
-    }
+    if (argc >= 1) x = NUM2DBL(xx);
+    if (argc >= 2) y = NUM2DBL(yy);
+    if (argc >= 3) z = NUM2DBL(zz);
   }
 
-  void* p = ruby_xmalloc(sizeof(gp_Vec));
-  gp_Vec* vec = new(p) gp_Vec(x, y, z);
-  DATA_PTR(self) = vec;
-  //DATA_TYPE(self) = &siren_vec_type;
+  gp_Vec* p;
+  Data_Get_Struct(self, gp_Vec, p);
+  p->SetX(x);
+  p->SetY(y);
+  p->SetZ(z);
+
   return self;
 }
 
@@ -131,44 +124,44 @@ void siren_vec_final( void* p)
 
 VALUE siren_vec_x(int argc, VALUE* argv, VALUE self)
 {
-  return (siren_vec_get(self)->X());
+  return DBL2NUM(siren_vec_get(self)->X());
 }
 
 VALUE siren_vec_x_set(int argc, VALUE* argv, VALUE self)
 {
   VALUE val;
-  rb_scan_args(argc, argv, "f", &val);
+  rb_scan_args(argc, argv, "1", &val);
   gp_Vec* vec = siren_vec_get(self);
-  vec->SetX(val);
-  return (vec->X());
+  vec->SetX(NUM2DBL(val));
+  return DBL2NUM(vec->X());
 }
 
 VALUE siren_vec_y(int argc, VALUE* argv, VALUE self)
 {
-  return (siren_vec_get(self)->Y());
+  return DBL2NUM(siren_vec_get(self)->Y());
 }
 
 VALUE siren_vec_y_set(int argc, VALUE* argv, VALUE self)
 {
   VALUE val;
-  rb_scan_args(argc, argv, "f", &val);
+  rb_scan_args(argc, argv, "1", &val);
   gp_Vec* vec = siren_vec_get(self);
-  vec->SetY(val);
-  return (vec->Y());
+  vec->SetY(NUM2DBL(val));
+  return DBL2NUM(vec->Y());
 }
 
 VALUE siren_vec_z(int argc, VALUE* argv, VALUE self)
 {
-  return (siren_vec_get(self)->Z());
+  return DBL2NUM(siren_vec_get(self)->Z());
 }
 
 VALUE siren_vec_z_set(int argc, VALUE* argv, VALUE self)
 {
   VALUE val;
-  rb_scan_args(argc, argv, "f", &val);
+  rb_scan_args(argc, argv, "1", &val);
   gp_Vec* vec = siren_vec_get(self);
-  vec->SetZ(val);
-  return (vec->Z());
+  vec->SetZ(NUM2DBL(val));
+  return DBL2NUM(vec->Z());
 }
 
 VALUE siren_vec_to_a(int argc, VALUE* argv, VALUE self)

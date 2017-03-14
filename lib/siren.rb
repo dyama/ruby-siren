@@ -1,5 +1,6 @@
 require "siren/version"
 require "siren/siren"
+# require "vec"
 ##
 #
 # Siren module
