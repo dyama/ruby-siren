@@ -1,9 +1,8 @@
 #include "vec.h"
 
-#define rb_array_p(x) RB_TYPE_P(x, T_ARRAY)
-#define rbFIXNUM_P(x) FIXNUM_P(x)
-#define rbRB_FLOAT_TYPE_P(x) RB_FLOAT_TYPE_P(x)
-#define DBL2NUM(x) INT2NUM(x)
+#define rb_array_p(x)  RB_TYPE_P(x, T_ARRAY)
+#define rb_fixnum_p(x) FIXNUM_P(x)
+#define rb_float_p(x)  RB_FLOAT_TYPE_P(x)
 
 VALUE sr_cVec;
 
@@ -98,21 +97,21 @@ VALUE siren_vec_init(int argc, VALUE* argv, VALUE self)
   }
   else {
     if (len >= 1) {
-      if (rbFIXNUM_P(a[0]))
+      if (rb_fixnum_p(a[0]))
         x = DBL2NUM(a[0]);
-      else if (rbRB_FLOAT_TYPE_P(a[0]))
+      else if (rb_float_p(a[0]))
         x = (a[0]);
     }
     if (len >= 2) {
-      if (rbFIXNUM_P(a[1]))
+      if (rb_fixnum_p(a[1]))
         y = DBL2NUM(a[1]);
-      else if (rbRB_FLOAT_TYPE_P(a[1]))
+      else if (rb_float_p(a[1]))
         y = VALUE(a[1]);
     }
     if (len >= 3) {
-      if (rbFIXNUM_P(a[2]))
+      if (rb_fixnum_p(a[2]))
         z = DBL2NUM(a[2]);
-      else if (rbRB_FLOAT_TYPE_P(a[2]))
+      else if (rb_float_p(a[2]))
         z = (a[2]);
     }
   }

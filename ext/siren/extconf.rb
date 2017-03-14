@@ -54,13 +54,55 @@ $LDFLAGS  = [occt_libpaths].flatten.map{|d| " -L#{d}"}.join
 $LDFLAGS += [occt_libs, thirdparty_libs].flatten.map{|d| " -l#{d}"}.join
 
 $srcs = []
-$srcs << Dir.glob("#{dir}/src/*.{c,cpp}")
-$srcs << Dir.glob("#{dir}/src/*/*.{c,cpp}")
+$srcs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|f| File.expand_path(f) }
+$srcs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|f| File.expand_path(f) }
 $srcs.flatten!
 
 $objs = []
-$objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }
-$objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }
+if false
+  $objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
+  $objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
+else
+  #$objs << %W(
+  #  #{dir}/src/common.o
+  #  #{dir}/src/io/step.o
+  #  #{dir}/src/io/stl.o
+  #  #{dir}/src/io/iges.o
+  #  #{dir}/src/topalgo.o
+  #  #{dir}/src/curve/offsetcurve.o
+  #  #{dir}/src/curve/circle.o
+  #  #{dir}/src/curve/line.o
+  #  #{dir}/src/curve/ellipse.o
+  #  #{dir}/src/curve/bzcurve.o
+  #  #{dir}/src/curve/bscurve.o
+  #  #{dir}/src/curve/parabola.o
+  #  #{dir}/src/curve/hyperbola.o
+  #  #{dir}/src/heal.o
+  #  #{dir}/src/brep.o
+  #  #{dir}/src/shape.o
+  #  #{dir}/src/bndbox.o
+  #  #{dir}/src/curve.o
+  #  #{dir}/src/filler.o
+  #  #{dir}/src/offset.o
+  #  #{dir}/src/trans.o
+  #  #{dir}/src/vec.o
+  #  #{dir}/src/bo.o
+  #  #{dir}/src/shape/wire.o
+  #  #{dir}/src/shape/face.o
+  #  #{dir}/src/shape/shell.o
+  #  #{dir}/src/shape/chunk.o
+  #  #{dir}/src/shape/edge.o
+  #  #{dir}/src/shape/solid.o
+  #  #{dir}/src/shape/vertex.o
+  #  #{dir}/src/shape/compound.o
+  #  #{dir}/src/siren.o
+  #)
+  $objs << %W(
+    #{dir}/src/vec.o
+    #{dir}/src/common.o
+    #{dir}/src/siren.o
+  )
+end
 $objs.flatten!
 
 create_makefile("siren/siren")

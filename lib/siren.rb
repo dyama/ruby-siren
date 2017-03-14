@@ -1,6 +1,5 @@
 require "siren/version"
 require "siren/siren"
-
 ##
 #
 # Siren module
