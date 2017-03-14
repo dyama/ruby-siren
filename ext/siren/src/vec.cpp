@@ -184,10 +184,10 @@ VALUE siren_vec_is_normal(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
   VALUE angtol;
-  rb_scan_args(argc, argv, "of", &other, &angtol);
+  rb_scan_args(argc, argv, "2", &other, &angtol);
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
-  Standard_Boolean res = me->IsNormal(*o, angtol);
+  Standard_Boolean res = me->IsNormal(*o, NUM2DBL(angtol));
   return res ? Qtrue : Qfalse;
 }
 
@@ -195,10 +195,10 @@ VALUE siren_vec_is_reverse(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
   VALUE angtol;
-  rb_scan_args(argc, argv, "of", &other, &angtol);
+  rb_scan_args(argc, argv, "2", &other, &angtol);
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
-  Standard_Boolean res = me->IsOpposite(*o, angtol);
+  Standard_Boolean res = me->IsOpposite(*o, NUM2DBL(angtol));
   return res ? Qtrue : Qfalse;
 }
 
@@ -206,10 +206,10 @@ VALUE siren_vec_is_parallel(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
   VALUE angtol;
-  rb_scan_args(argc, argv, "of", &other, &angtol);
+  rb_scan_args(argc, argv, "2", &other, &angtol);
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
-  Standard_Boolean res = me->IsParallel(*o, angtol);
+  Standard_Boolean res = me->IsParallel(*o, NUM2DBL(angtol));
   return res ? Qtrue : Qfalse;
 }
 
@@ -238,28 +238,28 @@ VALUE siren_vec_reverse_bang(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_angle(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
   Standard_Real res = me->Angle(*o);
-  return (res);
+  return DBL2NUM(res);
 }
 
 VALUE siren_vec_angleref(int argc, VALUE* argv, VALUE self)
 {
   VALUE other, vref;
-  rb_scan_args(argc, argv, "oo", &other, &vref);
+  rb_scan_args(argc, argv, "2", &other, &vref);
   gp_Vec* me = siren_vec_get(self);
   gp_Vec* o = siren_vec_get(other);
   gp_Vec* ref = siren_vec_get(vref);
   Standard_Real res = me->AngleWithRef(*o, *ref);
-  return (res);
+  return DBL2NUM(res);
 }
 
 VALUE siren_vec_magnitude(int argc, VALUE* argv, VALUE self)
 {
   Standard_Real res = siren_vec_get(self)->Magnitude();
-  return (res);
+  return DBL2NUM(res);
 }
 
 VALUE siren_vec_negative(int argc, VALUE* argv, VALUE self)
@@ -312,7 +312,7 @@ VALUE siren_vec_devide_scalar(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_cross(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   gp_Vec ans = siren_vec_get(self)->Crossed(*siren_vec_get(other));
   return siren_vec_new(ans.X(), ans.Y(), ans.Z());
 }
@@ -320,7 +320,7 @@ VALUE siren_vec_cross(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_cross_bang(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   siren_vec_get(self)->Cross(*siren_vec_get(other));
   return self;
 }
@@ -328,25 +328,25 @@ VALUE siren_vec_cross_bang(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_dot(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   Standard_Real ans = siren_vec_get(self)->Dot(*siren_vec_get(other));
-  return (ans);
+  return DBL2NUM(ans);
 }
 
 VALUE siren_vec_dot_cross(int argc, VALUE* argv, VALUE self)
 {
   VALUE v1, v2;
-  rb_scan_args(argc, argv, "o", &v1, &v2);
+  rb_scan_args(argc, argv, "1", &v1, &v2);
   Standard_Real ans = siren_vec_get(self)->DotCross(
       *siren_vec_get(v1),
       *siren_vec_get(v2));
-  return (ans);
+  return DBL2NUM(ans);
 }
 
 VALUE siren_vec_cross_cross(int argc, VALUE* argv, VALUE self)
 {
   VALUE v1, v2;
-  rb_scan_args(argc, argv, "o", &v1, &v2);
+  rb_scan_args(argc, argv, "1", &v1, &v2);
   gp_Vec ans = siren_vec_get(self)->CrossCrossed(
       *siren_vec_get(v1),
       *siren_vec_get(v2)
@@ -357,7 +357,7 @@ VALUE siren_vec_cross_cross(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_cross_cross_bang(int argc, VALUE* argv, VALUE self)
 {
   VALUE v1, v2;
-  rb_scan_args(argc, argv, "o", &v1, &v2);
+  rb_scan_args(argc, argv, "1", &v1, &v2);
   siren_vec_get(self)->CrossCross(
       *siren_vec_get(v1),
       *siren_vec_get(v2)
@@ -368,29 +368,29 @@ VALUE siren_vec_cross_cross_bang(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_cross_mag(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   Standard_Real ans = siren_vec_get(self)->CrossMagnitude(*siren_vec_get(other));
-  return (ans);
+  return DBL2NUM(ans);
 }
 
 VALUE siren_vec_cross_square_mag(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   Standard_Real ans = siren_vec_get(self)->CrossSquareMagnitude(*siren_vec_get(other));
-  return (ans);
+  return DBL2NUM(ans);
 }
 
 VALUE siren_vec_square_mag(int argc, VALUE* argv, VALUE self)
 {
   Standard_Real res = siren_vec_get(self)->SquareMagnitude();
-  return (res);
+  return DBL2NUM(res);
 }
 
 VALUE siren_vec_mirror(int argc, VALUE* argv, VALUE self)
 {
   VALUE dir;
-  rb_scan_args(argc, argv, "o", &dir);
+  rb_scan_args(argc, argv, "1", &dir);
   gp_Vec res = siren_vec_get(self)->Mirrored(*siren_vec_get(dir));
   return siren_vec_new(res.X(), res.Y(), res.Z());
 }
@@ -398,7 +398,7 @@ VALUE siren_vec_mirror(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_mirror_bang(int argc, VALUE* argv, VALUE self)
 {
   VALUE dir;
-  rb_scan_args(argc, argv, "o", &dir);
+  rb_scan_args(argc, argv, "1", &dir);
   siren_vec_get(self)->Mirror(*siren_vec_get(dir));
   return self;
 }
@@ -407,9 +407,9 @@ VALUE siren_vec_rotate(int argc, VALUE* argv, VALUE self)
 {
   VALUE dir;
   VALUE angle;
-  rb_scan_args(argc, argv, "of", &dir, &angle);
+  rb_scan_args(argc, argv, "2", &dir, &angle);
   gp_Vec res = siren_vec_get(self)->Rotated(
-      gp_Ax1(gp_Pnt(0.0, 0.0, 0.0), *siren_vec_get(dir)), angle);
+      gp_Ax1(gp_Pnt(0.0, 0.0, 0.0), *siren_vec_get(dir)), NUM2DBL(angle));
   return siren_vec_new(res.X(), res.Y(), res.Z());
 }
 
@@ -417,32 +417,32 @@ VALUE siren_vec_rotate_bang(int argc, VALUE* argv, VALUE self)
 {
   VALUE dir;
   VALUE angle;
-  rb_scan_args(argc, argv, "of", &dir, &angle);
+  rb_scan_args(argc, argv, "2", &dir, &angle);
   siren_vec_get(self)->Rotate(
-      gp_Ax1(gp_Pnt(0.0, 0.0, 0.0), *siren_vec_get(dir)), angle);
+      gp_Ax1(gp_Pnt(0.0, 0.0, 0.0), *siren_vec_get(dir)), NUM2DBL(angle));
   return self;
 }
 
 VALUE siren_vec_scale(int argc, VALUE* argv, VALUE self)
 {
   VALUE f;
-  rb_scan_args(argc, argv, "f", &f);
-  gp_Vec res = siren_vec_get(self)->Scaled(f);
+  rb_scan_args(argc, argv, "1", &f);
+  gp_Vec res = siren_vec_get(self)->Scaled(NUM2DBL(f));
   return siren_vec_new(res.X(), res.Y(), res.Z());
 }
 
 VALUE siren_vec_scale_bang(int argc, VALUE* argv, VALUE self)
 {
   VALUE f;
-  rb_scan_args(argc, argv, "f", &f);
-  siren_vec_get(self)->Scale(f);
+  rb_scan_args(argc, argv, "1", &f);
+  siren_vec_get(self)->Scale(NUM2DBL(f));
   return self;
 }
 
 VALUE siren_vec_transform(int argc, VALUE* argv, VALUE self)
 {
   VALUE t;
-  rb_scan_args(argc, argv, "o", &t);
+  rb_scan_args(argc, argv, "1", &t);
   gp_Vec res = siren_vec_get(self)->Transformed(*siren_trans_get(t));
   return siren_vec_new(res.X(), res.Y(), res.Z());
 }
@@ -450,7 +450,7 @@ VALUE siren_vec_transform(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_transform_bang(int argc, VALUE* argv, VALUE self)
 {
   VALUE t;
-  rb_scan_args(argc, argv, "o", &t);
+  rb_scan_args(argc, argv, "1", &t);
   siren_vec_get(self)->Transform(*siren_trans_get(t));
   return self;
 }

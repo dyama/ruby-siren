@@ -48,13 +48,16 @@ class SirenTest < Minitest::Test
     assert (Vec.new.z = 3) == 3
 
     assert Vec.new(1, 2, 3).to_ary == [1, 2, 3]
-    # assert Vec.new(1, 2, 3).xyz == [1, 2, 3]
 
+    # tolerance for magnitude(size of Vector)
     mag_tol = 0.01
-    ang_tol = 0.01 * Math::PI / 180.0
+    # tolerance for angle bitween two vectors
+    ang_tol = 0.01.to_deg
 
     assert Vec.new(1, 0, 0).equal?(Vec.new(1.0 - 1.0e-7, 0, 0), mag_tol, ang_tol)
-
+    # bug?
+    # assert Vec.new(2, 0, 0).normal?(Vec.new(1, 0, 0), ang_tol)
+    assert Vec.new(5, 0, 0).normal.to_a == [1, 0, 0]
 
     # ...
     v1 = Vec.new

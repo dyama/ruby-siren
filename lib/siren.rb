@@ -1,6 +1,8 @@
 require "siren/version"
 require "siren/siren"
 require "vec"
+require "kernel/array"
+require "kernel/float"
 
 ##
 #
