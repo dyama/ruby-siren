@@ -1,12 +1,12 @@
 #include "siren.h"
 
 #include "vec.h"
+#include "bndbox.h"
 // #include "curve.h"
 // #include "shape.h"
 // #include "topalgo.h"
 // #include "brep.h"
 // #include "trans.h"
-// #include "bndbox.h"
 // #include "filler.h"
 // 
 // #ifdef SIREN_ENABLE_BO
@@ -45,7 +45,7 @@ extern "C" {
 
     // Class
     siren_vec_install    ();
-//     siren_bndbox_install ();
+    siren_bndbox_install ();
 //     siren_curve_install  ();
 //     siren_shape_install  ();
 //     siren_trans_install  ();

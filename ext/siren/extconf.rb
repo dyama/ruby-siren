@@ -64,7 +64,6 @@ if false
   $objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
 else
   #$objs << %W(
-  #  #{dir}/src/common.o
   #  #{dir}/src/io/step.o
   #  #{dir}/src/io/stl.o
   #  #{dir}/src/io/iges.o
@@ -80,12 +79,10 @@ else
   #  #{dir}/src/heal.o
   #  #{dir}/src/brep.o
   #  #{dir}/src/shape.o
-  #  #{dir}/src/bndbox.o
   #  #{dir}/src/curve.o
   #  #{dir}/src/filler.o
   #  #{dir}/src/offset.o
   #  #{dir}/src/trans.o
-  #  #{dir}/src/vec.o
   #  #{dir}/src/bo.o
   #  #{dir}/src/shape/wire.o
   #  #{dir}/src/shape/face.o
@@ -95,11 +92,11 @@ else
   #  #{dir}/src/shape/solid.o
   #  #{dir}/src/shape/vertex.o
   #  #{dir}/src/shape/compound.o
-  #  #{dir}/src/siren.o
   #)
   $objs << %W(
     #{dir}/src/vec.o
     #{dir}/src/common.o
+    #{dir}/src/bndbox.o
     #{dir}/src/siren.o
   )
 end

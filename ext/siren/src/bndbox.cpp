@@ -1,76 +1,67 @@
 #include "bndbox.h"
 
-VALUE sr_cBndbox;
-
-VALUE siren_bndbox_new( const TopoDS_Shape& shape)
-{
-  VALUE obj;
-  obj = rb_instance_alloc(sr_cBndBox);
-  void* p = ruby_xmalloc(sizeof(Bnd_Box));
-  Bnd_Box* inner = new(p) Bnd_Box();
-  BRepBndLib::Add(shape, *inner);
-  DATA_PTR(obj)  = inner;
-  // DATA_TYPE(obj) = &siren_bndbox_type;
-  return obj;
-}
+VALUE sr_cBndBox;
 
 Bnd_Box* siren_bndbox_get(VALUE obj)
 {
-#if 0
-  return static_cast<Bnd_Box*>(_get_datatype(obj, &siren_bndbox_type));
-#else
   Bnd_Box* m;
   Data_Get_Struct(obj, Bnd_Box, m);
   return m;
-#endif
+}
+
+static VALUE siren_bndbox_allocate(VALUE klass)
+{
+  void* p = ruby_xmalloc(sizeof(Bnd_Box));
+  new(p) Bnd_Box();
+  return Data_Wrap_Struct(klass, NULL, siren_bndbox_final, p);
 }
 
 bool siren_bndbox_install()
 {
+  sr_cBndBox = rb_define_class_under(sr_mSiren, "BndBox", rb_cObject);
+
+  rb_define_alloc_func(sr_cBndBox, siren_bndbox_allocate);
+
   // MRB_SET_INSTANCE_TT(cls_bndbox, MRB_TT_DATA);
-  rb_define_method(sr_cBndBox, "initialize", siren_bndbox_init,          -1);
-  rb_define_method(sr_cBndBox, "inspect",    siren_bndbox_to_s,          -1);
-  rb_define_method(sr_cBndBox, "to_s",       siren_bndbox_to_s,          -1);
-  rb_define_method(sr_cBndBox, "min",        siren_bndbox_min,           -1);
-  rb_define_method(sr_cBndBox, "max",        siren_bndbox_max,           -1);
-  rb_define_method(sr_cBndBox, "add",        siren_bndbox_add,           -1);
-  rb_define_method(sr_cBndBox, "out?",       siren_bndbox_is_out,        -1);
-  rb_define_method(sr_cBndBox, "center",     siren_bndbox_center,        -1);
-  rb_define_method(sr_cBndBox, "xsize",      siren_bndbox_xsize,         -1);
-  rb_define_method(sr_cBndBox, "ysize",      siren_bndbox_ysize,         -1);
-  rb_define_method(sr_cBndBox, "zsize",      siren_bndbox_zsize,         -1);
-  rb_define_method(sr_cBndBox, "void?",      siren_bndbox_is_void,       -1);
-  rb_define_method(sr_cBndBox, "whole?",     siren_bndbox_is_whole,      -1);
-  rb_define_method(sr_cBndBox, "void!",      siren_bndbox_void_bang,     -1);
-  rb_define_method(sr_cBndBox, "whole!",     siren_bndbox_whole_bang,    -1);
-  rb_define_method(sr_cBndBox, "xthin?",     siren_bndbox_is_xthin,      -1);
-  rb_define_method(sr_cBndBox, "ythin?",     siren_bndbox_is_ythin,      -1);
-  rb_define_method(sr_cBndBox, "zthin?",     siren_bndbox_is_zthin,      -1);
-  rb_define_method(sr_cBndBox, "openxmin?",  siren_bndbox_is_openxmin,   -1);
-  rb_define_method(sr_cBndBox, "openxmax?",  siren_bndbox_is_openxmax,   -1);
-  rb_define_method(sr_cBndBox, "openymin?",  siren_bndbox_is_openymin,   -1);
-  rb_define_method(sr_cBndBox, "openymax?",  siren_bndbox_is_openymax,   -1);
-  rb_define_method(sr_cBndBox, "openzmin?",  siren_bndbox_is_openzmin,   -1);
-  rb_define_method(sr_cBndBox, "openzmax?",  siren_bndbox_is_openzmax,   -1);
-  rb_define_method(sr_cBndBox, "openxmin!",  siren_bndbox_openxmin_bang, -1);
-  rb_define_method(sr_cBndBox, "openxmax!",  siren_bndbox_openxmax_bang, -1);
-  rb_define_method(sr_cBndBox, "openymin!",  siren_bndbox_openymin_bang, -1);
-  rb_define_method(sr_cBndBox, "openymax!",  siren_bndbox_openymax_bang, -1);
-  rb_define_method(sr_cBndBox, "openzmin!",  siren_bndbox_openzmin_bang, -1);
-  rb_define_method(sr_cBndBox, "openzmax!",  siren_bndbox_openzmax_bang, -1);
-  rb_define_method(sr_cBndBox, "gap",        siren_bndbox_get_gap,       -1);
-  rb_define_method(sr_cBndBox, "gap=",       siren_bndbox_set_gap,       -1);
-  rb_define_method(sr_cBndBox, "dist",       siren_bndbox_dist,          -1);
-  rb_define_method(sr_cBndBox, "square",     siren_bndbox_square,        -1);
+  rb_define_method(sr_cBndBox, "initialize", RUBY_METHOD_FUNC(siren_bndbox_init),          -1);
+  rb_define_method(sr_cBndBox, "inspect",    RUBY_METHOD_FUNC(siren_bndbox_to_s),          -1);
+  rb_define_method(sr_cBndBox, "to_s",       RUBY_METHOD_FUNC(siren_bndbox_to_s),          -1);
+  rb_define_method(sr_cBndBox, "min",        RUBY_METHOD_FUNC(siren_bndbox_min),           -1);
+  rb_define_method(sr_cBndBox, "max",        RUBY_METHOD_FUNC(siren_bndbox_max),           -1);
+  rb_define_method(sr_cBndBox, "add",        RUBY_METHOD_FUNC(siren_bndbox_add),           -1);
+  rb_define_method(sr_cBndBox, "out?",       RUBY_METHOD_FUNC(siren_bndbox_is_out),        -1);
+  rb_define_method(sr_cBndBox, "center",     RUBY_METHOD_FUNC(siren_bndbox_center),        -1);
+  rb_define_method(sr_cBndBox, "xsize",      RUBY_METHOD_FUNC(siren_bndbox_xsize),         -1);
+  rb_define_method(sr_cBndBox, "ysize",      RUBY_METHOD_FUNC(siren_bndbox_ysize),         -1);
+  rb_define_method(sr_cBndBox, "zsize",      RUBY_METHOD_FUNC(siren_bndbox_zsize),         -1);
+  rb_define_method(sr_cBndBox, "void?",      RUBY_METHOD_FUNC(siren_bndbox_is_void),       -1);
+  rb_define_method(sr_cBndBox, "whole?",     RUBY_METHOD_FUNC(siren_bndbox_is_whole),      -1);
+  rb_define_method(sr_cBndBox, "void!",      RUBY_METHOD_FUNC(siren_bndbox_void_bang),     -1);
+  rb_define_method(sr_cBndBox, "whole!",     RUBY_METHOD_FUNC(siren_bndbox_whole_bang),    -1);
+  rb_define_method(sr_cBndBox, "xthin?",     RUBY_METHOD_FUNC(siren_bndbox_is_xthin),      -1);
+  rb_define_method(sr_cBndBox, "ythin?",     RUBY_METHOD_FUNC(siren_bndbox_is_ythin),      -1);
+  rb_define_method(sr_cBndBox, "zthin?",     RUBY_METHOD_FUNC(siren_bndbox_is_zthin),      -1);
+  rb_define_method(sr_cBndBox, "openxmin?",  RUBY_METHOD_FUNC(siren_bndbox_is_openxmin),   -1);
+  rb_define_method(sr_cBndBox, "openxmax?",  RUBY_METHOD_FUNC(siren_bndbox_is_openxmax),   -1);
+  rb_define_method(sr_cBndBox, "openymin?",  RUBY_METHOD_FUNC(siren_bndbox_is_openymin),   -1);
+  rb_define_method(sr_cBndBox, "openymax?",  RUBY_METHOD_FUNC(siren_bndbox_is_openymax),   -1);
+  rb_define_method(sr_cBndBox, "openzmin?",  RUBY_METHOD_FUNC(siren_bndbox_is_openzmin),   -1);
+  rb_define_method(sr_cBndBox, "openzmax?",  RUBY_METHOD_FUNC(siren_bndbox_is_openzmax),   -1);
+  rb_define_method(sr_cBndBox, "openxmin!",  RUBY_METHOD_FUNC(siren_bndbox_openxmin_bang), -1);
+  rb_define_method(sr_cBndBox, "openxmax!",  RUBY_METHOD_FUNC(siren_bndbox_openxmax_bang), -1);
+  rb_define_method(sr_cBndBox, "openymin!",  RUBY_METHOD_FUNC(siren_bndbox_openymin_bang), -1);
+  rb_define_method(sr_cBndBox, "openymax!",  RUBY_METHOD_FUNC(siren_bndbox_openymax_bang), -1);
+  rb_define_method(sr_cBndBox, "openzmin!",  RUBY_METHOD_FUNC(siren_bndbox_openzmin_bang), -1);
+  rb_define_method(sr_cBndBox, "openzmax!",  RUBY_METHOD_FUNC(siren_bndbox_openzmax_bang), -1);
+  rb_define_method(sr_cBndBox, "gap",        RUBY_METHOD_FUNC(siren_bndbox_get_gap),       -1);
+  rb_define_method(sr_cBndBox, "gap=",       RUBY_METHOD_FUNC(siren_bndbox_set_gap),       -1);
+  rb_define_method(sr_cBndBox, "dist",       RUBY_METHOD_FUNC(siren_bndbox_dist),          -1);
+  rb_define_method(sr_cBndBox, "square",     RUBY_METHOD_FUNC(siren_bndbox_square),        -1);
   return true;
 }
 
 VALUE siren_bndbox_init(int argc, VALUE* argv, VALUE self)
 {
-  void* p = ruby_xmalloc(sizeof(Bnd_Box));
-  Bnd_Box* bndbox = new(p) Bnd_Box();
-  DATA_PTR(self) = bndbox;
-  // DATA_TYPE(self) = &siren_bndbox_type;
   return self;
 }
 
@@ -158,7 +149,6 @@ VALUE siren_bndbox_is_out(int argc, VALUE* argv, VALUE self)
   VALUE other;
   rb_scan_args(argc, argv, "1", &other);
   Bnd_Box* b = siren_bndbox_get(self);
-  // return b->IsOut(siren_pnt_get(other)) == Standard_True ? Qtrue : Qfalse;
   return b->IsOut(*siren_bndbox_get(other)) == Standard_True ? Qtrue : Qfalse;
 }
 
@@ -183,7 +173,7 @@ VALUE siren_bndbox_xsize(int argc, VALUE* argv, VALUE self)
   Standard_Real xmin, ymin, zmin;
   Standard_Real xmax, ymax, zmax;
   b->Get(xmin, ymin, zmin, xmax, ymax, zmax);
-  return (xmax - xmin);
+  return DBL2NUM(xmax - xmin);
 }
 
 VALUE siren_bndbox_ysize(int argc, VALUE* argv, VALUE self)
@@ -195,7 +185,7 @@ VALUE siren_bndbox_ysize(int argc, VALUE* argv, VALUE self)
   Standard_Real xmin, ymin, zmin;
   Standard_Real xmax, ymax, zmax;
   b->Get(xmin, ymin, zmin, xmax, ymax, zmax);
-  return (ymax - ymin);
+  return DBL2NUM(ymax - ymin);
 }
 
 VALUE siren_bndbox_zsize(int argc, VALUE* argv, VALUE self)
@@ -207,7 +197,7 @@ VALUE siren_bndbox_zsize(int argc, VALUE* argv, VALUE self)
   Standard_Real xmin, ymin, zmin;
   Standard_Real xmax, ymax, zmax;
   b->Get(xmin, ymin, zmin, xmax, ymax, zmax);
-  return (zmax - zmin);
+  return DBL2NUM(zmax - zmin);
 }
 
 VALUE siren_bndbox_is_void(int argc, VALUE* argv, VALUE self)
@@ -333,7 +323,7 @@ VALUE siren_bndbox_set_gap(int argc, VALUE* argv, VALUE self)
 VALUE siren_bndbox_get_gap(int argc, VALUE* argv, VALUE self)
 {
   Standard_Real tol = siren_bndbox_get(self)->GetGap();
-  return (tol);
+  return DBL2NUM(tol);
 }
 
 VALUE siren_bndbox_dist(int argc, VALUE* argv, VALUE self)
@@ -346,12 +336,12 @@ VALUE siren_bndbox_dist(int argc, VALUE* argv, VALUE self)
     return Qnil;
   }
   Standard_Real value = b->Distance(*bb);
-  return (value);
+  return DBL2NUM(value);
 }
 
 VALUE siren_bndbox_square(int argc, VALUE* argv, VALUE self)
 {
   Standard_Real value = siren_bndbox_get(self)->SquareExtent();
-  return (value);
+  return DBL2NUM(value);
 }
 
