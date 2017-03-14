@@ -16,10 +16,10 @@ gp_Vec* siren_vec_get(VALUE obj)
 VALUE siren_vec_new(double x, double y, double z)
 {
   VALUE arg = rb_ary_new();
-  rb_ary_push(arg, (x));
-  rb_ary_push(arg, (y));
-  rb_ary_push(arg, (z));
-  return rb_class_new_instance(1, &arg, sr_mSiren);
+  rb_ary_push(arg, DBL2NUM(x));
+  rb_ary_push(arg, DBL2NUM(y));
+  rb_ary_push(arg, DBL2NUM(z));
+  return rb_class_new_instance(1, &arg, sr_cVec);
 }
 
 VALUE siren_vec_new(const gp_Vec& vec)
@@ -40,7 +40,6 @@ bool siren_vec_install()
 
   rb_define_alloc_func(sr_cVec, siren_vec_allocate);
 
-  // MRB_SET_INSTANCE_TT(sr_cVec, MRB_TT_DATA);
   rb_define_method(sr_cVec, "initialize",       RUBY_METHOD_FUNC(siren_vec_init),             -1);
   rb_define_method(sr_cVec, "x",                RUBY_METHOD_FUNC(siren_vec_x),                -1);
   rb_define_method(sr_cVec, "x=",               RUBY_METHOD_FUNC(siren_vec_x_set),            -1);
@@ -80,12 +79,12 @@ bool siren_vec_install()
   rb_define_method(sr_cVec, "transform",        RUBY_METHOD_FUNC(siren_vec_transform),        -1);
   rb_define_method(sr_cVec, "transform!",       RUBY_METHOD_FUNC(siren_vec_transform_bang),   -1);
 
-  rb_define_module_function(sr_cVec, "-@",      RUBY_METHOD_FUNC(siren_vec_negative),         -1);
-  rb_define_module_function(sr_cVec, "==",      RUBY_METHOD_FUNC(siren_vec_eq),               -1);
-  rb_define_module_function(sr_cVec, "+",       RUBY_METHOD_FUNC(siren_vec_plus),             -1);
-  rb_define_module_function(sr_cVec, "-",       RUBY_METHOD_FUNC(siren_vec_minus),            -1);
-  rb_define_module_function(sr_cVec, "*",       RUBY_METHOD_FUNC(siren_vec_multiply_scalar),  -1);
-  rb_define_module_function(sr_cVec, "/",       RUBY_METHOD_FUNC(siren_vec_devide_scalar),    -1);
+  rb_define_method(sr_cVec, "-@",               RUBY_METHOD_FUNC(siren_vec_negative),         -1);
+  rb_define_method(sr_cVec, "==",               RUBY_METHOD_FUNC(siren_vec_eq),               -1);
+  rb_define_method(sr_cVec, "+",                RUBY_METHOD_FUNC(siren_vec_plus),             -1);
+  rb_define_method(sr_cVec, "-",                RUBY_METHOD_FUNC(siren_vec_minus),            -1);
+  rb_define_method(sr_cVec, "*",                RUBY_METHOD_FUNC(siren_vec_multiply_scalar),  -1);
+  rb_define_method(sr_cVec, "/",                RUBY_METHOD_FUNC(siren_vec_devide_scalar),    -1);
 
   return true;
 }
@@ -277,7 +276,7 @@ VALUE siren_vec_negative(int argc, VALUE* argv, VALUE self)
 VALUE siren_vec_eq(int argc, VALUE* argv, VALUE self)
 {
   VALUE other;
-  rb_scan_args(argc, argv, "o", &other);
+  rb_scan_args(argc, argv, "1", &other);
   Standard_Real lintol = 0.0, angtol = 0.0; // to be use the default tolerance value
   Standard_Boolean ans = siren_vec_get(self)->IsEqual(*siren_vec_get(other), lintol, angtol);
   return ans ? Qtrue : Qfalse;
