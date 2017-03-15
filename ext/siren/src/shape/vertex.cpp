@@ -4,34 +4,20 @@
 
 VALUE sr_cVertex;
 
-VALUE siren_vertex_new( const TopoDS_Shape* src)
-{
-  VALUE obj = rb_instance_alloc(sr_cVertex);
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = *src; // Copy to inner native member
-  DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(obj) = &siren_vertex_type;
-  return obj;
-}
-
 TopoDS_Vertex siren_vertex_get(VALUE self)
 {
-#if 0
-  TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_vertex_type));
-  TopoDS_Vertex vertex = TopoDS::Vertex(*shape);
-  if (vertex.IsNull()) { rb_raise(Qnil, "The geometry type is not Vertex."); }
-  return vertex;
-#endif
+  TopoDS_Shape* shape = siren_shape_get(self);
+  TopoDS_Vertex res = TopoDS::Vertex(*shape);
+  if (res.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Vertex.");
+  }
+  return res;
 }
 
 bool siren_vertex_install()
 {
-#if 0
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_vertex = rb_define_class_under(sr_mSiren, "Vertex", cls_shape);
-  MRB_SET_INSTANCE_TT(cls_vertex, MRB_TT_DATA);
-#endif
+  sr_cVertex = rb_define_class_under(sr_mSiren, "Vertex", rb_cObject);
+  rb_define_alloc_func(sr_cVertex, siren_shape_allocate);
   rb_define_method(sr_cVertex, "initialize", RUBY_METHOD_FUNC(siren_vertex_init), -1);
   rb_define_method(sr_cVertex, "xyz",        RUBY_METHOD_FUNC(siren_vertex_xyz),  -1);
   rb_define_method(sr_cVertex, "to_a",       RUBY_METHOD_FUNC(siren_vertex_xyz),  -1);

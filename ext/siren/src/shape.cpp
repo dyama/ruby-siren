@@ -7,35 +7,48 @@
 
 VALUE sr_cShape;
 
-TopoDS_Shape* siren_shape_get( VALUE obj)
+VALUE siren_shape_allocate(VALUE klass)
 {
-  // return static_cast<TopoDS_Shape*>(_get_datatype(obj, &siren_shape_type));
-  // Get ptr without type checking.
-  return static_cast<TopoDS_Shape*>(DATA_PTR(obj));
+  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
+  new(p) TopoDS_Shape();
+  return Data_Wrap_Struct(klass, NULL, siren_shape_final, p);
+}
+
+TopoDS_Shape* siren_shape_get(VALUE obj)
+{
+  TopoDS_Shape* m;
+  Data_Get_Struct(obj, TopoDS_Shape, m);
+  return m;
 }
 
 VALUE siren_shape_new(const TopoDS_Shape& shape)
 {
+  VALUE klass;
   switch (shape.ShapeType()) {
-    case TopAbs_VERTEX:    return siren_vertex_new(&shape);   break;
-    case TopAbs_EDGE:      return siren_edge_new(&shape);     break;
-    case TopAbs_WIRE:      return siren_wire_new(&shape);     break;
-    case TopAbs_FACE:      return siren_face_new(&shape);     break;
-    case TopAbs_SHELL:     return siren_shell_new(&shape);    break;
-    case TopAbs_SOLID:     return siren_solid_new(&shape);    break;
+    case TopAbs_VERTEX:    klass = sr_cVertex;    break;
+    case TopAbs_EDGE:      klass = sr_cEdge;      break;
+    case TopAbs_WIRE:      klass = sr_cWire;      break;
+    case TopAbs_FACE:      klass = sr_cFace;      break;
+    case TopAbs_SHELL:     klass = sr_cShell;     break;
+    case TopAbs_SOLID:     klass = sr_cSolid;     break;
 #ifdef SIREN_ENABLE_CHUNK
-    case TopAbs_COMPSOLID: return siren_chunk_new(&shape);    break;
+    case TopAbs_COMPSOLID: klass = sr_cCompSolid; break;
 #endif
-    case TopAbs_COMPOUND:  return siren_compound_new(&shape); break;
-    default: break;
+    case TopAbs_COMPOUND:  klass = sr_cCompound;  break;
+    default:
+      rb_raise(Qnil, "Failed to make Shape object.");
+      break;
   }
-  rb_raise(Qnil, "Failed to make Shape object.");
-  return Qnil;
+  auto val = siren_shape_allocate(klass);
+  auto ps = siren_shape_get(val);
+  *ps = shape;
+  return val;
 }
 
 bool siren_shape_install()
 {
-  // MRB_SET_INSTANCE_TT(cls_shape, MRB_TT_DATA);
+  sr_cShape = rb_define_class_under(sr_mSiren, "Shape", rb_cObject);
+  rb_define_alloc_func(sr_cShape, siren_shape_allocate);
   rb_define_method(sr_cShape, "initialize", RUBY_METHOD_FUNC(siren_shape_init),           -1);
   rb_define_method(sr_cShape, "null?",      RUBY_METHOD_FUNC(siren_shape_is_null),        -1);
   rb_define_method(sr_cShape, "pos",        RUBY_METHOD_FUNC(siren_shape_pos),            -1);

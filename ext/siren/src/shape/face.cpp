@@ -2,34 +2,20 @@
 
 VALUE sr_cFace;
 
-VALUE siren_face_new( const TopoDS_Shape* src)
-{
-  VALUE obj = rb_instance_alloc(sr_cFace);
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = *src; // Copy to inner native member
-  DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(obj) = &siren_face_type;
-  return obj;
-}
-
 TopoDS_Face siren_face_get(VALUE self)
 {
-#if 0
-  TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_face_type));
-  TopoDS_Face face = TopoDS::Face(*shape);
-  if (face.IsNull()) { rb_raise(Qnil, "The geometry type is not Face."); }
-  return face;
-#endif
+  TopoDS_Shape* shape = siren_shape_get(self);
+  TopoDS_Face res = TopoDS::Face(*shape);
+  if (res.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Face.");
+  }
+  return res;
 }
 
 bool siren_face_install()
 {
-#if 0
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_face = rb_define_class_under(sr_mSiren, "Face", cls_shape);
-  MRB_SET_INSTANCE_TT(cls_face, MRB_TT_DATA);
-#endif
+  sr_cFace = rb_define_class_under(sr_mSiren, "Face", rb_cObject);
+  rb_define_alloc_func(sr_cFace, siren_shape_allocate);
   rb_define_method(sr_cFace, "initialize", RUBY_METHOD_FUNC(siren_shape_init),     -1);
   rb_define_method(sr_cFace, "normal",     RUBY_METHOD_FUNC(siren_face_normal),    -1);
   rb_define_method(sr_cFace, "to_bezier",  RUBY_METHOD_FUNC(siren_face_to_bezier), -1);

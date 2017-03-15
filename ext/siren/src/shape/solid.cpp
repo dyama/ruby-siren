@@ -2,34 +2,20 @@
 
 VALUE sr_cSolid;
 
-VALUE siren_solid_new( const TopoDS_Shape* src)
-{
-  VALUE obj = rb_instance_alloc(sr_cSolid);
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = *src; // Copy to inner native member
-  DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(obj) = &siren_solid_type;
-  return obj;
-}
-
 TopoDS_Solid siren_solid_get(VALUE self)
 {
-#if 0
-  TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_solid_type));
-  TopoDS_Solid solid = TopoDS::Solid(*shape);
-  if (solid.IsNull()) { rb_raise(Qnil, "The geometry type is not Solid."); }
-  return solid;
-#endif
+  TopoDS_Shape* shape = siren_shape_get(self);
+  TopoDS_Solid res = TopoDS::Solid(*shape);
+  if (res.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Solid.");
+  }
+  return res;
 }
 
 bool siren_solid_install()
 {
-#if 0
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_solid = rb_define_class_under(sr_mSiren, "Solid", cls_shape);
-  MRB_SET_INSTANCE_TT(cls_solid, MRB_TT_DATA);
-#endif
+  sr_cSolid = rb_define_class_under(sr_mSiren, "Solid", rb_cObject);
+  rb_define_alloc_func(sr_cSolid, siren_shape_allocate);
   rb_define_method(sr_cSolid, "initialize", RUBY_METHOD_FUNC(siren_solid_init), -1);
   rb_define_singleton_method(sr_cSolid, "box",        RUBY_METHOD_FUNC(siren_solid_box),        -1);
   rb_define_singleton_method(sr_cSolid, "box2p",      RUBY_METHOD_FUNC(siren_solid_box2p),      -1);

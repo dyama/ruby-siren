@@ -2,34 +2,20 @@
 
 VALUE sr_cEdge;
 
-VALUE siren_edge_new( const TopoDS_Shape* src)
-{
-  VALUE obj = rb_instance_alloc(sr_cEdge);
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = *src; // Copy to inner native member
-  DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(obj) = &siren_edge_type;
-  return obj;
-}
-
 TopoDS_Edge siren_edge_get(VALUE self)
 {
-#if 0
-  TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_edge_type));
-  TopoDS_Edge edge = TopoDS::Edge(*shape);
-  if (edge.IsNull()) { rb_raise(Qnil, "The geometry type is not Edge."); }
-  return edge;
-#endif
+  TopoDS_Shape* shape = siren_shape_get(self);
+  TopoDS_Edge res = TopoDS::Edge(*shape);
+  if (res.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Edge.");
+  }
+  return res;
 }
 
 bool siren_edge_install()
 {
-#if 0
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_edge = rb_define_class_under(sr_mSiren, "Edge", cls_shape);
-  MRB_SET_INSTANCE_TT(cls_edge, MRB_TT_DATA);
-#endif
+  sr_cEdge = rb_define_class_under(sr_mSiren, "Edge", rb_cObject);
+  rb_define_alloc_func(sr_cEdge, siren_shape_allocate);
   rb_define_method(sr_cEdge, "initialize", RUBY_METHOD_FUNC(siren_edge_init),      -1);
   rb_define_method(sr_cEdge, "sp",         RUBY_METHOD_FUNC(siren_edge_sp),        -1);
   rb_define_method(sr_cEdge, "tp",         RUBY_METHOD_FUNC(siren_edge_tp),        -1);
@@ -271,7 +257,7 @@ VALUE siren_edge_trim(int argc, VALUE* argv, VALUE self)
 VALUE siren_edge_length(int argc, VALUE* argv, VALUE self)
 {
   Standard_Real res = 0.0;
-  VALUE ary = siren_edge_to_pts(self);
+  VALUE ary = siren_edge_to_pts(0, NULL, self);
   gp_Pnt prev;
   for (int i=0; i < RARRAY_LEN(ary); i++) {
     if (i == 0) {

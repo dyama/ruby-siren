@@ -4,34 +4,20 @@
 
 VALUE sr_cCompound;
 
-VALUE siren_compound_new( const TopoDS_Shape* src)
-{
-  VALUE obj = rb_instance_alloc(sr_cCompound);
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = *src; // Copy to inner native member
-  DATA_PTR(obj)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(obj) = &siren_compound_type;
-  return obj;
-}
-
 TopoDS_Compound siren_compound_get(VALUE self)
 {
-#if 0
-  TopoDS_Shape* shape = static_cast<TopoDS_Shape*>(_get_datatype(self, &siren_compound_type));
-  TopoDS_Compound compound = TopoDS::Compound(*shape);
-  if (compound.IsNull()) { rb_raise(Qnil, "The geometry type is not Compound."); }
-  return compound;
-#endif
+  TopoDS_Shape* shape = siren_shape_get(self);
+  TopoDS_Compound res = TopoDS::Compound(*shape);
+  if (res.IsNull()) {
+    rb_raise(Qnil, "The geometry type is not Compound.");
+  }
+  return res;
 }
 
 bool siren_compound_install()
 {
-#if 0
-  struct RClass* cls_shape = siren_shape_rclass();
-  struct RClass* cls_compound = rb_define_class_under(sr_mSiren, "Compound", cls_shape);
-  MRB_SET_INSTANCE_TT(cls_compound, MRB_TT_DATA);
-#endif
+  sr_cCompound = rb_define_class_under(sr_mSiren, "Compound", rb_cObject);
+  rb_define_alloc_func(sr_cCompound, siren_shape_allocate);
   rb_define_method(sr_cCompound, "initialize", RUBY_METHOD_FUNC(siren_compound_init),   -1);
   rb_define_method(sr_cCompound, "push",       RUBY_METHOD_FUNC(siren_compound_push),   -1);
   rb_define_method(sr_cCompound, "<<",         RUBY_METHOD_FUNC(siren_compound_push),   -1);
