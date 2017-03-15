@@ -59,7 +59,7 @@ $srcs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|f| File.expand_path(f) }
 $srcs.flatten!
 
 $objs = []
-if true
+if false
   $objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
   $objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
 else
@@ -67,14 +67,6 @@ else
   #  #{dir}/src/io/step.o
   #  #{dir}/src/io/stl.o
   #  #{dir}/src/io/iges.o
-  #  #{dir}/src/curve/offsetcurve.o
-  #  #{dir}/src/curve/circle.o
-  #  #{dir}/src/curve/line.o
-  #  #{dir}/src/curve/ellipse.o
-  #  #{dir}/src/curve/bzcurve.o
-  #  #{dir}/src/curve/bscurve.o
-  #  #{dir}/src/curve/parabola.o
-  #  #{dir}/src/curve/hyperbola.o
   #  #{dir}/src/heal.o
   #  #{dir}/src/filler.o
   #  #{dir}/src/offset.o
@@ -95,6 +87,15 @@ else
     #{dir}/src/shape/solid.o
     #{dir}/src/shape/vertex.o
     #{dir}/src/shape/compound.o
+    #{dir}/src/curve.o
+    #{dir}/src/curve/offsetcurve.o
+    #{dir}/src/curve/circle.o
+    #{dir}/src/curve/line.o
+    #{dir}/src/curve/ellipse.o
+    #{dir}/src/curve/bzcurve.o
+    #{dir}/src/curve/bscurve.o
+    #{dir}/src/curve/parabola.o
+    #{dir}/src/curve/hyperbola.o
     #{dir}/src/shape.o
     #{dir}/src/siren.o
   )

@@ -115,8 +115,6 @@ VALUE siren_shape_first_datum(int, VALUE*, VALUE);
     return res; \
   }
 
-#define SR_SHAPE_INIT(CLASS) \
-  sr_c##CLASS = rb_define_class_under(sr_mSiren, #CLASS, rb_cObject); \
-  rb_define_alloc_func(sr_c##CLASS, siren_shape_allocate);
-#endif
+#define SR_SHAPE_INIT(CLASS) SR_CLASS_INIT(CLASS,shape)
 
+#endif
