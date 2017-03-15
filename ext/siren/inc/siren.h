@@ -2,14 +2,14 @@
 #define _SIREN_H_
 
 // Configuration
-// #define SIREN_ENABLE_GPROP
-// #define SIREN_ENABLE_BO
-// #define SIREN_ENABLE_OFFSET
-// #define SIREN_ENABLE_SHHEALING
-// #define SIREN_ENABLE_STL
-// #define SIREN_ENABLE_IGES
-// #define SIREN_ENABLE_STEP
-// #define SIREN_ENABLE_CHUNK
+#define SIREN_ENABLE_GPROP
+#define SIREN_ENABLE_BO
+#define SIREN_ENABLE_OFFSET
+#define SIREN_ENABLE_SHHEALING
+#define SIREN_ENABLE_STL
+#define SIREN_ENABLE_IGES
+#define SIREN_ENABLE_STEP
+//#define SIREN_ENABLE_CHUNK
 
 // C++ standard library headers
 #include <iostream>

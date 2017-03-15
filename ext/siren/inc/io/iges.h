@@ -13,7 +13,7 @@
 
 bool siren_iges_install();
 
-VALUE siren_iges_save( VALUE self);
-VALUE siren_iges_load( VALUE self);
+VALUE siren_iges_save(int, VALUE*, VALUE);
+VALUE siren_iges_load(int, VALUE*, VALUE);
 
 #endif

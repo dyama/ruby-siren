@@ -54,7 +54,7 @@ VALUE siren_solid_init(int argc, VALUE* argv, VALUE self)
 VALUE siren_solid_box(int argc, VALUE* argv, VALUE self)
 {
   VALUE size, pos;
-  rb_scan_args(argc, argv, "|AA", &size, &pos);
+  rb_scan_args(argc, argv, "02", &size, &pos);
 
   Standard_Real sx, sy, sz;
   if (argc >= 1) {

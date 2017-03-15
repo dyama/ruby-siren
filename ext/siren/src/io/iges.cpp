@@ -4,20 +4,21 @@
 
 bool siren_iges_install()
 {
-  // Class method
-  rb_define_class_method(sr_mSiren, "save_iges", RUBY_METHOD_FUNC(siren_iges_save), MRB_ARGS_REQ(2));
-  rb_define_class_method(sr_mSiren, "load_iges", RUBY_METHOD_FUNC(siren_iges_load), MRB_ARGS_REQ(1));
-  // For mix-in
-  rb_define_method      (sr_mSiren, "save_iges", RUBY_METHOD_FUNC(siren_iges_save), MRB_ARGS_REQ(2));
-  rb_define_method      (sr_mSiren, "load_iges", RUBY_METHOD_FUNC(siren_iges_load), MRB_ARGS_REQ(1));
+#if 0
+  rb_define_class_method(sr_mSiren, "save_iges", RUBY_METHOD_FUNC(siren_iges_save), -1);
+  rb_define_class_method(sr_mSiren, "load_iges", RUBY_METHOD_FUNC(siren_iges_load), -1);
+#else
+  rb_define_method      (sr_mSiren, "save_iges", RUBY_METHOD_FUNC(siren_iges_save), -1);
+  rb_define_method      (sr_mSiren, "load_iges", RUBY_METHOD_FUNC(siren_iges_load), -1);
+#endif
   return true;
 }
 
-VALUE siren_iges_save( VALUE self)
+VALUE siren_iges_save(int argc, VALUE* argv, VALUE self)
 {
   VALUE target;
   VALUE path;
-  rb_scan_args(argc, argv, "oS", &target, &path);
+  rb_scan_args(argc, argv, "2", &target, &path);
 
   IGESControl_Controller::Init();
 //  IGESControl_Writer writer(Interface_Static::CVal("XSTEP.iges.unit"),
@@ -29,17 +30,17 @@ VALUE siren_iges_save( VALUE self)
 
   std::ofstream fst(RSTRING_PTR(path), std::ios_base::out);
   if (writer.Write(fst) == Standard_False) {
-    rb_raisef(Qnil, "Failed to save IGES to %S.", path);
+    rb_raise(Qnil, "Failed to save IGES to %S.", path);
   }
 
   return Qnil;
 }
 
-VALUE siren_iges_load( VALUE self)
+VALUE siren_iges_load(int argc, VALUE* argv, VALUE self)
 {
   VALUE path;
-  VALUE as_ary = FALSE;
-  rb_scan_args(argc, argv, "S|b", &path, &as_ary);
+  VALUE as_ary = Qfalse;
+  rb_scan_args(argc, argv, "11", &path, &as_ary);
 
   IGESControl_Reader iges_reader;
   int stat = iges_reader.ReadFile((Standard_CString)RSTRING_PTR(path));
@@ -50,10 +51,10 @@ VALUE siren_iges_load( VALUE self)
       iges_reader.TransferRoots();
     }
     catch (...) {
-      rb_raise(E_RUNTIME_ERROR, "Failed to TransferRoots() with an IGES.");
+      rb_raise(Qnil, "Failed to TransferRoots() with an IGES.");
     }
 
-    if (as_ary) {
+    if (as_ary == Qtrue) {
       // Return array
       result = rb_ary_new();
       for (int i=1; i <= iges_reader.NbShapes(); i++) {
@@ -66,7 +67,7 @@ VALUE siren_iges_load( VALUE self)
           rb_warn("Failed to get entitiy at %d.", i);
         }
       }
-      if (_ary_len(result) < 1) {
+      if (RARRAY_LEN(result) < 1) {
         result = Qnil;
       }
     }
@@ -76,7 +77,7 @@ VALUE siren_iges_load( VALUE self)
     }
   }
   else {
-    rb_raisef(Qnil, "Failed to load IGES from %S.", path);
+    rb_raise(Qnil, "Failed to load IGES from %S.", path);
   }
   return result;
 }
