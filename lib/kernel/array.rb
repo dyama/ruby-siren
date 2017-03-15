@@ -86,7 +86,7 @@ class Array
 
   def trans!(t)
     r = t.move_point self
-    xyz = r.xyz
+    self.xyz = r.xyz
   end
 
   def x
