@@ -44,8 +44,7 @@ VALUE siren_curve_new(handle<Geom_Curve> curve)
 
 bool siren_curve_install()
 {
-  sr_cCurve = rb_define_class_under(sr_mSiren, "Curve", rb_cObject);
-  rb_define_alloc_func(sr_cShape, siren_curve_allocate);
+  SR_CURVE_INIT(Curve)
   rb_define_method(sr_cCurve, "initialize", RUBY_METHOD_FUNC(siren_curve_init), -1);
   siren_line_install();
   siren_circle_install();

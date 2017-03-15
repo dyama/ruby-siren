@@ -47,8 +47,7 @@ VALUE siren_shape_new(const TopoDS_Shape& shape)
 
 bool siren_shape_install()
 {
-  sr_cShape = rb_define_class_under(sr_mSiren, "Shape", rb_cObject);
-  rb_define_alloc_func(sr_cShape, siren_shape_allocate);
+  SR_SHAPE_INIT(Shape)
   rb_define_method(sr_cShape, "initialize", RUBY_METHOD_FUNC(siren_shape_init),           -1);
   rb_define_method(sr_cShape, "null?",      RUBY_METHOD_FUNC(siren_shape_is_null),        -1);
   rb_define_method(sr_cShape, "pos",        RUBY_METHOD_FUNC(siren_shape_pos),            -1);

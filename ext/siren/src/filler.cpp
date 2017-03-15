@@ -11,8 +11,7 @@ BRepFill_Filling* siren_filler_get(VALUE obj)
 
 bool siren_filler_install()
 {
-  sr_cFiller = rb_define_class_under(sr_mSiren, "Filler", rb_cObject);
-  rb_define_alloc_func(sr_cFiller, siren_filler_allocate);
+  SR_CLASS_INIT(Filler, filler)
   rb_define_method(sr_cFiller, "initialize", RUBY_METHOD_FUNC(siren_filler_init),      -1);
   rb_define_method(sr_cFiller, "add_bound",  RUBY_METHOD_FUNC(siren_filler_add_bound), 2);
   rb_define_method(sr_cFiller, "add",        RUBY_METHOD_FUNC(siren_filler_add),       2);

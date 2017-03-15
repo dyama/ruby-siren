@@ -18,11 +18,7 @@ static VALUE siren_bndbox_allocate(VALUE klass)
 
 bool siren_bndbox_install()
 {
-  sr_cBndBox = rb_define_class_under(sr_mSiren, "BndBox", rb_cObject);
-
-  rb_define_alloc_func(sr_cBndBox, siren_bndbox_allocate);
-
-  // MRB_SET_INSTANCE_TT(cls_bndbox, MRB_TT_DATA);
+  SR_CLASS_INIT(BndBox, bndbox)
   rb_define_method(sr_cBndBox, "initialize", RUBY_METHOD_FUNC(siren_bndbox_init),          -1);
   rb_define_method(sr_cBndBox, "inspect",    RUBY_METHOD_FUNC(siren_bndbox_to_s),          -1);
   rb_define_method(sr_cBndBox, "to_s",       RUBY_METHOD_FUNC(siren_bndbox_to_s),          -1);
