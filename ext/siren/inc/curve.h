@@ -3,11 +3,14 @@
 
 #include "siren.h"
 
+#include <Geom_Curve.hxx>
 #include <GeomAbs_CurveType.hxx>
 
 extern VALUE sr_cCurve;
 
+VALUE siren_curve_allocate(VALUE);
 VALUE siren_curve_new(handle<Geom_Curve> curve);
+
 void siren_curve_final(void* p);
 static rb_data_type_t siren_curve_type = { "Curve", siren_curve_final };
 

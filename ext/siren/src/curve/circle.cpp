@@ -2,54 +2,20 @@
 
 VALUE sr_cCircle;
 
-VALUE siren_circle_new(const handle<Geom_Curve>* curve)
-{
-  VALUE obj;
-  obj = rb_instance_alloc(sr_cCircle);
-  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
-  handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
-  *hgcurve = *curve;
-  DATA_PTR(obj) = hgcurve;
-#if 0
-  DATA_TYPE(obj) = &siren_circle_type;
-#endif
-  return obj;
-}
-
 handle<Geom_Circle> siren_circle_get(VALUE self)
 {
-#if 0
-  handle<Geom_Curve> hgc = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_circle_type));
-  if (hgc.IsNull()) {
-    rb_raisef(Qnil, "The geometry type is not Curve.");
-  }
-  handle<Geom_Circle> circle = handle<Geom_Circle>::DownCast(hgc);
-  if (circle.IsNull()) {
-    rb_raisef(Qnil, "The geometry type is not Circle.");
-  }
-  return circle;
-#else
-  handle<Geom_Curve> hgc;
-  Data_Get_Struct(self, Geom_Curve, hgc);
-  if (hgc.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Curve.");
-  }
-  handle<Geom_Circle> circle = handle<Geom_Circle>::DownCast(hgc);
-  if (circle.IsNull()) {
+  auto curve = siren_curve_get(self);
+  auto res = handle<Geom_Circle>::DownCast(*curve);
+  if (res.IsNull()) {
     rb_raise(Qnil, "The geometry type is not Circle.");
   }
-  return circle;
-#endif
+  return res;
 }
 
 bool siren_circle_install()
 {
-#if 0
-  struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_circle = rb_define_class_under(sr_mSiren, "Circle", rb_cObject);
-  MRB_SET_INSTANCE_TT(cls_circle, MRB_TT_DATA);
-#endif
-
+  sr_cCircle = rb_define_class_under(sr_mSiren, "Circle", rb_cObject);
+  rb_define_alloc_func(sr_cCircle, siren_curve_allocate);
   rb_define_method(sr_cCircle, "initialize", RUBY_METHOD_FUNC(siren_curve_init),        -1);
   rb_define_method(sr_cCircle, "radius",     RUBY_METHOD_FUNC(siren_circle_radius),     -1);
   rb_define_method(sr_cCircle, "radius=",    RUBY_METHOD_FUNC(siren_circle_radius_set), -1);
