@@ -14,6 +14,6 @@ bool siren_shell_install();
 TopoDS_Shell siren_shell_get(VALUE self);
 VALUE siren_shell_new( const TopoDS_Shape* src);
 
-VALUE siren_shell_make(...);
+VALUE siren_shell_make(int, VALUE*, VALUE);
 
 #endif

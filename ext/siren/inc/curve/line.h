@@ -12,6 +12,6 @@ bool siren_line_install();
 handle<Geom_Line> siren_line_get(VALUE self);
 VALUE siren_line_new(const handle<Geom_Curve>* curve);
 
-VALUE siren_line_dir(...);
+VALUE siren_line_dir(int, VALUE*, VALUE);
 
 #endif

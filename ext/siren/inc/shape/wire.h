@@ -23,8 +23,8 @@ bool siren_wire_install();
 TopoDS_Wire siren_wire_get(VALUE self);
 VALUE siren_wire_new( const TopoDS_Shape* src);
 
-VALUE siren_wire_make(...);
-VALUE siren_wire_ordered_edges(...);
-VALUE siren_wire_curves(...);
+VALUE siren_wire_make(int, VALUE*, VALUE);
+VALUE siren_wire_ordered_edges(int, VALUE*, VALUE);
+VALUE siren_wire_curves(int, VALUE*, VALUE);
 
 #endif

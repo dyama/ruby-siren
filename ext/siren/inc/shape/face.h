@@ -50,16 +50,16 @@ bool siren_face_install();
 TopoDS_Face siren_face_get(VALUE self);
 VALUE siren_face_new( const TopoDS_Shape* src);
 
-VALUE siren_face_plane(...);
-VALUE siren_face_face(...);
-VALUE siren_face_infplane(...);
-VALUE siren_face_polygon(...);
-VALUE siren_face_bzsurf(...);
-VALUE siren_face_bssurf(...);
+VALUE siren_face_plane(int, VALUE*, VALUE);
+VALUE siren_face_face(int, VALUE*, VALUE);
+VALUE siren_face_infplane(int, VALUE*, VALUE);
+VALUE siren_face_polygon(int, VALUE*, VALUE);
+VALUE siren_face_bzsurf(int, VALUE*, VALUE);
+VALUE siren_face_bssurf(int, VALUE*, VALUE);
 
-VALUE siren_face_normal(...);
-VALUE siren_face_to_bezier(...);
-VALUE siren_face_split(...);
-VALUE siren_face_triangle(...);
+VALUE siren_face_normal(int, VALUE*, VALUE);
+VALUE siren_face_to_bezier(int, VALUE*, VALUE);
+VALUE siren_face_split(int, VALUE*, VALUE);
+VALUE siren_face_triangle(int, VALUE*, VALUE);
 
 #endif

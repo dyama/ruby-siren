@@ -12,6 +12,6 @@ bool siren_bzcurve_install();
 handle<Geom_BezierCurve> siren_bzcurve_get(VALUE self);
 VALUE siren_bzcurve_new( const handle<Geom_Curve>* curve);
 
-VALUE siren_bzcurve_init(...);
+VALUE siren_bzcurve_init(int, VALUE*, VALUE);
 
 #endif

@@ -14,8 +14,8 @@ bool siren_compound_install();
 TopoDS_Compound siren_compound_get(VALUE self);
 VALUE siren_compound_new( const TopoDS_Shape* src);
 
-VALUE siren_compound_init(...);
-VALUE siren_compound_push(...);
-VALUE siren_compound_delete(...);
+VALUE siren_compound_init(int, VALUE*, VALUE);
+VALUE siren_compound_push(int, VALUE*, VALUE);
+VALUE siren_compound_delete(int, VALUE*, VALUE);
 
 #endif

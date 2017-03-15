@@ -15,8 +15,8 @@ bool siren_chunk_install();
 TopoDS_CompSolid siren_chunk_get(VALUE self);
 VALUE siren_chunk_new( const TopoDS_Shape* src);
 
-VALUE siren_chunk_init(...);
-VALUE siren_chunk_to_solid(...);
+VALUE siren_chunk_init(int, VALUE*, VALUE);
+VALUE siren_chunk_to_solid(int, VALUE*, VALUE);
 
 #endif
 

@@ -24,12 +24,12 @@
 
 bool siren_offset_install();
 
-VALUE siren_offset_sweep_vec(...);
-VALUE siren_offset_sweep_path(...);
-VALUE siren_offset_loft(...);
-VALUE siren_offset_offset_geomsurf(...);
-VALUE siren_offset_offset(...);
-VALUE siren_offset_offset_shape(...);
-VALUE siren_offset_pipe(...);
+VALUE siren_offset_sweep_vec(int, VALUE*, VALUE);
+VALUE siren_offset_sweep_path(int, VALUE*, VALUE);
+VALUE siren_offset_loft(int, VALUE*, VALUE);
+VALUE siren_offset_offset_geomsurf(int, VALUE*, VALUE);
+VALUE siren_offset_offset(int, VALUE*, VALUE);
+VALUE siren_offset_offset_shape(int, VALUE*, VALUE);
+VALUE siren_offset_pipe(int, VALUE*, VALUE);
 
 #endif

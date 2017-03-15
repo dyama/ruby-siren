@@ -14,8 +14,8 @@ bool siren_vertex_install();
 TopoDS_Vertex siren_vertex_get(VALUE self);
 VALUE siren_vertex_new( const TopoDS_Shape* src);
 
-VALUE siren_vertex_init(...);
-VALUE siren_vertex_xyz(...);
-VALUE siren_vertex_to_v(...);
+VALUE siren_vertex_init(int, VALUE*, VALUE);
+VALUE siren_vertex_xyz(int, VALUE*, VALUE);
+VALUE siren_vertex_to_v(int, VALUE*, VALUE);
 
 #endif

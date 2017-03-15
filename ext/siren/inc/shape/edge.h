@@ -29,22 +29,22 @@ bool siren_edge_install();
 TopoDS_Edge siren_edge_get(VALUE self);
 VALUE siren_edge_new( const TopoDS_Shape* src);
 
-VALUE siren_edge_init(...);
-VALUE siren_edge_sp(...);
-VALUE siren_edge_tp(...);
-VALUE siren_edge_to_pts(...);
-VALUE siren_edge_param(...);
-VALUE siren_edge_to_xyz(...);
-VALUE siren_edge_curvature(...);
-VALUE siren_edge_tangent(...);
+VALUE siren_edge_init(int, VALUE*, VALUE);
+VALUE siren_edge_sp(int, VALUE*, VALUE);
+VALUE siren_edge_tp(int, VALUE*, VALUE);
+VALUE siren_edge_to_pts(int, VALUE*, VALUE);
+VALUE siren_edge_param(int, VALUE*, VALUE);
+VALUE siren_edge_to_xyz(int, VALUE*, VALUE);
+VALUE siren_edge_curvature(int, VALUE*, VALUE);
+VALUE siren_edge_tangent(int, VALUE*, VALUE);
 
-VALUE siren_edge_terms(...);
-VALUE siren_edge_curve(...);
+VALUE siren_edge_terms(int, VALUE*, VALUE);
+VALUE siren_edge_curve(int, VALUE*, VALUE);
 
-VALUE siren_edge_split(...);
-VALUE siren_edge_trim(...);
-VALUE siren_edge_extrema(...);
+VALUE siren_edge_split(int, VALUE*, VALUE);
+VALUE siren_edge_trim(int, VALUE*, VALUE);
+VALUE siren_edge_extrema(int, VALUE*, VALUE);
 
-VALUE siren_edge_length(...);
+VALUE siren_edge_length(int, VALUE*, VALUE);
 
 #endif

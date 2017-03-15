@@ -40,6 +40,6 @@ opencascade::handle<Geom_Curve>* siren_curve_get( VALUE obj);
 struct RClass* siren_curve_rclass();
 
 VALUE siren_curve_new(const opencascade::handle<Geom_Curve>* curve);
-VALUE siren_curve_init(...);
+VALUE siren_curve_init(int, VALUE*, VALUE);
 
 #endif
