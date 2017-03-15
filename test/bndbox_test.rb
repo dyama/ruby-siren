@@ -13,9 +13,6 @@ module BndBoxTest
 
   def test_bndbox
 
-    b = BndBox.new
-    assert b.add([1, 2, 3]).nil?
-
   end
 
 end
