@@ -59,47 +59,8 @@ $srcs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|f| File.expand_path(f) }
 $srcs.flatten!
 
 $objs = []
-if true
-  $objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
-  $objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
-else
-  #$objs << %W(
-  #  #{dir}/src/io/step.o
-  #  #{dir}/src/io/stl.o
-  #  #{dir}/src/io/iges.o
-  #  #{dir}/src/heal.o
-  #  #{dir}/src/filler.o
-  #  #{dir}/src/offset.o
-  #  #{dir}/src/bo.o
-  #)
-  $objs << %W(
-    #{dir}/src/vec.o
-    #{dir}/src/common.o
-    #{dir}/src/trans.o
-    #{dir}/src/bndbox.o
-    #{dir}/src/topalgo.o
-    #{dir}/src/brep.o
-    #{dir}/src/shape/wire.o
-    #{dir}/src/shape/face.o
-    #{dir}/src/shape/shell.o
-    #{dir}/src/shape/chunk.o
-    #{dir}/src/shape/edge.o
-    #{dir}/src/shape/solid.o
-    #{dir}/src/shape/vertex.o
-    #{dir}/src/shape/compound.o
-    #{dir}/src/curve.o
-    #{dir}/src/curve/offsetcurve.o
-    #{dir}/src/curve/circle.o
-    #{dir}/src/curve/line.o
-    #{dir}/src/curve/ellipse.o
-    #{dir}/src/curve/bzcurve.o
-    #{dir}/src/curve/bscurve.o
-    #{dir}/src/curve/parabola.o
-    #{dir}/src/curve/hyperbola.o
-    #{dir}/src/shape.o
-    #{dir}/src/siren.o
-  )
-end
+$objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
+$objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
 $objs.flatten!
 
 create_makefile("siren/siren")

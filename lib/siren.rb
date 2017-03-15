@@ -98,55 +98,55 @@ module Siren
     Siren.bzcurve(*args)
   end
 
-  # # Alias
-  # {
-  #   Siren::Vertex => {
-  #     :vertex     => :new
-  #   },
-  #   Siren::Wire => {
-  #     :wire       => :make,
-  #   },
-  #   Siren::Face => {
-  #     :plane      => :plane,
-  #     :face       => :face,
-  #     :infplane   => :infplane,
-  #     :polygon    => :polygon,
-  #     :bzsurf     => :bzsurf,
-  #     :bssurf     => :bssurf,
-  #   },
-  #   Siren::Shell => {
-  #     :sew        => :make,
-  #     :shell      => :make,
-  #   },
-  #   Siren::Solid => {
-  #     :box        => :box,
-  #     :box2p      => :box2p,
-  #     :boxax      => :boxax,
-  #     :sphere     => :sphere,
-  #     :cylinder   => :cylinder,
-  #     :cone       => :cone,
-  #     :torus      => :torus,
-  #     :halfspace  => :halfspace,
-  #     :prism      => :prism,
-  #     :revol      => :revol,
-  #     :revolution => :revolution,
-  #     :wedge      => :wedge,
-  #   }
-  # }.each do |c, ms|
-  #   ms.each do |ma, mo|
-  #     # ma = Alias method name
-  #     # mo = Original method name
-  #     # puts "Export #{c}.#{mo} as Siren.#{ma}"
-  #     self.define_singleton_method(ma) do |*args|
-  #       c.send(mo, *args)
-  #     end
-  #     self.class_eval do
-  #       self.define_method(ma) do |*args|
-  #         c.send(mo, *args)
-  #       end
-  #     end
-  #   end
-  # end
+  # Alias
+  {
+    Siren::Vertex => {
+      :vertex     => :new
+    },
+    Siren::Wire => {
+      :wire       => :make,
+    },
+    Siren::Face => {
+      :plane      => :plane,
+      :face       => :face,
+      :infplane   => :infplane,
+      :polygon    => :polygon,
+      :bzsurf     => :bzsurf,
+      :bssurf     => :bssurf,
+    },
+    Siren::Shell => {
+      :sew        => :make,
+      :shell      => :make,
+    },
+    Siren::Solid => {
+      :box        => :box,
+      :box2p      => :box2p,
+      :boxax      => :boxax,
+      :sphere     => :sphere,
+      :cylinder   => :cylinder,
+      :cone       => :cone,
+      :torus      => :torus,
+      :halfspace  => :halfspace,
+      :prism      => :prism,
+      :revol      => :revol,
+      :revolution => :revolution,
+      :wedge      => :wedge,
+    }
+  }.each do |c, ms|
+    ms.each do |ma, mo|
+      # ma = Alias method name
+      # mo = Original method name
+      # puts "Export #{c}.#{mo} as Siren.#{ma}"
+      self.define_singleton_method(ma) do |*args|
+        c.send(mo, *args)
+      end
+      self.class_eval do
+        self.send(:define_method, ma) do |*args|
+          c.send(mo, *args)
+        end
+      end
+    end
+  end
 
 end
 
