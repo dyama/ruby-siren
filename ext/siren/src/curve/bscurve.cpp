@@ -6,42 +6,7 @@
 
 VALUE sr_cBSCurve;
 
-VALUE siren_bscurve_new(const handle<Geom_Curve>* curve)
-{
-  VALUE obj;
-  obj = rb_instance_alloc(sr_cBSCurve);
-  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
-  handle<Geom_Curve>* hgcurve = new(p) handle<Geom_Curve>();
-  *hgcurve = *curve;
-  DATA_PTR(obj) = hgcurve;
-#if 0
-  DATA_TYPE(obj) = &siren_bscurve_type;
-#endif
-  return obj;
-}
-
-handle<Geom_BSplineCurve> siren_bscurve_get(VALUE self)
-{
-#if 0
-  handle<Geom_Curve> hgc
-    = *static_cast<handle<Geom_Curve>*>(_get_datatype(self, &siren_bscurve_type));
-  if (hgc.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not Curve."); }
-  handle<Geom_BSplineCurve> bscurve = handle<Geom_BSplineCurve>::DownCast(hgc);
-  if (bscurve.IsNull()) { rb_raise(E_RUNTIME_ERROR, "The geometry type is not BSCurve."); }
-  return bscurve;
-#else
-  handle<Geom_Curve> hgc;
-  Data_Get_Struct(self, Geom_Curve, hgc);
-  if (hgc.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Curve.");
-  }
-  handle<Geom_BSplineCurve> bsc = handle<Geom_BSplineCurve>::DownCast(hgc);
-  if (bsc.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not BSCurve.");
-  }
-  return bsc;
-#endif
-}
+SR_CURVE_GET(BSplineCurve, bscurve)
 
 bool siren_bscurve_install()
 {

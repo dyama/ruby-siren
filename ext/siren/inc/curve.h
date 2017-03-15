@@ -46,4 +46,15 @@ struct RClass* siren_curve_rclass();
 VALUE siren_curve_new(handle<Geom_Curve> curve);
 VALUE siren_curve_init(int, VALUE*, VALUE);
 
+#define SR_CURVE_GET(OCCT,SRT) \
+  handle<Geom_##OCCT> siren_##SRT##_get(VALUE self) \
+  { \
+    auto curve = siren_curve_get(self); \
+    auto res = handle<Geom_##OCCT>::DownCast(*curve); \
+    if (res.IsNull()) { \
+      rb_raise(Qnil, "The geometry type is not " #SRT "."); \
+    } \
+    return res; \
+  }
+
 #endif

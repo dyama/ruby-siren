@@ -2,15 +2,7 @@
 
 VALUE sr_cCircle;
 
-handle<Geom_Circle> siren_circle_get(VALUE self)
-{
-  auto curve = siren_curve_get(self);
-  auto res = handle<Geom_Circle>::DownCast(*curve);
-  if (res.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Circle.");
-  }
-  return res;
-}
+SR_CURVE_GET(Circle, circle)
 
 bool siren_circle_install()
 {
