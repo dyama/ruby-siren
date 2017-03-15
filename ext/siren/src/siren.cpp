@@ -9,27 +9,27 @@
 #include "curve.h"
 #include "filler.h"
 
-#ifdef SIREN_ENABLE_BO
+#ifdef SR_ENABLE_BO
   #include "bo.h"
 #endif
 
-#ifdef SIREN_ENABLE_SHHEALING
+#ifdef SR_ENABLE_SHHEALING
   #include "heal.h"
 #endif
 
-#ifdef SIREN_ENABLE_OFFSET
+#ifdef SR_ENABLE_OFFSET
   #include "offset.h"
 #endif
 
-#ifdef SIREN_ENABLE_IGES
+#ifdef SR_ENABLE_IGES
   #include "io/iges.h"
 #endif
 
-#ifdef SIREN_ENABLE_STL
+#ifdef SR_ENABLE_STL
   #include "io/stl.h"
 #endif
 
-#ifdef SIREN_ENABLE_STEP
+#ifdef SR_ENABLE_STEP
   #include "io/step.h"
 #endif
 
@@ -52,19 +52,19 @@ extern "C" {
     siren_topalgo_install();
     siren_brep_install   ();
     siren_filler_install ();
-#ifdef SIREN_ENABLE_OFFSET
+#ifdef SR_ENABLE_OFFSET
     siren_offset_install ();
 #endif
-#ifdef SIREN_ENABLE_BO
+#ifdef SR_ENABLE_BO
     siren_bo_install     ();
 #endif
-#ifdef SIREN_ENABLE_IGES
+#ifdef SR_ENABLE_IGES
     siren_iges_install   ();
 #endif
-#ifdef SIREN_ENABLE_STL
+#ifdef SR_ENABLE_STL
     siren_stl_install    ();
 #endif
-#ifdef SIREN_ENABLE_STEP
+#ifdef SR_ENABLE_STEP
     siren_step_install   ();
 #endif
 

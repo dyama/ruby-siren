@@ -6,7 +6,7 @@
 #include "bndbox.h"
 #include "trans.h"
 
-#ifdef SIREN_ENABLE_SHHEALING
+#ifdef SR_ENABLE_SHHEALING
   #include "heal.h"
 #endif
 

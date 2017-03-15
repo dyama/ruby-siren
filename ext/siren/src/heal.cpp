@@ -1,5 +1,7 @@
 #include "heal.h"
 
+#ifdef SR_ENABLE_HEALING
+
 VALUE siren_heal_outerwire(VALUE self, VALUE tol)
 {
 #if 0
@@ -97,3 +99,4 @@ VALUE siren_heal_fix( VALUE self)
 
   return res;
 }
+#endif

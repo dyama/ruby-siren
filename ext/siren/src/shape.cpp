@@ -31,7 +31,7 @@ VALUE siren_shape_new(const TopoDS_Shape& shape)
     case TopAbs_FACE:      klass = sr_cFace;      break;
     case TopAbs_SHELL:     klass = sr_cShell;     break;
     case TopAbs_SOLID:     klass = sr_cSolid;     break;
-#ifdef SIREN_ENABLE_CHUNK
+#ifdef SR_ENABLE_CHUNK
     case TopAbs_COMPSOLID: klass = sr_cCompSolid; break;
 #endif
     case TopAbs_COMPOUND:  klass = sr_cCompound;  break;
@@ -74,7 +74,7 @@ bool siren_shape_install()
   rb_define_method(sr_cShape, "section",    RUBY_METHOD_FUNC(siren_shape_section),        -1);
   rb_define_method(sr_cShape, "reverse",    RUBY_METHOD_FUNC(siren_shape_reverse),        -1);
   rb_define_method(sr_cShape, "reverse!",   RUBY_METHOD_FUNC(siren_shape_reverse_bang),   -1);
-#ifdef SIREN_ENABLE_SHHEALING
+#ifdef SR_ENABLE_SHHEALING
   rb_define_method(sr_cShape, "outerwire",  RUBY_METHOD_FUNC(siren_heal_outerwire),       -1);
   rb_define_method(sr_cShape, "fix",        RUBY_METHOD_FUNC(siren_heal_fix),             -1);
 #endif
@@ -112,7 +112,7 @@ bool siren_shape_install()
   siren_face_install();
   siren_shell_install();
   siren_solid_install();
-#ifdef SIREN_ENABLE_CHUNK
+#ifdef SR_ENABLE_CHUNK
   siren_chunk_install();
 #endif
   siren_compound_install();
@@ -330,7 +330,7 @@ VALUE siren_shape_explore(int argc, VALUE* argv, VALUE self)
   if (rb_funcall(klass, rb_intern("=="), 1, sr_cCompound) == Qtrue) {
     type = TopAbs_COMPOUND;
   }
-#ifdef SIREN_ENABLE_CHUNK
+#ifdef SR_ENABLE_CHUNK
   else if (rb_funcall(klass, rb_intern("=="), 1, sr_cChunk) == Qtrue) {
     type = TopAbs_COMPSOLID;
   }
@@ -367,7 +367,7 @@ VALUE siren_shape_explore(int argc, VALUE* argv, VALUE self)
     if (rb_funcall(klassf, rb_intern("=="), 1, sr_cCompound) == Qtrue) {
       avoid = TopAbs_COMPOUND;
     }
-#ifdef SIREN_ENABLE_CHUNK
+#ifdef SR_ENABLE_CHUNK
     else if (rb_funcall(klassf, rb_intern("=="), 1, sr_cChunk) == Qtrue) {
       avoid = TopAbs_COMPSOLID;
     }

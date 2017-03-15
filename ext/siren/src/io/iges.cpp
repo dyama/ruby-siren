@@ -1,6 +1,6 @@
 #include "io/iges.h"
 
-#ifdef SIREN_ENABLE_IGES
+#ifdef SR_ENABLE_IGES
 
 bool siren_iges_install()
 {

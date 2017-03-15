@@ -1,7 +1,7 @@
 #ifndef _SHAPE_CHUNK_H_
 #define _SHAPE_CHUNK_H_
 
-#ifdef SIREN_ENABLE_CHUNK
+#ifdef SR_ENABLE_CHUNK
 
 #include "siren.h"
 

@@ -1,6 +1,6 @@
 #include "io/step.h"
 
-#ifdef SIREN_ENABLE_STEP
+#ifdef SR_ENABLE_STEP
 
 bool siren_step_install()
 {

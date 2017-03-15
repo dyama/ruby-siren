@@ -1,4 +1,4 @@
-#ifdef SIREN_ENABLE_CHUNK
+#ifdef SR_ENABLE_CHUNK
 
 #include "shape/chunk.h"
 
