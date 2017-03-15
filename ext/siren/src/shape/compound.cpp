@@ -4,20 +4,11 @@
 
 VALUE sr_cCompound;
 
-TopoDS_Compound siren_compound_get(VALUE self)
-{
-  TopoDS_Shape* shape = siren_shape_get(self);
-  TopoDS_Compound res = TopoDS::Compound(*shape);
-  if (res.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Compound.");
-  }
-  return res;
-}
+SR_SHAPE_GET(Compound, compound)
 
 bool siren_compound_install()
 {
-  sr_cCompound = rb_define_class_under(sr_mSiren, "Compound", rb_cObject);
-  rb_define_alloc_func(sr_cCompound, siren_shape_allocate);
+  SR_SHAPE_INIT(Compound)
   rb_define_method(sr_cCompound, "initialize", RUBY_METHOD_FUNC(siren_compound_init),   -1);
   rb_define_method(sr_cCompound, "push",       RUBY_METHOD_FUNC(siren_compound_push),   -1);
   rb_define_method(sr_cCompound, "<<",         RUBY_METHOD_FUNC(siren_compound_push),   -1);

@@ -3,20 +3,11 @@
 
 VALUE sr_cWire;
 
-TopoDS_Wire siren_wire_get(VALUE self)
-{
-  TopoDS_Shape* shape = siren_shape_get(self);
-  TopoDS_Wire res = TopoDS::Wire(*shape);
-  if (res.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Wire.");
-  }
-  return res;
-}
+SR_SHAPE_GET(Wire, wire)
 
 bool siren_wire_install()
 {
-  sr_cWire = rb_define_class_under(sr_mSiren, "Wire", rb_cObject);
-  rb_define_alloc_func(sr_cWire, siren_shape_allocate);
+  SR_SHAPE_INIT(Wire)
   rb_define_method(sr_cWire, "initialize",    RUBY_METHOD_FUNC(siren_shape_init),         -1);
   rb_define_method(sr_cWire, "ordered_edges", RUBY_METHOD_FUNC(siren_wire_ordered_edges), -1);
   rb_define_method(sr_cWire, "curves",        RUBY_METHOD_FUNC(siren_wire_curves),        -1);

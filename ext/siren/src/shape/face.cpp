@@ -2,20 +2,11 @@
 
 VALUE sr_cFace;
 
-TopoDS_Face siren_face_get(VALUE self)
-{
-  TopoDS_Shape* shape = siren_shape_get(self);
-  TopoDS_Face res = TopoDS::Face(*shape);
-  if (res.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Face.");
-  }
-  return res;
-}
+SR_SHAPE_GET(Face, face)
 
 bool siren_face_install()
 {
-  sr_cFace = rb_define_class_under(sr_mSiren, "Face", rb_cObject);
-  rb_define_alloc_func(sr_cFace, siren_shape_allocate);
+  SR_SHAPE_INIT(Face)
   rb_define_method(sr_cFace, "initialize", RUBY_METHOD_FUNC(siren_shape_init),     -1);
   rb_define_method(sr_cFace, "normal",     RUBY_METHOD_FUNC(siren_face_normal),    -1);
   rb_define_method(sr_cFace, "to_bezier",  RUBY_METHOD_FUNC(siren_face_to_bezier), -1);

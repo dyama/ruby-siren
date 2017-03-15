@@ -4,20 +4,11 @@
 
 VALUE sr_cVertex;
 
-TopoDS_Vertex siren_vertex_get(VALUE self)
-{
-  TopoDS_Shape* shape = siren_shape_get(self);
-  TopoDS_Vertex res = TopoDS::Vertex(*shape);
-  if (res.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Vertex.");
-  }
-  return res;
-}
+SR_SHAPE_GET(Vertex, vertex)
 
 bool siren_vertex_install()
 {
-  sr_cVertex = rb_define_class_under(sr_mSiren, "Vertex", rb_cObject);
-  rb_define_alloc_func(sr_cVertex, siren_shape_allocate);
+  SR_SHAPE_INIT(Vertex)
   rb_define_method(sr_cVertex, "initialize", RUBY_METHOD_FUNC(siren_vertex_init), -1);
   rb_define_method(sr_cVertex, "xyz",        RUBY_METHOD_FUNC(siren_vertex_xyz),  -1);
   rb_define_method(sr_cVertex, "to_a",       RUBY_METHOD_FUNC(siren_vertex_xyz),  -1);

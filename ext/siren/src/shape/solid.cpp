@@ -2,20 +2,11 @@
 
 VALUE sr_cSolid;
 
-TopoDS_Solid siren_solid_get(VALUE self)
-{
-  TopoDS_Shape* shape = siren_shape_get(self);
-  TopoDS_Solid res = TopoDS::Solid(*shape);
-  if (res.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Solid.");
-  }
-  return res;
-}
+SR_SHAPE_GET(Solid, solid)
 
 bool siren_solid_install()
 {
-  sr_cSolid = rb_define_class_under(sr_mSiren, "Solid", rb_cObject);
-  rb_define_alloc_func(sr_cSolid, siren_shape_allocate);
+  SR_SHAPE_INIT(Solid)
   rb_define_method(sr_cSolid, "initialize", RUBY_METHOD_FUNC(siren_solid_init), -1);
   rb_define_singleton_method(sr_cSolid, "box",        RUBY_METHOD_FUNC(siren_solid_box),        -1);
   rb_define_singleton_method(sr_cSolid, "box2p",      RUBY_METHOD_FUNC(siren_solid_box2p),      -1);

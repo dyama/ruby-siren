@@ -103,4 +103,20 @@ VALUE siren_shape_first_datum(int, VALUE*, VALUE);
 // VALUE siren_shape_complement_bang(int, VALUE*, VALUE);
 // VALUE siren_shape_compose(int, VALUE*, VALUE);
 // VALUE siren_shape_compose_bang(int, VALUE*, VALUE);
+
+#define SR_SHAPE_GET(OCCT,SRT) \
+  TopoDS_##OCCT siren_##SRT##_get(VALUE self) \
+  { \
+    TopoDS_Shape* shape = siren_shape_get(self); \
+    TopoDS_##OCCT res = TopoDS::OCCT(*shape); \
+    if (res.IsNull()) { \
+      rb_raise(Qnil, "The geometry type is not " #SRT "."); \
+    } \
+    return res; \
+  }
+
+#define SR_SHAPE_INIT(CLASS) \
+  sr_c##CLASS = rb_define_class_under(sr_mSiren, #CLASS, rb_cObject); \
+  rb_define_alloc_func(sr_c##CLASS, siren_shape_allocate);
 #endif
+

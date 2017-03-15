@@ -2,20 +2,11 @@
 
 VALUE sr_cEdge;
 
-TopoDS_Edge siren_edge_get(VALUE self)
-{
-  TopoDS_Shape* shape = siren_shape_get(self);
-  TopoDS_Edge res = TopoDS::Edge(*shape);
-  if (res.IsNull()) {
-    rb_raise(Qnil, "The geometry type is not Edge.");
-  }
-  return res;
-}
+SR_SHAPE_GET(Edge, edge)
 
 bool siren_edge_install()
 {
-  sr_cEdge = rb_define_class_under(sr_mSiren, "Edge", rb_cObject);
-  rb_define_alloc_func(sr_cEdge, siren_shape_allocate);
+  SR_SHAPE_INIT(Edge)
   rb_define_method(sr_cEdge, "initialize", RUBY_METHOD_FUNC(siren_edge_init),      -1);
   rb_define_method(sr_cEdge, "sp",         RUBY_METHOD_FUNC(siren_edge_sp),        -1);
   rb_define_method(sr_cEdge, "tp",         RUBY_METHOD_FUNC(siren_edge_tp),        -1);
