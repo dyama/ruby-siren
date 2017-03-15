@@ -5,6 +5,8 @@
 # Siren::Vec test module
 #
 
+require 'test_helper'
+
 module VecTest
 
   include Siren
