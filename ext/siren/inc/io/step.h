@@ -12,7 +12,7 @@
 
 bool siren_step_install();
 
-VALUE siren_step_save( VALUE self);
-VALUE siren_step_load( VALUE self);
+VALUE siren_step_save(int, VALUE*, VALUE);
+VALUE siren_step_load(int, VALUE*, VALUE);
 
 #endif

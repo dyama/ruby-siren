@@ -14,7 +14,7 @@ bool siren_stl_install()
 VALUE siren_stl_load(int argc, VALUE* argv, VALUE self)
 {
   VALUE path;
-  rb_scan_args(argc, argv, "S", &path);
+  rb_scan_args(argc, argv, "1", &path);
 
   TopoDS_Shape shape;
   StlAPI::Read(shape, (Standard_CString)RSTRING_PTR(path));
