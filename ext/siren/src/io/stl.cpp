@@ -4,10 +4,10 @@ bool siren_stl_install()
 {
 #if 0
   // Class method
-  rb_define_class_method(sr_mSiren, "load_stl", siren_stl_load, MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "load_stl", RUBY_METHOD_FUNC(siren_stl_load), MRB_ARGS_REQ(1));
 #endif
   // For mix-in
-  rb_define_method(sr_mSiren, "load_stl", siren_stl_load, -1);
+  rb_define_method(sr_mSiren, "load_stl", RUBY_METHOD_FUNC(siren_stl_load), -1);
   return true;
 }
 
@@ -25,4 +25,3 @@ VALUE siren_stl_load(int argc, VALUE* argv, VALUE self)
 
   return siren_shape_new(shape);
 }
-

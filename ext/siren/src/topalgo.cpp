@@ -4,15 +4,15 @@ bool siren_topalgo_install()
 {
   // Class method
 #if 0
-  rb_define_class_method(sr_mSiren, "copy",       siren_topalgo_copy,        -1);
-  rb_define_class_method(sr_mSiren, "line",       siren_topalgo_line,        -1);
-  rb_define_class_method(sr_mSiren, "infline",    siren_topalgo_infline,     -1);
-  rb_define_class_method(sr_mSiren, "polyline",   siren_topalgo_polyline,    -1);
-  rb_define_class_method(sr_mSiren, "interpolate",siren_topalgo_interpolate, -1);
-  rb_define_class_method(sr_mSiren, "arc",        siren_topalgo_arc,         -1);
-  rb_define_class_method(sr_mSiren, "arc3p",      siren_topalgo_arc3p,       -1);
-  rb_define_class_method(sr_mSiren, "circle",     siren_topalgo_circle,      -1);
-  rb_define_class_method(sr_mSiren, "circle3p",   siren_topalgo_circle3p,    -1);
+  rb_define_class_method(sr_mSiren, "copy",       RUBY_METHOD_FUNC(siren_topalgo_copy),        -1);
+  rb_define_class_method(sr_mSiren, "line",       RUBY_METHOD_FUNC(siren_topalgo_line),        -1);
+  rb_define_class_method(sr_mSiren, "infline",    RUBY_METHOD_FUNC(siren_topalgo_infline),     -1);
+  rb_define_class_method(sr_mSiren, "polyline",   RUBY_METHOD_FUNC(siren_topalgo_polyline),    -1);
+  rb_define_class_method(sr_mSiren, "interpolate",RUBY_METHOD_FUNC(siren_topalgo_interpolate), -1);
+  rb_define_class_method(sr_mSiren, "arc",        RUBY_METHOD_FUNC(siren_topalgo_arc),         -1);
+  rb_define_class_method(sr_mSiren, "arc3p",      RUBY_METHOD_FUNC(siren_topalgo_arc3p),       -1);
+  rb_define_class_method(sr_mSiren, "circle",     RUBY_METHOD_FUNC(siren_topalgo_circle),      -1);
+  rb_define_class_method(sr_mSiren, "circle3p",   RUBY_METHOD_FUNC(siren_topalgo_circle3p),    -1);
 #endif
   // For mix-in
   rb_define_method(sr_mSiren, "copy",        RUBY_METHOD_FUNC(siren_topalgo_copy),        -1);
@@ -244,4 +244,3 @@ VALUE siren_topalgo_area(int argc, VALUE* argv, VALUE self)
   Standard_Real area = gprops.Mass();
   return (area);
 }
-

@@ -32,10 +32,10 @@ bool siren_compound_install()
   struct RClass* cls_compound = rb_define_class_under(sr_mSiren, "Compound", cls_shape);
   MRB_SET_INSTANCE_TT(cls_compound, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cCompound, "initialize", siren_compound_init,   -1);
-  rb_define_method(sr_cCompound, "push",       siren_compound_push,   -1);
-  rb_define_method(sr_cCompound, "<<",         siren_compound_push,   -1);
-  rb_define_method(sr_cCompound, "delete",     siren_compound_delete, -1);
+  rb_define_method(sr_cCompound, "initialize", RUBY_METHOD_FUNC(siren_compound_init),   -1);
+  rb_define_method(sr_cCompound, "push",       RUBY_METHOD_FUNC(siren_compound_push),   -1);
+  rb_define_method(sr_cCompound, "<<",         RUBY_METHOD_FUNC(siren_compound_push),   -1);
+  rb_define_method(sr_cCompound, "delete",     RUBY_METHOD_FUNC(siren_compound_delete), -1);
   return true;
 }
 
@@ -119,4 +119,3 @@ VALUE siren_compound_delete(int argc, VALUE* argv, VALUE self)
   }
   return self;
 }
-

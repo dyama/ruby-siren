@@ -310,4 +310,3 @@ VALUE siren_trans_move_point(int argc, VALUE* argv, VALUE self)
   point.Transform(*trans);
   return siren_pnt_to_ary(point);
 }
-

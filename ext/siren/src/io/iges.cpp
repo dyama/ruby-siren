@@ -5,11 +5,11 @@
 bool siren_iges_install()
 {
   // Class method
-  rb_define_class_method(sr_mSiren, "save_iges", siren_iges_save, MRB_ARGS_REQ(2));
-  rb_define_class_method(sr_mSiren, "load_iges", siren_iges_load, MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "save_iges", RUBY_METHOD_FUNC(siren_iges_save), MRB_ARGS_REQ(2));
+  rb_define_class_method(sr_mSiren, "load_iges", RUBY_METHOD_FUNC(siren_iges_load), MRB_ARGS_REQ(1));
   // For mix-in
-  rb_define_method      (sr_mSiren, "save_iges", siren_iges_save, MRB_ARGS_REQ(2));
-  rb_define_method      (sr_mSiren, "load_iges", siren_iges_load, MRB_ARGS_REQ(1));
+  rb_define_method      (sr_mSiren, "save_iges", RUBY_METHOD_FUNC(siren_iges_save), MRB_ARGS_REQ(2));
+  rb_define_method      (sr_mSiren, "load_iges", RUBY_METHOD_FUNC(siren_iges_load), MRB_ARGS_REQ(1));
   return true;
 }
 

@@ -30,11 +30,11 @@ bool siren_wire_install()
   struct RClass* cls_wire = rb_define_class_under(sr_mSiren, "Wire", cls_shape);
   MRB_SET_INSTANCE_TT(cls_wire, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cWire, "initialize",    siren_shape_init,         -1);
-  rb_define_method(sr_cWire, "ordered_edges", siren_wire_ordered_edges, -1);
-  rb_define_method(sr_cWire, "curves",        siren_wire_curves,        -1);
-  rb_define_singleton_method(sr_cWire, "make", siren_wire_make, -1);
-  rb_define_singleton_method(sr_cWire, "join", siren_wire_make, -1);
+  rb_define_method(sr_cWire, "initialize",    RUBY_METHOD_FUNC(siren_shape_init),         -1);
+  rb_define_method(sr_cWire, "ordered_edges", RUBY_METHOD_FUNC(siren_wire_ordered_edges), -1);
+  rb_define_method(sr_cWire, "curves",        RUBY_METHOD_FUNC(siren_wire_curves),        -1);
+  rb_define_singleton_method(sr_cWire, "make", RUBY_METHOD_FUNC(siren_wire_make), -1);
+  rb_define_singleton_method(sr_cWire, "join", RUBY_METHOD_FUNC(siren_wire_make), -1);
   return true;
 }
 

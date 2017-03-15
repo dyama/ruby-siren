@@ -50,6 +50,6 @@ bool siren_ellipse_install()
   struct RClass* cls_ellipse = rb_define_class_under(sr_mSiren, "Ellipse", cls_curve);
   MRB_SET_INSTANCE_TT(cls_ellipse, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cEllipse, "initialize", siren_curve_init, -1);
+  rb_define_method(sr_cEllipse, "initialize", RUBY_METHOD_FUNC(siren_curve_init), -1);
   return true;
 }

@@ -35,7 +35,7 @@ bool siren_curve_install()
 {
   sr_cCurve = rb_define_class_under(sr_mSiren, "Curve", rb_cObject);
   // MRB_SET_INSTANCE_TT(cls_curve, MRB_TT_DATA);
-  rb_define_method(sr_cCurve, "initialize", siren_curve_init, -1);
+  rb_define_method(sr_cCurve, "initialize", RUBY_METHOD_FUNC(siren_curve_init), -1);
 
   // Define derived classes for Siren::Curve
   siren_line_install();
@@ -75,4 +75,3 @@ opencascade::handle<Geom_Curve>* siren_curve_get(VALUE obj)
   return m;
 #endif
 }
-

@@ -30,19 +30,19 @@ bool siren_solid_install()
   struct RClass* cls_solid = rb_define_class_under(sr_mSiren, "Solid", cls_shape);
   MRB_SET_INSTANCE_TT(cls_solid, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cSolid, "initialize", siren_solid_init, -1);
-  rb_define_singleton_method(sr_cSolid, "box",        siren_solid_box,        -1);
-  rb_define_singleton_method(sr_cSolid, "box2p",      siren_solid_box2p,      -1);
-  rb_define_singleton_method(sr_cSolid, "boxax",      siren_solid_boxax,      -1);
-  rb_define_singleton_method(sr_cSolid, "sphere",     siren_solid_sphere,     -1);
-  rb_define_singleton_method(sr_cSolid, "cylinder",   siren_solid_cylinder,   -1);
-  rb_define_singleton_method(sr_cSolid, "cone",       siren_solid_cone,       -1);
-  rb_define_singleton_method(sr_cSolid, "torus",      siren_solid_torus,      -1);
-  rb_define_singleton_method(sr_cSolid, "halfspace",  siren_solid_halfspace,  -1);
-  rb_define_singleton_method(sr_cSolid, "prism",      siren_solid_prism,      -1);
-  rb_define_singleton_method(sr_cSolid, "revol",      siren_solid_revol,      -1);
-  rb_define_singleton_method(sr_cSolid, "revolution", siren_solid_revolution, -1);
-  rb_define_singleton_method(sr_cSolid, "wedge",      siren_solid_wedge,      -1);
+  rb_define_method(sr_cSolid, "initialize", RUBY_METHOD_FUNC(siren_solid_init), -1);
+  rb_define_singleton_method(sr_cSolid, "box",        RUBY_METHOD_FUNC(siren_solid_box),        -1);
+  rb_define_singleton_method(sr_cSolid, "box2p",      RUBY_METHOD_FUNC(siren_solid_box2p),      -1);
+  rb_define_singleton_method(sr_cSolid, "boxax",      RUBY_METHOD_FUNC(siren_solid_boxax),      -1);
+  rb_define_singleton_method(sr_cSolid, "sphere",     RUBY_METHOD_FUNC(siren_solid_sphere),     -1);
+  rb_define_singleton_method(sr_cSolid, "cylinder",   RUBY_METHOD_FUNC(siren_solid_cylinder),   -1);
+  rb_define_singleton_method(sr_cSolid, "cone",       RUBY_METHOD_FUNC(siren_solid_cone),       -1);
+  rb_define_singleton_method(sr_cSolid, "torus",      RUBY_METHOD_FUNC(siren_solid_torus),      -1);
+  rb_define_singleton_method(sr_cSolid, "halfspace",  RUBY_METHOD_FUNC(siren_solid_halfspace),  -1);
+  rb_define_singleton_method(sr_cSolid, "prism",      RUBY_METHOD_FUNC(siren_solid_prism),      -1);
+  rb_define_singleton_method(sr_cSolid, "revol",      RUBY_METHOD_FUNC(siren_solid_revol),      -1);
+  rb_define_singleton_method(sr_cSolid, "revolution", RUBY_METHOD_FUNC(siren_solid_revolution), -1);
+  rb_define_singleton_method(sr_cSolid, "wedge",      RUBY_METHOD_FUNC(siren_solid_wedge),      -1);
   return true;
 }
 
@@ -262,4 +262,3 @@ VALUE siren_solid_wedge(int argc, VALUE* argv, VALUE self)
   }
   return Qnil;
 }
-

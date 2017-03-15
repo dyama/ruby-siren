@@ -453,4 +453,3 @@ VALUE siren_vec_transform_bang(int argc, VALUE* argv, VALUE self)
   siren_vec_get(self)->Transform(*siren_trans_get(t));
   return self;
 }
-

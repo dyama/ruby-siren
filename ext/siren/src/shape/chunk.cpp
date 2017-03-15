@@ -32,8 +32,8 @@ bool siren_chunk_install()
   struct RClass* cls_chunk = rb_define_class_under(sr_mSiren, "Chunk", cls_shape);
   MRB_SET_INSTANCE_TT(cls_chunk, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cChunk, "initialize", siren_chunk_init,   -1);
-  rb_define_method(sr_cChunk, "to_solid",  siren_chunk_to_solid, -1);
+  rb_define_method(sr_cChunk, "initialize", RUBY_METHOD_FUNC(siren_chunk_init),   -1);
+  rb_define_method(sr_cChunk, "to_solid",  RUBY_METHOD_FUNC(siren_chunk_to_solid), -1);
   return true;
 }
 

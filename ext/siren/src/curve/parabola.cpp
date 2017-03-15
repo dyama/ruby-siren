@@ -50,6 +50,6 @@ bool siren_parabola_install()
   struct RClass* cls_parabola = rb_define_class_under(sr_mSiren, "Parabola", cls_curve);
   MRB_SET_INSTANCE_TT(cls_parabola, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cParabola, "initialize", siren_curve_init, -1);
+  rb_define_method(sr_cParabola, "initialize", RUBY_METHOD_FUNC(siren_curve_init), -1);
   return true;
 }

@@ -17,15 +17,15 @@ bool siren_filler_install()
 #if 0
   MRB_SET_INSTANCE_TT(sr_cFiller, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cFiller, "initialize", siren_filler_init,      -1);
-  rb_define_method(sr_cFiller, "add_bound",  siren_filler_add_bound, 2);
-  rb_define_method(sr_cFiller, "add",        siren_filler_add,       2);
-  rb_define_method(sr_cFiller, "build",      siren_filler_build,     0);
-  rb_define_method(sr_cFiller, "done?",      siren_filler_is_done,   0);
-  rb_define_method(sr_cFiller, "face",       siren_filler_face,      0);
-  rb_define_method(sr_cFiller, "g0error",    siren_filler_g0error,   1);
-  rb_define_method(sr_cFiller, "g1error",    siren_filler_g1error,   1);
-  rb_define_method(sr_cFiller, "g2error",    siren_filler_g2error,   1);
+  rb_define_method(sr_cFiller, "initialize", RUBY_METHOD_FUNC(siren_filler_init),      -1);
+  rb_define_method(sr_cFiller, "add_bound",  RUBY_METHOD_FUNC(siren_filler_add_bound), 2);
+  rb_define_method(sr_cFiller, "add",        RUBY_METHOD_FUNC(siren_filler_add),       2);
+  rb_define_method(sr_cFiller, "build",      RUBY_METHOD_FUNC(siren_filler_build),     0);
+  rb_define_method(sr_cFiller, "done?",      RUBY_METHOD_FUNC(siren_filler_is_done),   0);
+  rb_define_method(sr_cFiller, "face",       RUBY_METHOD_FUNC(siren_filler_face),      0);
+  rb_define_method(sr_cFiller, "g0error",    RUBY_METHOD_FUNC(siren_filler_g0error),   1);
+  rb_define_method(sr_cFiller, "g1error",    RUBY_METHOD_FUNC(siren_filler_g1error),   1);
+  rb_define_method(sr_cFiller, "g2error",    RUBY_METHOD_FUNC(siren_filler_g2error),   1);
   return true;
 }
 
@@ -203,4 +203,3 @@ VALUE siren_filler_g2error(VALUE self, VALUE index)
   }
   return (value);
 }
-

@@ -5,11 +5,11 @@
 bool siren_step_install()
 {
   // Class method
-  rb_define_class_method(sr_mSiren, "save_step",  siren_step_save, MRB_ARGS_REQ(2));
-  rb_define_class_method(sr_mSiren, "load_step",  siren_step_load, MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "save_step",  RUBY_METHOD_FUNC(siren_step_save), MRB_ARGS_REQ(2));
+  rb_define_class_method(sr_mSiren, "load_step",  RUBY_METHOD_FUNC(siren_step_load), MRB_ARGS_REQ(1));
   // For mix-in
-  rb_define_method      (sr_mSiren, "save_step",  siren_step_save, MRB_ARGS_REQ(2));
-  rb_define_method      (sr_mSiren, "load_step",  siren_step_load, MRB_ARGS_REQ(1));
+  rb_define_method      (sr_mSiren, "save_step",  RUBY_METHOD_FUNC(siren_step_save), MRB_ARGS_REQ(2));
+  rb_define_method      (sr_mSiren, "load_step",  RUBY_METHOD_FUNC(siren_step_load), MRB_ARGS_REQ(1));
   return true;
 }
 

@@ -30,17 +30,17 @@ bool siren_face_install()
   struct RClass* cls_face = rb_define_class_under(sr_mSiren, "Face", cls_shape);
   MRB_SET_INSTANCE_TT(cls_face, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cFace, "initialize", siren_shape_init,     -1);
-  rb_define_method(sr_cFace, "normal",     siren_face_normal,    -1);
-  rb_define_method(sr_cFace, "to_bezier",  siren_face_to_bezier, -1);
-  rb_define_method(sr_cFace, "split",      siren_face_split,     -1);
-  rb_define_method(sr_cFace, "triangle",   siren_face_triangle,  -1);
-  rb_define_singleton_method(sr_cFace, "plane",    siren_face_plane,    -1);
-  rb_define_singleton_method(sr_cFace, "face",     siren_face_face,     -1);
-  rb_define_singleton_method(sr_cFace, "infplane", siren_face_infplane, -1);
-  rb_define_singleton_method(sr_cFace, "polygon",  siren_face_polygon,  -1);
-  rb_define_singleton_method(sr_cFace, "bzsurf",   siren_face_bzsurf,   -1);
-  rb_define_singleton_method(sr_cFace, "bssurf",   siren_face_bssurf,   -1);
+  rb_define_method(sr_cFace, "initialize", RUBY_METHOD_FUNC(siren_shape_init),     -1);
+  rb_define_method(sr_cFace, "normal",     RUBY_METHOD_FUNC(siren_face_normal),    -1);
+  rb_define_method(sr_cFace, "to_bezier",  RUBY_METHOD_FUNC(siren_face_to_bezier), -1);
+  rb_define_method(sr_cFace, "split",      RUBY_METHOD_FUNC(siren_face_split),     -1);
+  rb_define_method(sr_cFace, "triangle",   RUBY_METHOD_FUNC(siren_face_triangle),  -1);
+  rb_define_singleton_method(sr_cFace, "plane",    RUBY_METHOD_FUNC(siren_face_plane),    -1);
+  rb_define_singleton_method(sr_cFace, "face",     RUBY_METHOD_FUNC(siren_face_face),     -1);
+  rb_define_singleton_method(sr_cFace, "infplane", RUBY_METHOD_FUNC(siren_face_infplane), -1);
+  rb_define_singleton_method(sr_cFace, "polygon",  RUBY_METHOD_FUNC(siren_face_polygon),  -1);
+  rb_define_singleton_method(sr_cFace, "bzsurf",   RUBY_METHOD_FUNC(siren_face_bzsurf),   -1);
+  rb_define_singleton_method(sr_cFace, "bssurf",   RUBY_METHOD_FUNC(siren_face_bssurf),   -1);
   return true;
 }
 
@@ -375,4 +375,3 @@ VALUE siren_face_bssurf(int argc, VALUE* argv, VALUE self)
 
   return siren_shape_new(shape);
 }
-

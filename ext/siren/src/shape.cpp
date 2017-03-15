@@ -586,4 +586,3 @@ VALUE siren_shape_set_convex(int argc, VALUE* argv, VALUE self)
   siren_shape_get(self)->Convex((Standard_Boolean)flag);
   return self;
 }
-

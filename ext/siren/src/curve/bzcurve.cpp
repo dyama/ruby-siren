@@ -49,7 +49,7 @@ bool siren_bzcurve_install()
   struct RClass* cls_bzcurve = rb_define_class_under(sr_mSiren, "BzCurve", cls_curve);
   MRB_SET_INSTANCE_TT(cls_bzcurve, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cBzCurve, "initialize", siren_bzcurve_init, -1);
+  rb_define_method(sr_cBzCurve, "initialize", RUBY_METHOD_FUNC(siren_bzcurve_init), -1);
   return true;
 }
 
@@ -91,4 +91,3 @@ VALUE siren_bzcurve_init(int argc, VALUE* argv, VALUE self)
 #endif
   return self;
 }
-

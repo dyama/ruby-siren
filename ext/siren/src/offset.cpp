@@ -4,22 +4,22 @@ bool siren_offset_install()
 {
 #if 0
   // Class method
-  rb_define_class_method(sr_mSiren, "sweep_vec",       siren_offset_sweep_vec,       MRB_ARGS_REQ(2));
-  rb_define_class_method(sr_mSiren, "sweep_path",      siren_offset_sweep_path,      MRB_ARGS_REQ(2) | MRB_ARGS_OPT(4));
-  rb_define_class_method(sr_mSiren, "loft",            siren_offset_loft,            MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
-  rb_define_class_method(sr_mSiren, "offset_geomsurf", siren_offset_offset_geomsurf, MRB_ARGS_REQ(2) | MRB_ARGS_OPT(1));
-  rb_define_class_method(sr_mSiren, "offset",          siren_offset_offset,          MRB_ARGS_REQ(3) | MRB_ARGS_OPT(5));
-  rb_define_class_method(sr_mSiren, "offset_shape",    siren_offset_offset_shape,    MRB_ARGS_REQ(3) | MRB_ARGS_OPT(4));
-  rb_define_class_method(sr_mSiren, "pipe",            siren_offset_pipe,            MRB_ARGS_REQ(2) | MRB_ARGS_OPT(2));
+  rb_define_class_method(sr_mSiren, "sweep_vec",       RUBY_METHOD_FUNC(siren_offset_sweep_vec),       MRB_ARGS_REQ(2));
+  rb_define_class_method(sr_mSiren, "sweep_path",      RUBY_METHOD_FUNC(siren_offset_sweep_path),      MRB_ARGS_REQ(2) | MRB_ARGS_OPT(4));
+  rb_define_class_method(sr_mSiren, "loft",            RUBY_METHOD_FUNC(siren_offset_loft),            MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
+  rb_define_class_method(sr_mSiren, "offset_geomsurf", RUBY_METHOD_FUNC(siren_offset_offset_geomsurf), MRB_ARGS_REQ(2) | MRB_ARGS_OPT(1));
+  rb_define_class_method(sr_mSiren, "offset",          RUBY_METHOD_FUNC(siren_offset_offset),          MRB_ARGS_REQ(3) | MRB_ARGS_OPT(5));
+  rb_define_class_method(sr_mSiren, "offset_shape",    RUBY_METHOD_FUNC(siren_offset_offset_shape),    MRB_ARGS_REQ(3) | MRB_ARGS_OPT(4));
+  rb_define_class_method(sr_mSiren, "pipe",            RUBY_METHOD_FUNC(siren_offset_pipe),            MRB_ARGS_REQ(2) | MRB_ARGS_OPT(2));
 #endif
   // For mix-in
-  rb_define_method(sr_mSiren, "sweep_vec",       siren_offset_sweep_vec,       -1);
-  rb_define_method(sr_mSiren, "sweep_path",      siren_offset_sweep_path,      -1);
-  rb_define_method(sr_mSiren, "loft",            siren_offset_loft,            -1);
-  rb_define_method(sr_mSiren, "offset_geomsurf", siren_offset_offset_geomsurf, -1);
-  rb_define_method(sr_mSiren, "offset",          siren_offset_offset,          -1);
-  rb_define_method(sr_mSiren, "offset_shape",    siren_offset_offset_shape,    -1);
-  rb_define_method(sr_mSiren, "pipe",            siren_offset_pipe,            -1);
+  rb_define_method(sr_mSiren, "sweep_vec",       RUBY_METHOD_FUNC(siren_offset_sweep_vec),       -1);
+  rb_define_method(sr_mSiren, "sweep_path",      RUBY_METHOD_FUNC(siren_offset_sweep_path),      -1);
+  rb_define_method(sr_mSiren, "loft",            RUBY_METHOD_FUNC(siren_offset_loft),            -1);
+  rb_define_method(sr_mSiren, "offset_geomsurf", RUBY_METHOD_FUNC(siren_offset_offset_geomsurf), -1);
+  rb_define_method(sr_mSiren, "offset",          RUBY_METHOD_FUNC(siren_offset_offset),          -1);
+  rb_define_method(sr_mSiren, "offset_shape",    RUBY_METHOD_FUNC(siren_offset_offset_shape),    -1);
+  rb_define_method(sr_mSiren, "pipe",            RUBY_METHOD_FUNC(siren_offset_pipe),            -1);
   return true;
 }
 
@@ -254,4 +254,3 @@ VALUE siren_offset_pipe(int argc, VALUE* argv, VALUE self)
   mp.Build();
   return siren_shape_new(mp.Shape());
 }
-

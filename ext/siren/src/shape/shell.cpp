@@ -30,9 +30,9 @@ bool siren_shell_install()
   struct RClass* cls_shell = rb_define_class_under(sr_mSiren, "Shell", cls_shape);
   MRB_SET_INSTANCE_TT(cls_shell, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cShell, "initialize", siren_shape_init,  -1);
-  rb_define_singleton_method(sr_cShell, "make", siren_shell_make, -1);
-  rb_define_singleton_method(sr_cShell, "sew",  siren_shell_make, -1);
+  rb_define_method(sr_cShell, "initialize", RUBY_METHOD_FUNC(siren_shape_init),  -1);
+  rb_define_singleton_method(sr_cShell, "make", RUBY_METHOD_FUNC(siren_shell_make), -1);
+  rb_define_singleton_method(sr_cShell, "sew",  RUBY_METHOD_FUNC(siren_shell_make), -1);
   return true;
 }
 
@@ -61,4 +61,3 @@ VALUE siren_shell_make(int argc, VALUE* argv, VALUE self)
   sewer.Perform();
   return siren_shape_new(sewer.SewedShape());
 }
-

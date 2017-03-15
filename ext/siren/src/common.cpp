@@ -18,4 +18,3 @@ void siren_ary_to_xyz(VALUE ary, Standard_Real& x, Standard_Real& y, Standard_Re
   }
   return;
 }
-

@@ -4,9 +4,9 @@ bool siren_brep_install()
 {
 #if 0
   // Class method
-  rb_define_class_method(sr_mSiren, "save_brep", siren_brep_save, MRB_ARGS_REQ(2));
-  rb_define_class_method(sr_mSiren, "load_brep", siren_brep_load, MRB_ARGS_REQ(1));
-  rb_define_class_method(sr_mSiren, "dump",      siren_brep_dump, MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "save_brep", RUBY_METHOD_FUNC(siren_brep_save), MRB_ARGS_REQ(2));
+  rb_define_class_method(sr_mSiren, "load_brep", RUBY_METHOD_FUNC(siren_brep_load), MRB_ARGS_REQ(1));
+  rb_define_class_method(sr_mSiren, "dump",      RUBY_METHOD_FUNC(siren_brep_dump), MRB_ARGS_REQ(1));
 #endif
   // For mix-in
   rb_define_method(sr_mSiren, "save_brep", RUBY_METHOD_FUNC(siren_brep_save), -1);
@@ -55,4 +55,3 @@ VALUE siren_brep_dump(int argc, VALUE* argv, VALUE self)
   BRepTools::Dump(*shape, std::cout);
   return Qnil;
 }
-

@@ -2,10 +2,10 @@
 
 bool siren_bo_install()
 {
-  rb_define_method(sr_cShape, "common",   siren_bo_common,   -1);
-  rb_define_method(sr_cShape, "fuse",     siren_bo_fuse,     -1);
-  rb_define_method(sr_cShape, "cut",      siren_bo_cut,      -1);
-  rb_define_method(sr_cShape, "projwire", siren_bo_projwire, -2);
+  rb_define_method(sr_cShape, "common",   RUBY_METHOD_FUNC(siren_bo_common),   -1);
+  rb_define_method(sr_cShape, "fuse",     RUBY_METHOD_FUNC(siren_bo_fuse),     -1);
+  rb_define_method(sr_cShape, "cut",      RUBY_METHOD_FUNC(siren_bo_cut),      -1);
+  rb_define_method(sr_cShape, "projwire", RUBY_METHOD_FUNC(siren_bo_projwire), -2);
   return true;
 }
 
@@ -64,4 +64,3 @@ VALUE siren_bo_projwire(int argc, VALUE* argv, VALUE self)
   }
   return siren_shape_new(api.Shape());
 }
-

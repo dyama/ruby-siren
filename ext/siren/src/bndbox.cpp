@@ -344,4 +344,3 @@ VALUE siren_bndbox_square(int argc, VALUE* argv, VALUE self)
   Standard_Real value = siren_bndbox_get(self)->SquareExtent();
   return DBL2NUM(value);
 }
-

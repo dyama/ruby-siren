@@ -97,4 +97,3 @@ VALUE siren_heal_fix( VALUE self)
 
   return res;
 }
-

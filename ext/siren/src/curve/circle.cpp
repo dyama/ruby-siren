@@ -50,20 +50,20 @@ bool siren_circle_install()
   MRB_SET_INSTANCE_TT(cls_circle, MRB_TT_DATA);
 #endif
 
-  rb_define_method(sr_cCircle, "initialize", siren_curve_init,        -1);
-  rb_define_method(sr_cCircle, "radius",     siren_circle_radius,     -1);
-  rb_define_method(sr_cCircle, "radius=",    siren_circle_radius_set, -1);
-  rb_define_method(sr_cCircle, "center",     siren_circle_center,     -1);
-  rb_define_method(sr_cCircle, "center=",    siren_circle_center_set, -1);
-  rb_define_method(sr_cCircle, "area",       siren_circle_area,       -1);
-  rb_define_method(sr_cCircle, "length",     siren_circle_length,     -1);
-  rb_define_method(sr_cCircle, "normal",     siren_circle_normal,     -1);
-  rb_define_method(sr_cCircle, "normal=",    siren_circle_normal_set, -1);
-  rb_define_method(sr_cCircle, "dir",        siren_circle_dir,        -1);
-  rb_define_method(sr_cCircle, "dir=",       siren_circle_dir_set,    -1);
-  rb_define_method(sr_cCircle, "dist",       siren_circle_dist,       -1);
-  rb_define_method(sr_cCircle, "distdist",   siren_circle_distdist,   -1);
-  rb_define_method(sr_cCircle, "contain",    siren_circle_contain,    -1);
+  rb_define_method(sr_cCircle, "initialize", RUBY_METHOD_FUNC(siren_curve_init),        -1);
+  rb_define_method(sr_cCircle, "radius",     RUBY_METHOD_FUNC(siren_circle_radius),     -1);
+  rb_define_method(sr_cCircle, "radius=",    RUBY_METHOD_FUNC(siren_circle_radius_set), -1);
+  rb_define_method(sr_cCircle, "center",     RUBY_METHOD_FUNC(siren_circle_center),     -1);
+  rb_define_method(sr_cCircle, "center=",    RUBY_METHOD_FUNC(siren_circle_center_set), -1);
+  rb_define_method(sr_cCircle, "area",       RUBY_METHOD_FUNC(siren_circle_area),       -1);
+  rb_define_method(sr_cCircle, "length",     RUBY_METHOD_FUNC(siren_circle_length),     -1);
+  rb_define_method(sr_cCircle, "normal",     RUBY_METHOD_FUNC(siren_circle_normal),     -1);
+  rb_define_method(sr_cCircle, "normal=",    RUBY_METHOD_FUNC(siren_circle_normal_set), -1);
+  rb_define_method(sr_cCircle, "dir",        RUBY_METHOD_FUNC(siren_circle_dir),        -1);
+  rb_define_method(sr_cCircle, "dir=",       RUBY_METHOD_FUNC(siren_circle_dir_set),    -1);
+  rb_define_method(sr_cCircle, "dist",       RUBY_METHOD_FUNC(siren_circle_dist),       -1);
+  rb_define_method(sr_cCircle, "distdist",   RUBY_METHOD_FUNC(siren_circle_distdist),   -1);
+  rb_define_method(sr_cCircle, "contain",    RUBY_METHOD_FUNC(siren_circle_contain),    -1);
   return true;
 }
 

@@ -50,6 +50,6 @@ bool siren_hyperbola_install()
   struct RClass* cls_hyperbola = rb_define_class_under(sr_mSiren, "Hyperbola", cls_curve);
   MRB_SET_INSTANCE_TT(cls_hyperbola, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cHyperbola, "initialize", siren_curve_init, -1);
+  rb_define_method(sr_cHyperbola, "initialize", RUBY_METHOD_FUNC(siren_curve_init), -1);
   return true;
 }

@@ -30,20 +30,20 @@ bool siren_edge_install()
   struct RClass* cls_edge = rb_define_class_under(sr_mSiren, "Edge", cls_shape);
   MRB_SET_INSTANCE_TT(cls_edge, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cEdge, "initialize", siren_edge_init,      -1);
-  rb_define_method(sr_cEdge, "sp",         siren_edge_sp,        -1);
-  rb_define_method(sr_cEdge, "tp",         siren_edge_tp,        -1);
-  rb_define_method(sr_cEdge, "to_pts",     siren_edge_to_pts,    -1);
-  rb_define_method(sr_cEdge, "param",      siren_edge_param,     -1);
-  rb_define_method(sr_cEdge, "to_xyz",     siren_edge_to_xyz,    -1);
-  rb_define_method(sr_cEdge, "curvature",  siren_edge_curvature, -1);
-  rb_define_method(sr_cEdge, "tangent",    siren_edge_tangent,   -1);
-  rb_define_method(sr_cEdge, "extrema",    siren_edge_extrema,   -1);
-  rb_define_method(sr_cEdge, "split",      siren_edge_split,     -1);
-  rb_define_method(sr_cEdge, "trim",       siren_edge_trim,      -1);
-  rb_define_method(sr_cEdge, "terms",      siren_edge_terms,     -1);
-  rb_define_method(sr_cEdge, "length",     siren_edge_length,    -1);
-  rb_define_method(sr_cEdge, "curve",      siren_edge_curve,     -1);
+  rb_define_method(sr_cEdge, "initialize", RUBY_METHOD_FUNC(siren_edge_init),      -1);
+  rb_define_method(sr_cEdge, "sp",         RUBY_METHOD_FUNC(siren_edge_sp),        -1);
+  rb_define_method(sr_cEdge, "tp",         RUBY_METHOD_FUNC(siren_edge_tp),        -1);
+  rb_define_method(sr_cEdge, "to_pts",     RUBY_METHOD_FUNC(siren_edge_to_pts),    -1);
+  rb_define_method(sr_cEdge, "param",      RUBY_METHOD_FUNC(siren_edge_param),     -1);
+  rb_define_method(sr_cEdge, "to_xyz",     RUBY_METHOD_FUNC(siren_edge_to_xyz),    -1);
+  rb_define_method(sr_cEdge, "curvature",  RUBY_METHOD_FUNC(siren_edge_curvature), -1);
+  rb_define_method(sr_cEdge, "tangent",    RUBY_METHOD_FUNC(siren_edge_tangent),   -1);
+  rb_define_method(sr_cEdge, "extrema",    RUBY_METHOD_FUNC(siren_edge_extrema),   -1);
+  rb_define_method(sr_cEdge, "split",      RUBY_METHOD_FUNC(siren_edge_split),     -1);
+  rb_define_method(sr_cEdge, "trim",       RUBY_METHOD_FUNC(siren_edge_trim),      -1);
+  rb_define_method(sr_cEdge, "terms",      RUBY_METHOD_FUNC(siren_edge_terms),     -1);
+  rb_define_method(sr_cEdge, "length",     RUBY_METHOD_FUNC(siren_edge_length),    -1);
+  rb_define_method(sr_cEdge, "curve",      RUBY_METHOD_FUNC(siren_edge_curve),     -1);
   return true;
 }
 
@@ -285,4 +285,3 @@ VALUE siren_edge_length(int argc, VALUE* argv, VALUE self)
   }
   return (res);
 }
-

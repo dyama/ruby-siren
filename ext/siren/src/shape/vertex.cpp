@@ -32,10 +32,10 @@ bool siren_vertex_install()
   struct RClass* cls_vertex = rb_define_class_under(sr_mSiren, "Vertex", cls_shape);
   MRB_SET_INSTANCE_TT(cls_vertex, MRB_TT_DATA);
 #endif
-  rb_define_method(sr_cVertex, "initialize", siren_vertex_init, -1);
-  rb_define_method(sr_cVertex, "xyz",        siren_vertex_xyz,  -1);
-  rb_define_method(sr_cVertex, "to_a",       siren_vertex_xyz,  -1);
-  rb_define_method(sr_cVertex, "to_v",       siren_vertex_to_v, -1);
+  rb_define_method(sr_cVertex, "initialize", RUBY_METHOD_FUNC(siren_vertex_init), -1);
+  rb_define_method(sr_cVertex, "xyz",        RUBY_METHOD_FUNC(siren_vertex_xyz),  -1);
+  rb_define_method(sr_cVertex, "to_a",       RUBY_METHOD_FUNC(siren_vertex_xyz),  -1);
+  rb_define_method(sr_cVertex, "to_v",       RUBY_METHOD_FUNC(siren_vertex_to_v), -1);
   return true;
 }
 
@@ -92,4 +92,3 @@ VALUE siren_vertex_to_v(int argc, VALUE* argv, VALUE self)
   gp_Pnt p = BRep_Tool::Pnt(vertex);
   return siren_vec_new(p.X(), p.Y(), p.Z());
 }
-
