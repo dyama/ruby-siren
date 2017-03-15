@@ -49,21 +49,77 @@ class SirenTest < Minitest::Test
 
     assert Vec.new(1, 2, 3).to_ary == [1, 2, 3]
 
-    # tolerance for magnitude(size of Vector)
-    mag_tol = 0.01
-    # tolerance for angle bitween two vectors
-    ang_tol = 0.01.to_deg
+    mag_tol = 0.01        # tolerance for magnitude(size of Vector)
+    ang_tol = 0.01.to_deg # tolerance for angle bitween two vectors
 
-    assert Vec.new(1, 0, 0).equal?(Vec.new(1.0 - 1.0e-7, 0, 0), mag_tol, ang_tol)
-    # bug?
+    assert Vec.x.equal?(Vec.new(1.0 - 1.0e-7, 0, 0), mag_tol, ang_tol)
+
+    ## bug?
     # assert Vec.new(2, 0, 0).normal?(Vec.new(1, 0, 0), ang_tol)
-    assert Vec.new(5, 0, 0).normal.to_a == [1, 0, 0]
 
-    # ...
-    v1 = Vec.new
-    v1.x = 25.to_i
-    v1.y = 30.to_f
-    assert v1.to_a == [25.0, 30.0, 0.0]
+    assert Vec.new(5, 0, 0).normal.to_a == [1, 0, 0]
+    vec = Vec.new(5, 0, 0)
+    vec.normal!
+    assert vec.to_a == [1, 0, 0]
+
+    ## bug?
+    # assert Vec.new(10, 1, 10).parallel?(Vec.new(3, 3, 3), ang_tol)
+
+    assert Vec.x.reverse?(-Vec.x, ang_tol)
+    refute Vec.y.reverse?(-Vec.x, ang_tol)
+    vec = Vec.x
+    vec.reverse!
+    assert vec.to_a == (-Vec.x).to_a
+
+    assert Vec.x.angle(Vec.y) == Math::PI / 2
+    assert Vec.x.angle(-Vec.y) == Math::PI / 2
+
+    assert Vec.x.angleref(Vec.y, Vec.z) == Math::PI / 2
+    ## bug?
+    # p Vec.x.angleref(Vec.y, -Vec.z))
+
+    assert Vec.new(1, 0, 0).magnitude == 1
+    assert Vec.new(2, 0, 0).size == 2
+    assert Vec.new(3, 0, 0).length == 3
+
+    assert Vec.x.cross(Vec.y) == Vec.z
+    assert Vec.x.cross(-Vec.y) == -Vec.z
+    vec = Vec.x
+    vec.cross!(Vec.y)
+    assert vec == Vec.z
+
+    assert Vec.x.dot(Vec.y) == 0
+    assert Vec.x.dot(Vec.new(1, 1, 0)) > 0
+    ## bug?
+    # p Vec.x.dot(Vec.new(1, -1, 0))
+
+    ## no checked
+    # dot_cross
+    # cross_cross
+    # cross_cross!
+    # cross_mag
+    # cross_square_mag
+    # square_mag
+
+    assert Vec.x.mirror(Vec.y) == -Vec.x
+    vec = Vec.x
+    vec.mirror!(-Vec.y)
+    assert vec == -Vec.x
+
+    ## bug?
+    # assert Vec.x.rotate(Vec.z, 90.0.to_rad) == Vec.y
+    # vec = Vec.x
+    # vec.rotate!(Vec.z, 90.0.to_rad)
+    # assert vec == Vec.y
+
+    assert Vec.x.scale(2).to_a == [2, 0, 0]
+    vec = Vec.x
+    vec.scale!(2)
+    assert vec.to_a == [2, 0, 0]
+
+    ## Trans class not supported yet.
+    # transform
+    # transform!
 
   end
 
