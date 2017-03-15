@@ -7,7 +7,8 @@
 
 extern VALUE sr_cCurve;
 
-void siren_curve_final( void* p);
+VALUE siren_curve_new(handle<Geom_Curve> curve);
+void siren_curve_final(void* p);
 static rb_data_type_t siren_curve_type = { "Curve", siren_curve_final };
 
 #include "curve/line.h"
@@ -19,9 +20,9 @@ static rb_data_type_t siren_curve_type = { "Curve", siren_curve_final };
 #include "curve/bscurve.h"
 #include "curve/offsetcurve.h"
 
-inline GeomAbs_CurveType siren_curve_geomtype_native(opencascade::handle<Geom_Curve> hgc)
+inline GeomAbs_CurveType siren_curve_geomtype_native(handle<Geom_Curve> hgc)
 {
-  opencascade::handle<Standard_Type> type = hgc->DynamicType();
+  handle<Standard_Type> type = hgc->DynamicType();
   /* Geom_BoundedCurve */
   if (STANDARD_TYPE(Geom_BezierCurve) == type)  { return GeomAbs_BezierCurve; }
   if (STANDARD_TYPE(Geom_BSplineCurve) == type) { return GeomAbs_BSplineCurve; }
@@ -36,10 +37,10 @@ inline GeomAbs_CurveType siren_curve_geomtype_native(opencascade::handle<Geom_Cu
 }
 
 bool siren_curve_install();
-opencascade::handle<Geom_Curve>* siren_curve_get( VALUE obj);
+handle<Geom_Curve>* siren_curve_get(VALUE obj);
 struct RClass* siren_curve_rclass();
 
-VALUE siren_curve_new(const opencascade::handle<Geom_Curve>* curve);
+VALUE siren_curve_new(handle<Geom_Curve> curve);
 VALUE siren_curve_init(int, VALUE*, VALUE);
 
 #endif

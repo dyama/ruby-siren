@@ -59,7 +59,7 @@ $srcs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|f| File.expand_path(f) }
 $srcs.flatten!
 
 $objs = []
-if false
+if true
   $objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
   $objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
 else
