@@ -37,7 +37,6 @@ static VALUE siren_vec_allocate(VALUE klass)
 bool siren_vec_install()
 {
   sr_cVec = rb_define_class_under(sr_mSiren, "Vec", rb_cObject);
-
   rb_define_alloc_func(sr_cVec, siren_vec_allocate);
 
   rb_define_method(sr_cVec, "initialize",       RUBY_METHOD_FUNC(siren_vec_init),             -1);

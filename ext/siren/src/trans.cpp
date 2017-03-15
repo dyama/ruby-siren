@@ -2,58 +2,58 @@
 
 VALUE sr_cTrans;
 
-gp_Trsf* siren_trans_get( VALUE obj)
+gp_Trsf* siren_trans_get(VALUE obj)
 {
-#if 0
-  return static_cast<gp_Trsf*>(_get_datatype(obj, &siren_trans_type));
-#else
   gp_Trsf* m;
   Data_Get_Struct(obj, gp_Trsf, m);
   return m;
-#endif
+}
+
+static VALUE siren_trans_allocate(VALUE klass)
+{
+  void* p = ruby_xmalloc(sizeof(gp_Trsf));
+  new(p) gp_Trsf();
+  return Data_Wrap_Struct(klass, NULL, siren_trans_final, p);
 }
 
 VALUE siren_trans_new(const gp_Trsf& src)
 {
-  VALUE res;
-  res = rb_instance_alloc(sr_cTrans);
-  void* p = ruby_xmalloc(sizeof(gp_Trsf));
-  gp_Trsf* trans = new(p) gp_Trsf();
-  *trans = src;
-  DATA_PTR(res) = trans;
-  // DATA_TYPE(res) = &siren_trans_type;
-  return res;
+  VALUE t = siren_trans_allocate(sr_cTrans);
+  gp_Trsf* pt = siren_trans_get(t);
+  *pt = src;
+  return t;
 }
 
 bool siren_trans_install()
 {
-  // MRB_SET_INSTANCE_TT(cls_trans, MRB_TT_DATA);
-  rb_define_method(sr_cTrans, "initialize"     , siren_trans_init               , -1);
-  rb_define_method(sr_cTrans, "inspect"        , siren_trans_to_s               , -1);
-  rb_define_method(sr_cTrans, "to_s"           , siren_trans_to_s               , -1);
-  rb_define_method(sr_cTrans, "to_a"           , siren_trans_matrix             , -1);
-  rb_define_method(sr_cTrans, "to_ary"         , siren_trans_matrix             , -1);
-  rb_define_method(sr_cTrans, "matrix"         , siren_trans_matrix             , -1);
-  rb_define_method(sr_cTrans, "matrix="        , siren_trans_set_matrix         , -1);
-  rb_define_method(sr_cTrans, "multiply"       , siren_trans_multiply           , -1);
-  rb_define_method(sr_cTrans, "multiply!"      , siren_trans_multiply_bang      , -1);
-  rb_define_method(sr_cTrans, "power"          , siren_trans_power              , -1);
-  rb_define_method(sr_cTrans, "power!"         , siren_trans_power_bang         , -1);
-  rb_define_method(sr_cTrans, "translate!"     , siren_trans_translate_bang     , -1);
-  rb_define_method(sr_cTrans, "translatef"     , siren_trans_translatef         , -1);
-  rb_define_method(sr_cTrans, "translatef="    , siren_trans_set_translatef     , -1);
-  rb_define_method(sr_cTrans, "mirror!"        , siren_trans_mirror_bang        , -1);
-  rb_define_method(sr_cTrans, "rotate!"        , siren_trans_rotate_bang        , -1);
-  rb_define_method(sr_cTrans, "scale!"         , siren_trans_scale_bang         , -1);
-  rb_define_method(sr_cTrans, "scalef"         , siren_trans_scalef             , -1);
-  rb_define_method(sr_cTrans, "scalef="        , siren_trans_set_scalef         , -1);
-  rb_define_method(sr_cTrans, "invert"         , siren_trans_invert             , -1);
-  rb_define_method(sr_cTrans, "invert!"        , siren_trans_invert_bang        , -1);
-  rb_define_method(sr_cTrans, "reverse"        , siren_trans_invert             , -1);
-  rb_define_method(sr_cTrans, "reverse!"       , siren_trans_invert_bang        , -1);
-  rb_define_method(sr_cTrans, "negative?"      , siren_trans_is_negative        , -1);
-  rb_define_method(sr_cTrans, "transform!"     , siren_trans_transform_bang     , -1);
-  rb_define_method(sr_cTrans, "move_point"     , siren_trans_move_point         , -1);
+  sr_cTrans = rb_define_class_under(sr_mSiren, "Trans", rb_cObject);
+  rb_define_alloc_func(sr_cTrans, siren_trans_allocate);
+  rb_define_method(sr_cTrans, "initialize"     , RUBY_METHOD_FUNC(siren_trans_init              ), -1);
+  rb_define_method(sr_cTrans, "inspect"        , RUBY_METHOD_FUNC(siren_trans_to_s              ), -1);
+  rb_define_method(sr_cTrans, "to_s"           , RUBY_METHOD_FUNC(siren_trans_to_s              ), -1);
+  rb_define_method(sr_cTrans, "to_a"           , RUBY_METHOD_FUNC(siren_trans_matrix            ), -1);
+  rb_define_method(sr_cTrans, "to_ary"         , RUBY_METHOD_FUNC(siren_trans_matrix            ), -1);
+  rb_define_method(sr_cTrans, "matrix"         , RUBY_METHOD_FUNC(siren_trans_matrix            ), -1);
+  rb_define_method(sr_cTrans, "matrix="        , RUBY_METHOD_FUNC(siren_trans_set_matrix        ), -1);
+  rb_define_method(sr_cTrans, "multiply"       , RUBY_METHOD_FUNC(siren_trans_multiply          ), -1);
+  rb_define_method(sr_cTrans, "multiply!"      , RUBY_METHOD_FUNC(siren_trans_multiply_bang     ), -1);
+  rb_define_method(sr_cTrans, "power"          , RUBY_METHOD_FUNC(siren_trans_power             ), -1);
+  rb_define_method(sr_cTrans, "power!"         , RUBY_METHOD_FUNC(siren_trans_power_bang        ), -1);
+  rb_define_method(sr_cTrans, "translate!"     , RUBY_METHOD_FUNC(siren_trans_translate_bang    ), -1);
+  rb_define_method(sr_cTrans, "translatef"     , RUBY_METHOD_FUNC(siren_trans_translatef        ), -1);
+  rb_define_method(sr_cTrans, "translatef="    , RUBY_METHOD_FUNC(siren_trans_set_translatef    ), -1);
+  rb_define_method(sr_cTrans, "mirror!"        , RUBY_METHOD_FUNC(siren_trans_mirror_bang       ), -1);
+  rb_define_method(sr_cTrans, "rotate!"        , RUBY_METHOD_FUNC(siren_trans_rotate_bang       ), -1);
+  rb_define_method(sr_cTrans, "scale!"         , RUBY_METHOD_FUNC(siren_trans_scale_bang        ), -1);
+  rb_define_method(sr_cTrans, "scalef"         , RUBY_METHOD_FUNC(siren_trans_scalef            ), -1);
+  rb_define_method(sr_cTrans, "scalef="        , RUBY_METHOD_FUNC(siren_trans_set_scalef        ), -1);
+  rb_define_method(sr_cTrans, "invert"         , RUBY_METHOD_FUNC(siren_trans_invert            ), -1);
+  rb_define_method(sr_cTrans, "invert!"        , RUBY_METHOD_FUNC(siren_trans_invert_bang       ), -1);
+  rb_define_method(sr_cTrans, "reverse"        , RUBY_METHOD_FUNC(siren_trans_invert            ), -1);
+  rb_define_method(sr_cTrans, "reverse!"       , RUBY_METHOD_FUNC(siren_trans_invert_bang       ), -1);
+  rb_define_method(sr_cTrans, "negative?"      , RUBY_METHOD_FUNC(siren_trans_is_negative       ), -1);
+  rb_define_method(sr_cTrans, "transform!"     , RUBY_METHOD_FUNC(siren_trans_transform_bang    ), -1);
+  rb_define_method(sr_cTrans, "move_point"     , RUBY_METHOD_FUNC(siren_trans_move_point        ), -1);
 //  rb_define_method(sr_cTrans, "rotatef"        , siren_trans_rotatef            , -1);
 //  rb_define_method(sr_cTrans, "rotatef="       , siren_trans_set_rotatef        , -1);
   return true;
@@ -61,10 +61,6 @@ bool siren_trans_install()
 
 VALUE siren_trans_init(int argc, VALUE* argv, VALUE self)
 {
-  void* p = ruby_xmalloc(sizeof(gp_Trsf));
-  gp_Trsf* trans = new(p) gp_Trsf();
-  DATA_PTR(self) = trans;
-  // DATA_TYPE(self) = &siren_trans_type;
   return self;
 }
 

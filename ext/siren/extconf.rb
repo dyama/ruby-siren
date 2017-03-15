@@ -82,7 +82,6 @@ else
   #  #{dir}/src/curve.o
   #  #{dir}/src/filler.o
   #  #{dir}/src/offset.o
-  #  #{dir}/src/trans.o
   #  #{dir}/src/bo.o
   #  #{dir}/src/shape/wire.o
   #  #{dir}/src/shape/face.o
@@ -96,6 +95,7 @@ else
   $objs << %W(
     #{dir}/src/vec.o
     #{dir}/src/common.o
+    #{dir}/src/trans.o
     #{dir}/src/bndbox.o
     #{dir}/src/siren.o
   )
