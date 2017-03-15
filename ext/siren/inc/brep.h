@@ -10,8 +10,8 @@
 
 bool siren_brep_install();
 
-VALUE siren_brep_save(...);
-VALUE siren_brep_load(...);
-VALUE siren_brep_dump(...);
+VALUE siren_brep_save(int, VALUE*, VALUE);
+VALUE siren_brep_load(int, VALUE*, VALUE);
+VALUE siren_brep_dump(int, VALUE*, VALUE);
 
 #endif

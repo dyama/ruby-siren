@@ -3,10 +3,10 @@
 #include "vec.h"
 #include "trans.h"
 #include "bndbox.h"
+#include "shape.h"
+#include "brep.h"
+#include "topalgo.h"
 // #include "curve.h"
-// #include "shape.h"
-// #include "topalgo.h"
-// #include "brep.h"
 // #include "filler.h"
 // 
 // #ifdef SIREN_ENABLE_BO
@@ -47,15 +47,12 @@ extern "C" {
     siren_vec_install    ();
     siren_trans_install  ();
     siren_bndbox_install ();
-//     siren_curve_install  ();
-//     siren_shape_install  ();
-// 
-//     // API class
+    siren_shape_install  ();
+//  siren_curve_install  ();
+    siren_topalgo_install();
+    siren_brep_install   ();
+//
 //     siren_filler_install ();
-// 
-//     // Method
-//     siren_topalgo_install();
-//     siren_brep_install   ();
 // #ifdef SIREN_ENABLE_OFFSET
 //     siren_offset_install ();
 // #endif

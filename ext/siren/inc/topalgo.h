@@ -34,19 +34,19 @@
 
 bool siren_topalgo_install();
 
-VALUE siren_topalgo_copy(...);
+VALUE siren_topalgo_copy(int, VALUE*, VALUE);
 
-VALUE siren_topalgo_line       (...);
-VALUE siren_topalgo_infline    (...);
-VALUE siren_topalgo_polyline   (...);
-VALUE siren_topalgo_interpolate(...);
-VALUE siren_topalgo_arc        (...);
-VALUE siren_topalgo_arc3p      (...);
-VALUE siren_topalgo_circle     (...);
-VALUE siren_topalgo_circle3p   (...);
+VALUE siren_topalgo_line       (int, VALUE*, VALUE);
+VALUE siren_topalgo_infline    (int, VALUE*, VALUE);
+VALUE siren_topalgo_polyline   (int, VALUE*, VALUE);
+VALUE siren_topalgo_interpolate(int, VALUE*, VALUE);
+VALUE siren_topalgo_arc        (int, VALUE*, VALUE);
+VALUE siren_topalgo_arc3p      (int, VALUE*, VALUE);
+VALUE siren_topalgo_circle     (int, VALUE*, VALUE);
+VALUE siren_topalgo_circle3p   (int, VALUE*, VALUE);
 
-VALUE siren_topalgo_volume(...);
-VALUE siren_topalgo_cog(...);
-VALUE siren_topalgo_area(...);
+VALUE siren_topalgo_volume(int, VALUE*, VALUE);
+VALUE siren_topalgo_cog(int, VALUE*, VALUE);
+VALUE siren_topalgo_area(int, VALUE*, VALUE);
 
 #endif

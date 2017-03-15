@@ -15,19 +15,18 @@ bool siren_topalgo_install()
   rb_define_class_method(sr_mSiren, "circle3p",   siren_topalgo_circle3p,    -1);
 #endif
   // For mix-in
-  rb_define_method      (sr_mSiren, "copy",       siren_topalgo_copy,        -1);
-  rb_define_method      (sr_mSiren, "line",       siren_topalgo_line,        -1);
-  rb_define_method      (sr_mSiren, "infline",    siren_topalgo_infline,     -1);
-  rb_define_method      (sr_mSiren, "polyline",   siren_topalgo_polyline,    -1);
-  rb_define_method      (sr_mSiren, "interpolate",siren_topalgo_interpolate, -1);
-  rb_define_method      (sr_mSiren, "arc",        siren_topalgo_arc,         -1);
-  rb_define_method      (sr_mSiren, "arc3p",      siren_topalgo_arc3p,       -1);
-  rb_define_method      (sr_mSiren, "circle",     siren_topalgo_circle,      -1);
-  rb_define_method      (sr_mSiren, "circle3p",   siren_topalgo_circle3p,    -1);
-
-  rb_define_method(sr_cShape, "cog",    siren_topalgo_cog,    -1);
-  rb_define_method(sr_cShape, "area",   siren_topalgo_area,   -1);
-  rb_define_method(sr_cShape, "volume", siren_topalgo_volume, -1);
+  rb_define_method(sr_mSiren, "copy",        RUBY_METHOD_FUNC(siren_topalgo_copy),        -1);
+  rb_define_method(sr_mSiren, "line",        RUBY_METHOD_FUNC(siren_topalgo_line),        -1);
+  rb_define_method(sr_mSiren, "infline",     RUBY_METHOD_FUNC(siren_topalgo_infline),     -1);
+  rb_define_method(sr_mSiren, "polyline",    RUBY_METHOD_FUNC(siren_topalgo_polyline),    -1);
+  rb_define_method(sr_mSiren, "interpolate", RUBY_METHOD_FUNC(siren_topalgo_interpolate), -1);
+  rb_define_method(sr_mSiren, "arc",         RUBY_METHOD_FUNC(siren_topalgo_arc),         -1);
+  rb_define_method(sr_mSiren, "arc3p",       RUBY_METHOD_FUNC(siren_topalgo_arc3p),       -1);
+  rb_define_method(sr_mSiren, "circle",      RUBY_METHOD_FUNC(siren_topalgo_circle),      -1);
+  rb_define_method(sr_mSiren, "circle3p",    RUBY_METHOD_FUNC(siren_topalgo_circle3p),    -1);
+  rb_define_method(sr_cShape, "cog",         RUBY_METHOD_FUNC(siren_topalgo_cog),         -1);
+  rb_define_method(sr_cShape, "area",        RUBY_METHOD_FUNC(siren_topalgo_area),        -1);
+  rb_define_method(sr_cShape, "volume",      RUBY_METHOD_FUNC(siren_topalgo_volume),      -1);
 
   return true;
 }
@@ -47,7 +46,7 @@ VALUE siren_topalgo_copy(int argc, VALUE* argv, VALUE self)
 VALUE siren_topalgo_line(int argc, VALUE* argv, VALUE self)
 {
   VALUE sp, tp;
-  rb_scan_args(argc, argv, "|AA", &sp, &tp);
+  rb_scan_args(argc, argv, "02", &sp, &tp);
   gp_Pnt S(0., 0., 0.);
   gp_Pnt T(1., 1., 1.);
   if (argc > 0) {
