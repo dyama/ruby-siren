@@ -57,4 +57,8 @@ VALUE siren_curve_init(int, VALUE*, VALUE);
     return res; \
   }
 
+#define SR_CURVE_INIT(CLASS) \
+  sr_c##CLASS = rb_define_class_under(sr_mSiren, #CLASS, rb_cObject); \
+  rb_define_alloc_func(sr_c##CLASS, siren_curve_allocate);
+
 #endif

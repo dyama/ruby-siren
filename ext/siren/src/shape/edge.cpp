@@ -195,7 +195,7 @@ VALUE siren_edge_curve(int argc, VALUE* argv, VALUE self)
   // return rb_iv_get(self, rb_intern_lit("@curve"));
   Standard_Real first, last;
   handle<Geom_Curve> hgcurve = BRep_Tool::Curve(edge, first, last);
-  return siren_curve_new(&hgcurve);
+  return siren_curve_new(hgcurve);
 }
 
 VALUE siren_edge_extrema(int argc, VALUE* argv, VALUE self)

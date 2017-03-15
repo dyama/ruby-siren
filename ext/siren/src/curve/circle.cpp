@@ -6,8 +6,7 @@ SR_CURVE_GET(Circle, circle)
 
 bool siren_circle_install()
 {
-  sr_cCircle = rb_define_class_under(sr_mSiren, "Circle", rb_cObject);
-  rb_define_alloc_func(sr_cCircle, siren_curve_allocate);
+  SR_CURVE_INIT(Circle)
   rb_define_method(sr_cCircle, "initialize", RUBY_METHOD_FUNC(siren_curve_init),        -1);
   rb_define_method(sr_cCircle, "radius",     RUBY_METHOD_FUNC(siren_circle_radius),     -1);
   rb_define_method(sr_cCircle, "radius=",    RUBY_METHOD_FUNC(siren_circle_radius_set), -1);

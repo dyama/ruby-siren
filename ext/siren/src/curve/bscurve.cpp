@@ -10,11 +10,7 @@ SR_CURVE_GET(BSplineCurve, bscurve)
 
 bool siren_bscurve_install()
 {
-#if 0
-  struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_bscurve = rb_define_class_under(sr_mSiren, "BSCurve", cls_curve);
-  MRB_SET_INSTANCE_TT(cls_bscurve, MRB_TT_DATA);
-#endif
+  SR_CURVE_INIT(BSCurve)
   rb_define_method(sr_cBSCurve, "initialize", RUBY_METHOD_FUNC(siren_bscurve_init),    -1);
   rb_define_method(sr_cBSCurve, "degree",     RUBY_METHOD_FUNC(siren_bscurve_degree),  -1);
   rb_define_method(sr_cBSCurve, "knots",      RUBY_METHOD_FUNC(siren_bscurve_knots),   -1);

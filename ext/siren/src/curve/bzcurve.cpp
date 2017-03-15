@@ -10,11 +10,7 @@ SR_CURVE_GET(BezierCurve, bzcurve)
 
 bool siren_bzcurve_install()
 {
-#if 0
-  struct RClass* cls_curve = siren_curve_rclass();
-  struct RClass* cls_bzcurve = rb_define_class_under(sr_mSiren, "BzCurve", cls_curve);
-  MRB_SET_INSTANCE_TT(cls_bzcurve, MRB_TT_DATA);
-#endif
+  SR_CURVE_INIT(BzCurve)
   rb_define_method(sr_cBzCurve, "initialize", RUBY_METHOD_FUNC(siren_bzcurve_init), -1);
   return true;
 }
