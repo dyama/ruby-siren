@@ -12,7 +12,8 @@ module SolidTest
   include Siren
 
   def test_solid
-    p box.volume
+    p Solid.box
+    puts "%0.50f" % box.volume.round(15)
   end
 
 end

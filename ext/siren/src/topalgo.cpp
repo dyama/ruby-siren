@@ -67,7 +67,7 @@ VALUE siren_topalgo_line(int argc, VALUE* argv, VALUE self)
 VALUE siren_topalgo_infline(int argc, VALUE* argv, VALUE self)
 {
   VALUE orig, dir;
-  rb_scan_args(argc, argv, "|AA", &orig, &dir);
+  rb_scan_args(argc, argv, "02", &orig, &dir);
   gp_Pnt p(0., 0., 0.);
   gp_Dir d(1., 0., 0.);
   if (argc > 0) {
@@ -83,7 +83,7 @@ VALUE siren_topalgo_infline(int argc, VALUE* argv, VALUE self)
 VALUE siren_topalgo_polyline(int argc, VALUE* argv, VALUE self)
 {
   VALUE ary;
-  rb_scan_args(argc, argv, "A", &ary);
+  rb_scan_args(argc, argv, "1", &ary);
   BRepBuilderAPI_MakePolygon poly;
   for (int i = 0; i < RARRAY_LEN(ary); i++) {
     poly.Add(siren_ary_to_pnt(RARRAY_AREF(ary, i)));
@@ -95,7 +95,7 @@ VALUE siren_topalgo_polyline(int argc, VALUE* argv, VALUE self)
 VALUE siren_topalgo_interpolate(int argc, VALUE* argv, VALUE self)
 {
   VALUE pts, vecs;
-  rb_scan_args(argc, argv, "A|A", &pts, &vecs);
+  rb_scan_args(argc, argv, "11", &pts, &vecs);
 
   int psize = RARRAY_LEN(pts);
   opencascade::handle<TColgp_HArray1OfPnt> pary = new TColgp_HArray1OfPnt(1, psize);
@@ -150,9 +150,9 @@ VALUE siren_topalgo_arc(int argc, VALUE* argv, VALUE self)
 {
   VALUE orig, dir, vx;
   VALUE r, start_ang, term_ang;
-  rb_scan_args(argc, argv, "AAAfff", &orig, &dir, &vx, &r, &start_ang, &term_ang);
-  gp_Circ circle = gp_Circ(gp_Ax2(siren_ary_to_pnt(orig), siren_ary_to_dir(dir), siren_ary_to_dir(vx)), r);
-  opencascade::handle<Geom_TrimmedCurve> gc = GC_MakeArcOfCircle(circle, start_ang, term_ang, Standard_True);
+  rb_scan_args(argc, argv, "6", &orig, &dir, &vx, &r, &start_ang, &term_ang);
+  gp_Circ circle = gp_Circ(gp_Ax2(siren_ary_to_pnt(orig), siren_ary_to_dir(dir), siren_ary_to_dir(vx)), NUM2DBL(r));
+  opencascade::handle<Geom_TrimmedCurve> gc = GC_MakeArcOfCircle(circle, NUM2DBL(start_ang), NUM2DBL(term_ang), Standard_True);
   if (gc.IsNull()) {
     rb_raise(Qnil, "Failed to make a curve.");
     return Qnil;
@@ -166,7 +166,7 @@ VALUE siren_topalgo_arc(int argc, VALUE* argv, VALUE self)
 VALUE siren_topalgo_arc3p(int argc, VALUE* argv, VALUE self)
 {
   VALUE p1, p2, p3;
-  rb_scan_args(argc, argv, "AAA", &p1, &p2, &p3);
+  rb_scan_args(argc, argv, "3", &p1, &p2, &p3);
   opencascade::handle<Geom_TrimmedCurve> gc = GC_MakeArcOfCircle(
       siren_ary_to_pnt(p1),
       siren_ary_to_pnt(p2),
@@ -185,11 +185,11 @@ VALUE siren_topalgo_circle(int argc, VALUE* argv, VALUE self)
 {
   VALUE orig, dir;
   VALUE r;
-  rb_scan_args(argc, argv, "AAf", &orig, &dir, &r);
+  rb_scan_args(argc, argv, "3", &orig, &dir, &r);
   opencascade::handle<Geom_Circle> gc = GC_MakeCircle(
       siren_ary_to_pnt(orig),
       siren_ary_to_dir(dir),
-      r);
+      NUM2DBL(r));
   if (gc.IsNull()) {
     rb_raise(Qnil, "Failed to make a curve.");
     return Qnil;
@@ -203,7 +203,7 @@ VALUE siren_topalgo_circle(int argc, VALUE* argv, VALUE self)
 VALUE siren_topalgo_circle3p(int argc, VALUE* argv, VALUE self)
 {
   VALUE p1, p2, p3;
-  rb_scan_args(argc, argv, "AAA", &p1, &p2, &p3);
+  rb_scan_args(argc, argv, "3", &p1, &p2, &p3);
   opencascade::handle<Geom_Circle> gc = GC_MakeCircle(
       siren_ary_to_pnt(p1),
       siren_ary_to_pnt(p2),

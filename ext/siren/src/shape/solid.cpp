@@ -26,9 +26,9 @@ bool siren_solid_install()
 VALUE siren_solid_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE* a;
-  VALUE len;
-  rb_scan_args(argc, argv, "*", &a, &len);
-  if (len == 0) {
+  rb_scan_args(argc, argv, "1", &a);
+  int len = RARRAY_LEN(a);
+  if (argc == 0 || len == 0) {
     rb_raise(Qnil, "No shapes specified.");
   }
   BRepBuilderAPI_MakeSolid solid_maker;
@@ -43,11 +43,8 @@ VALUE siren_solid_init(int argc, VALUE* argv, VALUE self)
   if (shape.IsNull()) {
     rb_raise(Qnil, "Failed to make a Solid.");
   }
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = shape; // Copy to inner native member
-  DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(self) = &siren_solid_type;
+  auto p = siren_shape_get(self);
+  *p = shape;
   return self;
 }
 

@@ -28,9 +28,8 @@ VALUE siren_edge_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE curve;
   VALUE sp = 0.0, tp = 1.0;
-  rb_scan_args(argc, argv, "o|ff", &curve, &sp, &tp);
-  opencascade::handle<Geom_Curve>* phgcurve
-    = static_cast<opencascade::handle<Geom_Curve>*>(DATA_PTR(curve));
+  rb_scan_args(argc, argv, "12", &curve, &sp, &tp);
+  auto phgcurve = siren_curve_get(curve);
   TopoDS_Shape edge;
   if (argc == 1) {
     edge = BRepBuilderAPI_MakeEdge(*phgcurve);
@@ -50,11 +49,8 @@ VALUE siren_edge_init(int argc, VALUE* argv, VALUE self)
       rb_raise(Qnil, "Failed to make Edge from the Curve.");
     }
   }
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = edge; // Copy to inner native member
-  DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(self) = &siren_edge_type;
+  auto p = siren_shape_get(self);
+  *p = edge;
   return self;
 }
 

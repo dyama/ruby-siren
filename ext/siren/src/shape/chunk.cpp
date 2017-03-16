@@ -29,8 +29,8 @@ VALUE siren_chunk_obj()
 VALUE siren_chunk_init(int argc, VALUE* argv, VALUE self)
 {
   VALUE* a;
-  VALUE len;
-  rb_scan_args(argc, argv, "*", &a, &len);
+  rb_scan_args(argc, argv, "1", &a);
+  int len = RARRAY_LEN(a);
 
   TopoDS_CompSolid cs;
   TopoDS_Builder builder;
@@ -49,11 +49,8 @@ VALUE siren_chunk_init(int argc, VALUE* argv, VALUE self)
     }
   }
 
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = cs; // Copy to inner native member
-  DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(self) = &siren_chunk_type;
+  auto p = siren_shape_get(self);
+  *p = cs;
   return self;
 }
 

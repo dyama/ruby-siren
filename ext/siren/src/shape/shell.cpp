@@ -17,11 +17,11 @@ VALUE siren_shell_make(int argc, VALUE* argv, VALUE self)
 {
   VALUE ary;
   VALUE tol;
-  rb_scan_args(argc, argv, "A|f", &ary, &tol);
+  rb_scan_args(argc, argv, "11", &ary, &tol);
   BRepBuilderAPI_Sewing sewer;
   sewer.Init();
-  if (argc == 2 && tol >= 0) {
-    sewer.SetTolerance(tol);
+  if (argc == 2 && NUM2DBL(tol) >= 0.0) {
+    sewer.SetTolerance(NUM2DBL(tol));
   }
   int len = RARRAY_LEN(ary);
   for (int i=0; i < len; i++) {

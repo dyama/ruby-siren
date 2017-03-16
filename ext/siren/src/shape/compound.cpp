@@ -41,11 +41,8 @@ VALUE siren_compound_init(int argc, VALUE* argv, VALUE self)
     }
   }
 
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  TopoDS_Shape* inner = new(p) TopoDS_Shape();
-  *inner = comp; // Copy to inner native member
-  DATA_PTR(self)  = const_cast<TopoDS_Shape*>(inner);
-//  DATA_TYPE(self) = &siren_compound_type;
+  auto p = siren_shape_get(self);
+  *p = comp;
   return self;
 }
 

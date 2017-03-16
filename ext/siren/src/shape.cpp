@@ -323,7 +323,6 @@ VALUE siren_shape_explore(int argc, VALUE* argv, VALUE self)
   VALUE klass;
   VALUE klassf;
   VALUE block;
-  // rb_scan_args(argc, argv, "C|C&", &klass, &klassf, &block);
   rb_scan_args(argc, argv, "12", &klass, &klassf, &block);
 
   VALUE mtype;
@@ -512,7 +511,7 @@ VALUE siren_shape_set_lock(int argc, VALUE* argv, VALUE self)
 {
   VALUE flag;
   rb_scan_args(argc, argv, "1", &flag);
-  siren_shape_get(self)->Locked((Standard_Boolean)flag);
+  siren_shape_get(self)->Locked((Standard_Boolean)(flag == Qtrue));
   return self;
 }
 
@@ -526,7 +525,7 @@ VALUE siren_shape_set_modify(int argc, VALUE* argv, VALUE self)
 {
   VALUE flag;
   rb_scan_args(argc, argv, "1", &flag);
-  siren_shape_get(self)->Modified((Standard_Boolean)flag);
+  siren_shape_get(self)->Modified((Standard_Boolean)(flag == Qtrue));
   return self;
 }
 
@@ -540,7 +539,7 @@ VALUE siren_shape_set_check(int argc, VALUE* argv, VALUE self)
 {
   VALUE flag;
   rb_scan_args(argc, argv, "1", &flag);
-  siren_shape_get(self)->Checked((Standard_Boolean)flag);
+  siren_shape_get(self)->Checked((Standard_Boolean)(flag == Qtrue));
   return self;
 }
 
@@ -554,7 +553,7 @@ VALUE siren_shape_set_orientable(int argc, VALUE* argv, VALUE self)
 {
   VALUE flag;
   rb_scan_args(argc, argv, "1", &flag);
-  siren_shape_get(self)->Orientable((Standard_Boolean)flag);
+  siren_shape_get(self)->Orientable((Standard_Boolean)(flag == Qtrue));
   return self;
 }
 
@@ -568,7 +567,7 @@ VALUE siren_shape_set_close(int argc, VALUE* argv, VALUE self)
 {
   VALUE flag;
   rb_scan_args(argc, argv, "1", &flag);
-  siren_shape_get(self)->Closed((Standard_Boolean)flag);
+  siren_shape_get(self)->Closed((Standard_Boolean)(flag == Qtrue));
   return self;
 }
 
@@ -582,7 +581,7 @@ VALUE siren_shape_set_infinite(int argc, VALUE* argv, VALUE self)
 {
   VALUE flag;
   rb_scan_args(argc, argv, "1", &flag);
-  siren_shape_get(self)->Infinite((Standard_Boolean)flag);
+  siren_shape_get(self)->Infinite((Standard_Boolean)(flag == Qtrue));
   return self;
 }
 
@@ -596,6 +595,6 @@ VALUE siren_shape_set_convex(int argc, VALUE* argv, VALUE self)
 {
   VALUE flag;
   rb_scan_args(argc, argv, "1", &flag);
-  siren_shape_get(self)->Convex((Standard_Boolean)flag);
+  siren_shape_get(self)->Convex((Standard_Boolean)(flag == Qtrue));
   return self;
 }
