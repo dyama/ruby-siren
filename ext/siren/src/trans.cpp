@@ -26,7 +26,8 @@ VALUE siren_trans_new(const gp_Trsf& src)
 
 bool siren_trans_install()
 {
-  SR_CLASS_INIT(Trans, trans)
+  sr_cTrans = rb_define_class_under(sr_mSiren, "Trans", rb_cObject);
+  rb_define_alloc_func(sr_cTrans, siren_trans_allocate);
   rb_define_method(sr_cTrans, "initialize"     , RUBY_METHOD_FUNC(siren_trans_init              ), -1);
   rb_define_method(sr_cTrans, "inspect"        , RUBY_METHOD_FUNC(siren_trans_to_s              ), -1);
   rb_define_method(sr_cTrans, "to_s"           , RUBY_METHOD_FUNC(siren_trans_to_s              ), -1);

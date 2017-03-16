@@ -224,7 +224,7 @@ VALUE siren_topalgo_volume(int argc, VALUE* argv, VALUE self)
   GProp_GProps gprops;
   BRepGProp::VolumeProperties(*shape, gprops);
   Standard_Real vol = gprops.Mass();
-  return (vol);
+  return DBL2NUM(vol);
 }
 
 VALUE siren_topalgo_cog(int argc, VALUE* argv, VALUE self)
@@ -242,5 +242,5 @@ VALUE siren_topalgo_area(int argc, VALUE* argv, VALUE self)
   GProp_GProps gprops;
   BRepGProp::SurfaceProperties(*shape, gprops);
   Standard_Real area = gprops.Mass();
-  return (area);
+  return DBL2NUM(area);
 }

@@ -36,8 +36,4 @@ extern VALUE sr_mSiren;
 
 #include "common.h"
 
-#define SR_CLASS_INIT(U,L) \
-  sr_c##U = rb_define_class_under(sr_mSiren, #U, rb_cObject); \
-  rb_define_alloc_func(sr_c##U, siren_##L##_allocate);
-
 #endif
