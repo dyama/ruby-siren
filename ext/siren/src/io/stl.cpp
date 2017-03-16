@@ -20,7 +20,7 @@ VALUE siren_stl_load(int argc, VALUE* argv, VALUE self)
   StlAPI::Read(shape, (Standard_CString)RSTRING_PTR(path));
 
   if (shape.IsNull()) {
-    rb_raise(Qnil, "Failed to load STL from %S.", path);
+    rb_raise(Qnil, "Failed to load STL from %S.", (wchar_t*)RSTRING_PTR(path));
   }
 
   return siren_shape_new(shape);

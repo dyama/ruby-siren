@@ -30,7 +30,7 @@ VALUE siren_iges_save(int argc, VALUE* argv, VALUE self)
 
   std::ofstream fst(RSTRING_PTR(path), std::ios_base::out);
   if (writer.Write(fst) == Standard_False) {
-    rb_raise(Qnil, "Failed to save IGES to %S.", path);
+    rb_raise(Qnil, "Failed to save IGES to %S.", (wchar_t*)RSTRING_PTR(path));
   }
 
   return Qnil;
@@ -77,7 +77,7 @@ VALUE siren_iges_load(int argc, VALUE* argv, VALUE self)
     }
   }
   else {
-    rb_raise(Qnil, "Failed to load IGES from %S.", path);
+    rb_raise(Qnil, "Failed to load IGES from %S.", (wchar_t*)RSTRING_PTR(path));
   }
   return result;
 }
