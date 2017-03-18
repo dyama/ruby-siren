@@ -601,7 +601,7 @@ VALUE siren_shape_set_convex(int argc, VALUE* argv, VALUE self)
 
 bool siren_shape_p(const VALUE& target)
 {
-  return rb_funcall(target, rb_intern("class"), 0) == sr_cShape;
+  return rb_funcall(target, rb_intern("is_a?"), 1, sr_cShape) == Qtrue;
 }
 
 void siren_shape_check(const VALUE& target)
