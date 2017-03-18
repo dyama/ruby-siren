@@ -598,3 +598,20 @@ VALUE siren_shape_set_convex(int argc, VALUE* argv, VALUE self)
   siren_shape_get(self)->Convex((Standard_Boolean)(flag == Qtrue));
   return self;
 }
+
+bool siren_shape_p(const VALUE& target)
+{
+  return rb_funcall(target, rb_intern("class"), 0) == sr_cShape;
+}
+
+void siren_shape_check(const VALUE& target)
+{
+  if (!siren_shape_p(target)) {
+    VALUE type = rb_funcall(target, rb_intern("class"), 0);
+    VALUE type_str = rb_funcall(type, rb_intern("to_s"), 0);
+    VALUE etype_str = rb_funcall(sr_cShape, rb_intern("to_s"), 0);
+    rb_raise(rb_eTypeError, "wrong argument type %s (expected %s)",
+        RSTRING_PTR(type_str), RSTRING_PTR(etype_str));
+  }
+}
+

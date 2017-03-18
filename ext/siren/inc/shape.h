@@ -43,6 +43,9 @@ VALUE siren_shape_new( const TopoDS_Shape& shape);
 struct RClass* siren_shape_rclass();
 #define siren_is_shape(obj) (DATA_TYPE(obj) == &siren_shape_type)
 
+bool siren_shape_p(const VALUE&);
+void siren_shape_check(const VALUE&);
+
 VALUE siren_shape_init(int, VALUE*, VALUE);
 VALUE siren_shape_is_null(int, VALUE*, VALUE);
 VALUE siren_shape_pos(int, VALUE*, VALUE);
