@@ -20,13 +20,20 @@ VALUE siren_brep_save(int argc, VALUE* argv, VALUE self)
   VALUE target;
   VALUE path;
   rb_scan_args(argc, argv, "2", &target, &path);
+  siren_shape_check(target);
+  Check_Type(path, T_STRING);
+  if (NUM2INT(rb_funcall(path, rb_intern("size"), 0)) == 0) {
+    rb_raise(rb_eArgError, "Specified path has no charactors.");
+  }
   TopoDS_Shape* shape = siren_shape_get(target);
   try {
     std::ofstream fst(RSTRING_PTR(path), std::ios_base::out);
-    BRepTools::Write(*shape, fst);
+    if (fst.good()) {
+      BRepTools::Write(*shape, fst);
+    }
   }
   catch (...) {
-    rb_raise(rb_eSystemCallError, "Failed to save BRep to %S.", (wchar_t*)StringValuePtr(path));
+    rb_raise(rb_eIOError, "Failed to save BRep to %s.", RSTRING_PTR(path));
   }
   return Qnil;
 }
@@ -35,14 +42,20 @@ VALUE siren_brep_load(int argc, VALUE* argv, VALUE self)
 {
   VALUE path;
   rb_scan_args(argc, argv, "1", &path);
+  Check_Type(path, T_STRING);
+  if (rb_funcall(rb_cFile, rb_intern("exist?"), 1, path) == Qfalse) {
+    rb_raise(rb_eIOError, "No such file at %s.", RSTRING_PTR(path));
+  }
   BRep_Builder B;
   TopoDS_Shape shape;
   try {
     std::ifstream fst(RSTRING_PTR(path), std::ios_base::in);
-    BRepTools::Read(shape, fst, B);
+    if (fst.good()) {
+      BRepTools::Read(shape, fst, B);
+    }
   }
   catch (...) {
-    rb_raise(rb_eSystemCallError, "Failed to load BRep from %S.", (wchar_t*)StringValuePtr(path));
+    rb_raise(rb_eIOError, "Failed to load BRep from %s.", RSTRING_PTR(path));
   }
   return siren_shape_new(shape);
 }

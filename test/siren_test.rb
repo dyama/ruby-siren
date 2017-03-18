@@ -3,6 +3,7 @@ require 'vec_test'
 require 'bndbox_test'
 require 'solid_test'
 require 'trans_test'
+require 'io_test'
 
 class SirenTest < Minitest::Test
 
@@ -15,7 +16,7 @@ class SirenTest < Minitest::Test
   include VecTest
   include BndBoxTest
   include TransTest
-  include BRepTest
+  include IoTest
   # include SolidTest
 
   def test_classes
