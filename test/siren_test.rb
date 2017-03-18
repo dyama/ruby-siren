@@ -2,6 +2,7 @@ require 'test_helper'
 require 'vec_test'
 require 'bndbox_test'
 require 'solid_test'
+require 'trans_test'
 
 class SirenTest < Minitest::Test
 
@@ -13,7 +14,8 @@ class SirenTest < Minitest::Test
 
   include VecTest
   include BndBoxTest
-  include SolidTest
+  include TransTest
+  # include SolidTest
 
   def test_classes
     assert Vec.class == Class.class
