@@ -34,6 +34,7 @@ VALUE siren_trans_is_negative(int, VALUE*, VALUE);
 VALUE siren_trans_translate_bang(int, VALUE*, VALUE);
 VALUE siren_trans_translatef(int, VALUE*, VALUE);
 VALUE siren_trans_set_translatef(int, VALUE*, VALUE);
+VALUE siren_trans_mirror(int, VALUE*, VALUE);
 VALUE siren_trans_mirror_bang(int, VALUE*, VALUE);
 VALUE siren_trans_rotate_bang(int, VALUE*, VALUE);
 //VALUE siren_trans_rotatef(int, VALUE*, VALUE);

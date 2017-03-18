@@ -29,10 +29,8 @@ bool siren_trans_install()
   sr_cTrans = rb_define_class_under(sr_mSiren, "Trans", rb_cObject);
   rb_define_alloc_func(sr_cTrans, siren_trans_allocate);
   rb_define_method(sr_cTrans, "initialize"     , RUBY_METHOD_FUNC(siren_trans_init              ), -1);
-  rb_define_method(sr_cTrans, "inspect"        , RUBY_METHOD_FUNC(siren_trans_to_s              ), -1);
   rb_define_method(sr_cTrans, "to_s"           , RUBY_METHOD_FUNC(siren_trans_to_s              ), -1);
   rb_define_method(sr_cTrans, "to_a"           , RUBY_METHOD_FUNC(siren_trans_matrix            ), -1);
-  rb_define_method(sr_cTrans, "to_ary"         , RUBY_METHOD_FUNC(siren_trans_matrix            ), -1);
   rb_define_method(sr_cTrans, "matrix"         , RUBY_METHOD_FUNC(siren_trans_matrix            ), -1);
   rb_define_method(sr_cTrans, "matrix="        , RUBY_METHOD_FUNC(siren_trans_set_matrix        ), -1);
   rb_define_method(sr_cTrans, "multiply"       , RUBY_METHOD_FUNC(siren_trans_multiply          ), -1);
@@ -42,6 +40,7 @@ bool siren_trans_install()
   rb_define_method(sr_cTrans, "translate!"     , RUBY_METHOD_FUNC(siren_trans_translate_bang    ), -1);
   rb_define_method(sr_cTrans, "translatef"     , RUBY_METHOD_FUNC(siren_trans_translatef        ), -1);
   rb_define_method(sr_cTrans, "translatef="    , RUBY_METHOD_FUNC(siren_trans_set_translatef    ), -1);
+  rb_define_method(sr_cTrans, "mirror"         , RUBY_METHOD_FUNC(siren_trans_mirror            ), -1);
   rb_define_method(sr_cTrans, "mirror!"        , RUBY_METHOD_FUNC(siren_trans_mirror_bang       ), -1);
   rb_define_method(sr_cTrans, "rotate!"        , RUBY_METHOD_FUNC(siren_trans_rotate_bang       ), -1);
   rb_define_method(sr_cTrans, "scale!"         , RUBY_METHOD_FUNC(siren_trans_scale_bang        ), -1);
@@ -167,6 +166,26 @@ VALUE siren_trans_set_scalef(int argc, VALUE* argv, VALUE self)
   return (f);
 }
 
+VALUE siren_trans_mirror(int argc, VALUE* argv, VALUE self)
+{
+  VALUE op, norm, vx;
+  rb_scan_args(argc, argv, "12", &op, &norm, &vx);
+  auto res = siren_trans_new(*siren_trans_get(self));
+  auto p = siren_trans_get(res);
+  switch (argc) {
+  case 1:
+    p->SetMirror(siren_ary_to_pnt(op));
+    break;
+  case 2:
+    p->SetMirror(siren_ary_to_ax1(op, norm));
+    break;
+  case 3:
+    p->SetMirror(siren_ary_to_ax2(op, norm, vx));
+    break;
+  }
+  return res;
+}
+
 VALUE siren_trans_mirror_bang(int argc, VALUE* argv, VALUE self)
 {
   VALUE op, norm, vx;
@@ -260,8 +279,7 @@ VALUE siren_trans_matrix(int argc, VALUE* argv, VALUE self)
   for (int row = 1; row <= 4; row++) {
     result[row - 1] = rb_ary_new();
     for (int col = 1; col <= 3; col++) {
-      rb_ary_push(result[row - 1], 
-          (siren_trans_get(self)->Value(col, row)));
+      rb_ary_push(result[row - 1], DBL2NUM(siren_trans_get(self)->Value(col, row)));
     }
   }
   return rb_ary_new_from_values(4, result);
