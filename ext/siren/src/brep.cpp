@@ -11,7 +11,7 @@ bool siren_brep_install()
   // For mix-in
   rb_define_method(sr_mSiren, "save_brep", RUBY_METHOD_FUNC(siren_brep_save), -1);
   rb_define_method(sr_mSiren, "load_brep", RUBY_METHOD_FUNC(siren_brep_load), -1);
-  rb_define_method(sr_mSiren, "dump",      RUBY_METHOD_FUNC(siren_brep_dump), -1);
+  rb_define_method(sr_cShape, "dump",      RUBY_METHOD_FUNC(siren_brep_dump), -1);
   return true;
 }
 
@@ -50,8 +50,7 @@ VALUE siren_brep_load(int argc, VALUE* argv, VALUE self)
 VALUE siren_brep_dump(int argc, VALUE* argv, VALUE self)
 {
   VALUE target;
-  rb_scan_args(argc, argv, "1", &target);
-  TopoDS_Shape* shape = siren_shape_get(target);
+  TopoDS_Shape* shape = siren_shape_get(self);
   BRepTools::Dump(*shape, std::cout);
   return Qnil;
 }

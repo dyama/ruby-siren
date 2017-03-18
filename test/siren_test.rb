@@ -15,6 +15,7 @@ class SirenTest < Minitest::Test
   include VecTest
   include BndBoxTest
   include TransTest
+  include BRepTest
   # include SolidTest
 
   def test_classes
