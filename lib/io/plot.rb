@@ -3,7 +3,7 @@
 #
 module Siren
 
-  def save_plot(shape, path, face_mode = false, deflect = 1.0, angle = 5.0.to_rad)
+  def self.save_plot(shape, path, face_mode = false, deflect = 1.0, angle = 5.0.to_rad)
     File.open(path, "w") do |f|
       f.puts "# Created by siren - http://siren.xyz/"
       if face_mode

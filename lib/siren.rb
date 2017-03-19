@@ -1,8 +1,22 @@
-require "siren/version"
-require "siren/siren"
-require "vec"
-require "kernel/array"
-require "kernel/float"
+require 'siren/version'
+require 'siren/siren'
+require 'vec'
+require 'shape'
+require 'shapes'
+require 'io/dxf'
+require 'io/plot'
+require 'io/ply'
+require 'io/stl'
+require 'io/svg'
+require 'kernel/float'
+require 'kernel/array'
+require 'shape/compound'
+require 'shape/edge'
+require 'shape/face'
+require 'shape/shell'
+require 'shape/solid'
+require 'shape/vertex'
+require 'shape/wire'
 
 ##
 #

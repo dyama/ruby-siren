@@ -13,34 +13,40 @@ module IoTest
 
   def test_brep
     @path = "/tmp/siren-io-test.brep"
-    save_brep box, @path
+    assert (save_brep box, @path) == nil
     mybox = load_brep @path
     assert mybox.class == Siren::Solid
+    File.delete @path
   end
 
   def test_iges
     @path = "/tmp/siren-io-test.iges"
-    save_iges box, @path
+    assert (save_iges box, @path) == nil
     mybox = load_iges @path
     assert mybox.class == Siren::Solid
+    File.delete @path
   end
 
   def test_step
     @path = "/tmp/siren-io-test.step"
-    save_step box, @path
+    assert (save_step box, @path) == nil
     mybox = load_step @path
     assert mybox.class == Siren::Solid
+    File.delete @path
   end
 
   def test_stl
     @path = "/tmp/siren-io-test.stl"
-    save_stl box, @path
+    assert (save_stl box, @path) == nil
     mybox = load_stl @path
-    assert mybox.class == Siren::Compound
+    assert mybox.class == Siren::Shell
+    File.delete @path
   end
 
   def test_ply
-
+    @path = "/tmp/siren-io-test.ply"
+    assert (Siren.save_ply box, @path) == nil
+    File.delete @path
   end
 
 end

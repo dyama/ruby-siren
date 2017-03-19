@@ -98,14 +98,17 @@ VALUE siren_face_split(int argc, VALUE* argv, VALUE self)
 VALUE siren_face_triangle(int argc, VALUE* argv, VALUE self)
 {
   VALUE deflection, angle;
-  rb_scan_args(argc, argv, "ff", &deflection, &angle);
+  rb_scan_args(argc, argv, "11", &deflection, &angle);
+
+  Check_Type(deflection, T_FLOAT);
+  Check_Type(angle, T_FLOAT);
 
   VALUE result = rb_ary_new();
 
   TopoDS_Face face = siren_face_get(self);
   BRepTools::Update(face);
 
-  BRepMesh_IncrementalMesh imesh(face, deflection, Standard_False, angle);
+  BRepMesh_IncrementalMesh imesh(face, NUM2DBL(deflection), Standard_False, NUM2DBL(angle));
   imesh.Perform();
   if (!imesh.IsDone()) {
     rb_raise(Qnil, "Failed to incremantal mesh.");
