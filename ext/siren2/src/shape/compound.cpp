@@ -19,27 +19,19 @@ bool siren_compound_install()
 
 VALUE siren_compound_init(int argc, VALUE* argv, VALUE self)
 {
-  VALUE* a;
-  VALUE len;
-  rb_scan_args(argc, argv, "*", &a, &len);
+  VALUE a;
+  rb_scan_args(argc, argv, "*", &a);
 
   TopoDS_Compound comp;
   BRep_Builder B;
   B.MakeCompound(comp);
 
-  for (int i = 0; i < len; i++) {
-    VALUE arg = *(a + i);
-    if (rb_array_p(arg)) {
-      VALUE subary = rb_funcall(arg, rb_intern("flatten"), 0);
-      for (int j = 0; j < RARRAY_LEN(subary); j++) {
-        TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(subary, j));
-        B.Add(comp, *shape);
-      }
-    }
-    else {
-      TopoDS_Shape* shape = siren_shape_get(arg);
-      B.Add(comp, *shape);
-    }
+  rb_funcall(a, rb_intern("flatten!"), 0);
+
+  for (int i = 0; i < RARRAY_LEN(a); i++) {
+    VALUE item = RARRAY_AREF(a, i);
+    TopoDS_Shape* shape = siren_shape_get(item);
+    B.Add(comp, *shape);
   }
 
   auto p = siren_shape_get(self);
