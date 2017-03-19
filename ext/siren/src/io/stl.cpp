@@ -2,13 +2,20 @@
 
 bool siren_stl_install()
 {
-#if 0
-  // Class method
-  rb_define_class_method(sr_mSiren, "load_stl", RUBY_METHOD_FUNC(siren_stl_load), MRB_ARGS_REQ(1));
-#endif
-  // For mix-in
+  rb_define_method(sr_mSiren, "save_stl", RUBY_METHOD_FUNC(siren_stl_save), -1);
   rb_define_method(sr_mSiren, "load_stl", RUBY_METHOD_FUNC(siren_stl_load), -1);
   return true;
+}
+
+VALUE siren_stl_save(int argc, VALUE* argv, VALUE self)
+{
+  VALUE path, target;
+  rb_scan_args(argc, argv, "2", &target, &path);
+
+  auto p = siren_shape_get(target);
+  StlAPI::Write(*p, (Standard_CString)RSTRING_PTR(path), Standard_True);
+
+  return Qnil;
 }
 
 VALUE siren_stl_load(int argc, VALUE* argv, VALUE self)

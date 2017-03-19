@@ -8,6 +8,7 @@
 #include <StlAPI.hxx>
 
 bool siren_stl_install();
+VALUE siren_stl_save(int, VALUE*, VALUE);
 VALUE siren_stl_load(int, VALUE*, VALUE);
 
 #endif
