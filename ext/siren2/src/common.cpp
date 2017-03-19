@@ -6,13 +6,22 @@ void siren_ary_to_xyz(VALUE ary, Standard_Real& x, Standard_Real& y, Standard_Re
 
   int len = RARRAY_LEN(ary);
   if (len > 0) {
-    x = NUM2DBL(RARRAY_AREF(ary, 0));
+    auto xx = RARRAY_AREF(ary, 0);
+    if (siren_numeric_p(xx)) {
+      x = NUM2DBL(xx);
+    }
   }
   if (len > 1) {
-    y = NUM2DBL(RARRAY_AREF(ary, 1));
+    auto yy = RARRAY_AREF(ary, 1);
+    if (siren_numeric_p(yy)) {
+      y = NUM2DBL(yy);
+    }
   }
   if (len > 2) {
-    z = NUM2DBL(RARRAY_AREF(ary, 2));
+    auto zz = RARRAY_AREF(ary, 2);
+    if (siren_numeric_p(zz)) {
+      z = NUM2DBL(zz);
+    }
   }
   return;
 }
