@@ -11,7 +11,6 @@ bool siren_wire_install()
   SR_SHAPE_INIT(Wire)
   rb_define_method(sr_cWire, "initialize",    RUBY_METHOD_FUNC(siren_shape_init),         -1);
   rb_define_method(sr_cWire, "ordered_edges", RUBY_METHOD_FUNC(siren_wire_ordered_edges), -1);
-  rb_define_method(sr_cWire, "curves",        RUBY_METHOD_FUNC(siren_wire_curves),        -1);
   rb_define_singleton_method(sr_cWire, "make", RUBY_METHOD_FUNC(siren_wire_make), -1);
   rb_define_singleton_method(sr_cWire, "join", RUBY_METHOD_FUNC(siren_wire_make), -1);
   return true;
@@ -28,23 +27,11 @@ VALUE siren_wire_ordered_edges(int argc, VALUE* argv, VALUE self)
   return res;
 }
 
-VALUE siren_wire_curves(int argc, VALUE* argv, VALUE self)
-{
-  VALUE res = rb_ary_new();
-  VALUE edges = rb_funcall(self, rb_intern("edges"), 0);
-  for (int i = 0; i < RARRAY_LEN(edges); i++) {
-    VALUE edge = RARRAY_AREF(edges, i);
-    VALUE curve = rb_funcall(edge, rb_intern("curve"), 0);
-    rb_ary_push(res, curve);
-  }
-  return res;
-}
-
 VALUE siren_wire_make(int argc, VALUE* argv, VALUE self)
 {
   VALUE objs;
   VALUE tol;
-  rb_scan_args(argc, argv, "A|f", &objs, &tol);
+  rb_scan_args(argc, argv, "11", &objs, &tol);
   BRepBuilderAPI_MakeWire api;
 #ifdef USE_WIRE_FIX
   ShapeFix_Wire sfw;
@@ -69,7 +56,7 @@ VALUE siren_wire_make(int argc, VALUE* argv, VALUE self)
   sfw.Perform();
   for (int i = 1; i <= sfw.NbEdges(); i ++) {
     TopoDS_Edge e = sfw.WireData()->Edge(i);
-    FTol.SetTolerance(e, argc == 1 ? 0.01 : tol, TopAbs_VERTEX);
+    FTol.SetTolerance(e, argc == 1 ? 0.01 : NUM2DBL(tol), TopAbs_VERTEX);
     api.Add(e);
   }
   return siren_shape_new(api.Shape());
@@ -80,14 +67,14 @@ VALUE siren_wire_make(int argc, VALUE* argv, VALUE self)
     TopoDS_Shape* shape = siren_shape_get(RARRAY_AREF(objs, i));
     if (shape->ShapeType() == TopAbs_EDGE) {
       if (has_tol) {
-        fixtol.SetTolerance(*shape, tol, TopAbs_VERTEX);
+        fixtol.SetTolerance(*shape, NUM2DBL(tol), TopAbs_VERTEX);
       }
       api.Add(TopoDS::Edge(*shape));
     }
     else if (shape->ShapeType() == TopAbs_WIRE) {
       if (has_tol) {
-        fixtol.SetTolerance(*shape, tol, TopAbs_VERTEX);
-        fixtol.SetTolerance(*shape, tol, TopAbs_EDGE);
+        fixtol.SetTolerance(*shape, NUM2DBL(tol), TopAbs_VERTEX);
+        fixtol.SetTolerance(*shape, NUM2DBL(tol), TopAbs_EDGE);
       }
       api.Add(TopoDS::Wire(*shape));
     }

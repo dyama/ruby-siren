@@ -7,4 +7,8 @@ class Siren::Wire
     self.edges.inject { |e| e.length }
   end
 
+  def curves
+    self.edges.map { |e| e.curve }
+  end
+
 end
