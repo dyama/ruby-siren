@@ -26,6 +26,9 @@ VALUE siren_vertex_init(int argc, VALUE* argv, VALUE self)
     pnt = siren_ary_to_pnt(a);
   }
   else if (argc == 3) {
+    siren_numeric_check(a);
+    siren_numeric_check(y);
+    siren_numeric_check(z);
     pnt = gp_Pnt(NUM2DBL(a), NUM2DBL(y), NUM2DBL(z));
   }
   else {

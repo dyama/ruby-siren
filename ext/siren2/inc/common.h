@@ -95,4 +95,7 @@ inline VALUE siren_pnt_new(double x, double y, double z)
   return rb_ary_new_from_values(3, res);
 }
 
+bool siren_numeric_p(const VALUE&);
+void siren_numeric_check(const VALUE&);
+
 #endif
