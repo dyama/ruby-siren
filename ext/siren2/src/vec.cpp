@@ -89,27 +89,13 @@ bool siren_vec_install()
 
 VALUE siren_vec_init(int argc, VALUE* argv, VALUE self)
 {
-  VALUE xx, yy, zz;
-  rb_scan_args(argc, argv, "03", &xx, &yy, &zz);
-  int len = argc;
-
-  Standard_Real x = 0.0, y = 0.0, z = 0.0;
-  if (rb_array_p(xx)) {
-    gp_Pnt p = siren_ary_to_pnt(xx);
-    x = p.X(); y = p.Y(); z = p.Z();
-  }
-  else {
-    if (argc >= 1) x = NUM2DBL(xx);
-    if (argc >= 2) y = NUM2DBL(yy);
-    if (argc >= 3) z = NUM2DBL(zz);
-  }
-
+  VALUE a;
+  rb_scan_args(argc, argv, "*", &a);
+  auto b = rb_funcall(a, rb_intern("flatten"), 0);
+  auto vec = siren_ary_to_vec(b);
   gp_Vec* p;
   Data_Get_Struct(self, gp_Vec, p);
-  p->SetX(x);
-  p->SetY(y);
-  p->SetZ(z);
-
+  *p = vec;
   return self;
 }
 
