@@ -1,5 +1,5 @@
-require 'siren/version'
-require 'siren/siren'
+require 'siren2/version'
+require 'siren2/siren'
 require 'vec'
 require 'shape'
 require 'shapes'
