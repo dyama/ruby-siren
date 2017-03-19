@@ -127,7 +127,7 @@ VALUE siren_solid_sphere(int argc, VALUE* argv, VALUE self)
   VALUE pos;
   rb_scan_args(argc, argv, "02", &r, &pos);
 
-  Check_Type(r, T_FLOAT);
+  siren_numeric_check(r);
 
   gp_Pnt op;
   if (argc == 2) {
@@ -154,9 +154,9 @@ VALUE siren_solid_cylinder(int argc, VALUE* argv, VALUE self)
   VALUE r, h, a;
   rb_scan_args(argc, argv, "5", &pos, &norm, &r, &h, &a);
 
-  Check_Type(r, T_FLOAT);
-  Check_Type(h, T_FLOAT);
-  Check_Type(a, T_FLOAT);
+  siren_numeric_check(r);
+  siren_numeric_check(h);
+  siren_numeric_check(a);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
@@ -171,10 +171,10 @@ VALUE siren_solid_cone(int argc, VALUE* argv, VALUE self)
   VALUE r1, r2, h, ang;
   rb_scan_args(argc, argv, "6", &pos, &norm, &r1, &r2, &h, &ang);
 
-  Check_Type(r1, T_FLOAT);
-  Check_Type(r2, T_FLOAT);
-  Check_Type(h, T_FLOAT);
-  Check_Type(ang, T_FLOAT);
+  siren_numeric_check(r1);
+  siren_numeric_check(r2);
+  siren_numeric_check(h);
+  siren_numeric_check(ang);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
@@ -188,9 +188,9 @@ VALUE siren_solid_torus(int argc, VALUE* argv, VALUE self)
   VALUE pos, norm;
   rb_scan_args(argc, argv, "5", &pos, &norm, &r1, &r2, &ang);
 
-  Check_Type(r1, T_FLOAT);
-  Check_Type(r2, T_FLOAT);
-  Check_Type(ang, T_FLOAT);
+  siren_numeric_check(r1);
+  siren_numeric_check(r2);
+  siren_numeric_check(ang);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 

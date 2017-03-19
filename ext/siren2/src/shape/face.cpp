@@ -101,8 +101,8 @@ VALUE siren_face_triangle(int argc, VALUE* argv, VALUE self)
   VALUE deflection, angle;
   rb_scan_args(argc, argv, "11", &deflection, &angle);
 
-  Check_Type(deflection, T_FLOAT);
-  Check_Type(angle, T_FLOAT);
+  siren_numeric_check(deflection);
+  siren_numeric_check(angle);
 
   VALUE result = rb_ary_new();
 
@@ -178,10 +178,10 @@ VALUE siren_face_plane(int argc, VALUE* argv, VALUE self)
   VALUE pos, norm, vx;
   VALUE umin, umax, vmin, vmax;
   rb_scan_args(argc, argv, "7", &pos, &norm, &vx, &umin, &umax, &vmin, &vmax);
-  Check_Type(umin, T_FLOAT);
-  Check_Type(umax, T_FLOAT);
-  Check_Type(vmin, T_FLOAT);
-  Check_Type(vmax, T_FLOAT);
+  siren_numeric_check(umin);
+  siren_numeric_check(umax);
+  siren_numeric_check(vmin);
+  siren_numeric_check(vmax);
   try {
     gp_Pln _pln(siren_ary_to_ax2(pos, norm, vx));
     BRepBuilderAPI_MakeFace face(_pln, NUM2DBL(umin), NUM2DBL(umax), NUM2DBL(vmin), NUM2DBL(vmax));

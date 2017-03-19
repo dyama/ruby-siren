@@ -39,8 +39,8 @@ VALUE siren_edge_init(int argc, VALUE* argv, VALUE self)
         "The start parameter specified without a terminal parameter.");
   }
   else {
-    Check_Type(sp, T_FLOAT);
-    Check_Type(tp, T_FLOAT);
+    siren_numeric_check(sp);
+    siren_numeric_check(tp);
     try {
       edge = BRepBuilderAPI_MakeEdge(*phgcurve, NUM2DBL(sp), NUM2DBL(tp));
       if (edge.IsNull()) {
@@ -139,7 +139,7 @@ VALUE siren_edge_to_xyz(int argc, VALUE* argv, VALUE self)
 {
   VALUE param;
   rb_scan_args(argc, argv, "1", &param);
-  Check_Type(param, T_FLOAT);
+  siren_numeric_check(param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -151,7 +151,7 @@ VALUE siren_edge_curvature(int argc, VALUE* argv, VALUE self)
 {
   VALUE param;
   rb_scan_args(argc, argv, "1", &param);
-  Check_Type(param, T_FLOAT);
+  siren_numeric_check(param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -163,7 +163,7 @@ VALUE siren_edge_tangent(int argc, VALUE* argv, VALUE self)
 {
   VALUE param;
   rb_scan_args(argc, argv, "1", &param);
-  Check_Type(param, T_FLOAT);
+  siren_numeric_check(param);
   BRepAdaptor_Curve C(siren_edge_get(self));
   gp_Pnt p;
   gp_Vec v1, v2;
@@ -224,7 +224,7 @@ VALUE siren_edge_split(int argc, VALUE* argv, VALUE self)
 {
   VALUE param;
   rb_scan_args(argc, argv, "1", &param);
-  Check_Type(param, T_FLOAT);
+  siren_numeric_check(param);
   Standard_Real first, last;
   TopoDS_Edge e = siren_edge_get(self);
   handle<Geom_Curve> gc  = BRep_Tool::Curve(e, first, last);
@@ -241,8 +241,8 @@ VALUE siren_edge_trim(int argc, VALUE* argv, VALUE self)
 {
   VALUE first2, last2;
   rb_scan_args(argc, argv, "2", &first2, &last2);
-  Check_Type(first2, T_FLOAT);
-  Check_Type(last2, T_FLOAT);
+  siren_numeric_check(first2);
+  siren_numeric_check(last2);
   if (NUM2DBL(first2) == NUM2DBL(last2)) {
     rb_raise(Qnil, "Specified parameter has same value.");
   }
