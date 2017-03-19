@@ -5,6 +5,7 @@
 VALUE sr_cCompound;
 
 SR_SHAPE_GET(Compound, compound)
+SR_SHAPE_CHECK(Compound, compound)
 
 bool siren_compound_install()
 {

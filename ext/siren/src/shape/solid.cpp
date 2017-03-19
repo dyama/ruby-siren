@@ -3,6 +3,7 @@
 VALUE sr_cSolid;
 
 SR_SHAPE_GET(Solid, solid)
+SR_SHAPE_CHECK(Solid, solid)
 
 bool siren_solid_install()
 {

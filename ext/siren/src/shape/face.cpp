@@ -3,6 +3,7 @@
 VALUE sr_cFace;
 
 SR_SHAPE_GET(Face, face)
+SR_SHAPE_CHECK(Face, face)
 
 bool siren_face_install()
 {
@@ -176,10 +177,14 @@ VALUE siren_face_plane(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos, norm, vx;
   VALUE umin, umax, vmin, vmax;
-  rb_scan_args(argc, argv, "AAAffff", &pos, &norm, &vx, &umin, &umax, &vmin, &vmax);
+  rb_scan_args(argc, argv, "7", &pos, &norm, &vx, &umin, &umax, &vmin, &vmax);
+  Check_Type(umin, T_FLOAT);
+  Check_Type(umax, T_FLOAT);
+  Check_Type(vmin, T_FLOAT);
+  Check_Type(vmax, T_FLOAT);
   try {
     gp_Pln _pln(siren_ary_to_ax2(pos, norm, vx));
-    BRepBuilderAPI_MakeFace face(_pln, umin, umax, vmin, vmax);
+    BRepBuilderAPI_MakeFace face(_pln, NUM2DBL(umin), NUM2DBL(umax), NUM2DBL(vmin), NUM2DBL(vmax));
     return siren_shape_new(face.Shape());
   }
   catch (...) {
@@ -193,20 +198,20 @@ VALUE siren_face_face(int argc, VALUE* argv, VALUE self)
 {
   VALUE wire;
   VALUE force_plane;
-  rb_scan_args(argc, argv, "ob", &wire, &force_plane);
+  rb_scan_args(argc, argv, "2", &wire, &force_plane);
+
+  siren_wire_check(wire);
+
   TopoDS_Shape* s = siren_shape_get(wire);
   TopoDS_Wire w = TopoDS::Wire(*s);
-  if (w.IsNull()) {
-    rb_raise(Qnil, "Specified shape type is not wire.");
-  }
-  TopoDS_Face face = BRepBuilderAPI_MakeFace(w, (Standard_Boolean)force_plane);
+  TopoDS_Face face = BRepBuilderAPI_MakeFace(w, (Standard_Boolean)(force_plane == Qtrue));
   return siren_shape_new(face);
 }
 
 VALUE siren_face_infplane(int argc, VALUE* argv, VALUE self)
 {
   VALUE orig, dir;
-  rb_scan_args(argc, argv, "AA", &orig, &dir);
+  rb_scan_args(argc, argv, "2", &orig, &dir);
   gp_Pln pln(siren_ary_to_pnt(orig), siren_ary_to_dir(dir));
   TopoDS_Face face = BRepBuilderAPI_MakeFace(pln);
   return siren_shape_new(face);
@@ -216,7 +221,7 @@ VALUE siren_face_polygon(int argc, VALUE* argv, VALUE self)
 {
   VALUE pts;
   VALUE force_plane = Qfalse;
-  rb_scan_args(argc, argv, "A|b", &pts, &force_plane);
+  rb_scan_args(argc, argv, "11", &pts, &force_plane);
 
   BRepBuilderAPI_MakePolygon mp;
 
@@ -225,7 +230,7 @@ VALUE siren_face_polygon(int argc, VALUE* argv, VALUE self)
   }
 
   mp.Close();
-  BRepBuilderAPI_MakeFace mf(mp.Wire(), force_plane);
+  BRepBuilderAPI_MakeFace mf(mp.Wire(), (Standard_Boolean)(force_plane == Qtrue));
   mf.Build();
 
   if (!mf.IsDone()) {
@@ -238,7 +243,7 @@ VALUE siren_face_polygon(int argc, VALUE* argv, VALUE self)
 VALUE siren_face_bzsurf(int argc, VALUE* argv, VALUE self)
 {
   VALUE ptary, wtary;
-  rb_scan_args(argc, argv, "A|A", &ptary, &wtary);
+  rb_scan_args(argc, argv, "11", &ptary, &wtary);
 
   int rlen = RARRAY_LEN(ptary);
   int clen = RARRAY_LEN(RARRAY_AREF(ptary, 0));
@@ -260,7 +265,7 @@ VALUE siren_face_bzsurf(int argc, VALUE* argv, VALUE self)
       VALUE ar = RARRAY_AREF(wtary, r);
       for (int c=0; c<clen; c++) {
         VALUE val = RARRAY_AREF(ar, c);
-        weights.SetValue(r, c, VALUE(val));
+        weights.SetValue(r, c, NUM2DBL(val));
       }
     }
     s = new Geom_BezierSurface(poles, weights);
@@ -278,11 +283,14 @@ VALUE siren_face_bssurf(int argc, VALUE* argv, VALUE self)
   VALUE _ar_ukm, _ar_vkm;
   VALUE _pol;
   VALUE _wire;
-  rb_scan_args(argc, argv, "iAiAA|o", &_udeg, &_ar_ukm, &_vdeg, &_ar_vkm, &_pol, &_wire);
+  rb_scan_args(argc, argv, "51", &_udeg, &_ar_ukm, &_vdeg, &_ar_vkm, &_pol, &_wire);
 
   bool has_contour = argc == 6;
+  if (has_contour) {
+    siren_wire_check(_wire);
+  }
 
-  Standard_Integer udeg = _udeg;
+  Standard_Integer udeg = NUM2INT(_udeg);
   Standard_Integer nbuknots = RARRAY_LEN(_ar_ukm);
   Standard_Integer nbuknots_pure = 0;
   TColStd_Array1OfReal uknots(1, nbuknots);
@@ -291,13 +299,13 @@ VALUE siren_face_bssurf(int argc, VALUE* argv, VALUE self)
     VALUE item = RARRAY_AREF(_ar_ukm, i - 1);
     VALUE knot = RARRAY_AREF(item, 0);
     VALUE mult = RARRAY_AREF(item, 1);
-    uknots(i) = VALUE(knot);
-    umults(i) = DBL2NUM(mult);
+    uknots(i) = NUM2DBL(knot);
+    umults(i) = NUM2INT(mult);
     nbuknots_pure += umults(i);
   }
   Standard_Integer nbupoles = nbuknots_pure - udeg - 1;
 
-  Standard_Integer vdeg = _vdeg;
+  Standard_Integer vdeg = NUM2INT(_vdeg);
   Standard_Integer nbvknots = RARRAY_LEN(_ar_vkm);
   Standard_Integer nbvknots_pure = 0;
   TColStd_Array1OfReal vknots(1, nbvknots);
@@ -306,8 +314,8 @@ VALUE siren_face_bssurf(int argc, VALUE* argv, VALUE self)
     VALUE item = RARRAY_AREF(_ar_vkm, i - 1);
     VALUE knot = RARRAY_AREF(item, 0);
     VALUE mult = RARRAY_AREF(item, 1);
-    vknots(i) = VALUE(knot);
-    vmults(i) = DBL2NUM(mult);
+    vknots(i) = NUM2DBL(knot);
+    vmults(i) = NUM2INT(mult);
     nbvknots_pure += vmults(i);
   }
   Standard_Integer nbvpoles = nbvknots_pure - vdeg - 1;
@@ -320,11 +328,12 @@ VALUE siren_face_bssurf(int argc, VALUE* argv, VALUE self)
     for (int u=1; u <= nbupoles; u++) {
       VALUE uitem = RARRAY_AREF(vitem, u - 1);
       poles.SetValue(u, v, siren_ary_to_pnt(RARRAY_AREF(uitem, 0)));
-      weights.SetValue(u, v, VALUE(RARRAY_AREF(uitem, 1)));
+      weights.SetValue(u, v, NUM2DBL(RARRAY_AREF(uitem, 1)));
     }
   }
 
-  opencascade::handle<Geom_BSplineSurface> hg_bssurf = new Geom_BSplineSurface(poles, weights, uknots, vknots, umults, vmults, udeg, vdeg);
+  handle<Geom_BSplineSurface> hg_bssurf
+    = new Geom_BSplineSurface(poles, weights, uknots, vknots, umults, vmults, udeg, vdeg);
   TopoDS_Shape shape;
   if (has_contour) {
     TopoDS_Shape* s = siren_shape_get(_wire);

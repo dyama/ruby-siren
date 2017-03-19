@@ -12,6 +12,8 @@ extern VALUE sr_cShell;
 static rb_data_type_t siren_shell_type = { "Shell", siren_shape_final };
 bool siren_shell_install();
 TopoDS_Shell siren_shell_get(VALUE self);
+bool siren_shell_p(const VALUE&);
+void siren_shell_check(const VALUE&);
 VALUE siren_shell_new( const TopoDS_Shape* src);
 
 VALUE siren_shell_make(int, VALUE*, VALUE);

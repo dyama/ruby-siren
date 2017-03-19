@@ -5,6 +5,7 @@
 VALUE sr_cVertex;
 
 SR_SHAPE_GET(Vertex, vertex)
+SR_SHAPE_CHECK(Vertex, vertex)
 
 bool siren_vertex_install()
 {

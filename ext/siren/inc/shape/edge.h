@@ -27,6 +27,8 @@ extern VALUE sr_cEdge;
 static rb_data_type_t siren_edge_type = { "Edge", siren_shape_final };
 bool siren_edge_install();
 TopoDS_Edge siren_edge_get(VALUE self);
+bool siren_edge_p(const VALUE&);
+void siren_edge_check(const VALUE&);
 VALUE siren_edge_new( const TopoDS_Shape* src);
 
 VALUE siren_edge_init(int, VALUE*, VALUE);

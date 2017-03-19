@@ -13,6 +13,9 @@ extern VALUE sr_cChunk;
 static rb_data_type_t siren_chunk_type = { "Chunk", siren_shape_final };
 bool siren_chunk_install();
 TopoDS_CompSolid siren_chunk_get(VALUE self);
+bool siren_chunk_p(const VALUE&);
+void siren_chunk_check(const VALUE&);
+
 VALUE siren_chunk_new( const TopoDS_Shape* src);
 
 VALUE siren_chunk_init(int, VALUE*, VALUE);

@@ -3,6 +3,7 @@
 VALUE sr_cEdge;
 
 SR_SHAPE_GET(Edge, edge)
+SR_SHAPE_CHECK(Edge, edge)
 
 bool siren_edge_install()
 {

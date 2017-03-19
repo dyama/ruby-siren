@@ -19,6 +19,8 @@ extern VALUE sr_cSolid;
 static rb_data_type_t siren_solid_type = { "Solid", siren_shape_final };
 bool siren_solid_install();
 TopoDS_Solid siren_solid_get(VALUE self);
+bool siren_solid_p(const VALUE&);
+void siren_solid_check(const VALUE&);
 VALUE siren_solid_new( const TopoDS_Shape* src);
 
 VALUE siren_solid_init(int, VALUE*, VALUE);

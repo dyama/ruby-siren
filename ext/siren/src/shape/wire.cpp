@@ -4,6 +4,7 @@
 VALUE sr_cWire;
 
 SR_SHAPE_GET(Wire, wire)
+SR_SHAPE_CHECK(Wire, wire)
 
 bool siren_wire_install()
 {
@@ -109,3 +110,4 @@ VALUE siren_wire_make(int argc, VALUE* argv, VALUE self)
 #endif
   return siren_shape_new(api.Wire());
 }
+

@@ -12,8 +12,9 @@ extern VALUE sr_cCompound;
 static rb_data_type_t siren_compound_type = { "Compound", siren_shape_final };
 bool siren_compound_install();
 TopoDS_Compound siren_compound_get(VALUE self);
+bool siren_compound_p(const VALUE&);
+void siren_compound_check(const VALUE&);
 VALUE siren_compound_new( const TopoDS_Shape* src);
-
 VALUE siren_compound_init(int, VALUE*, VALUE);
 VALUE siren_compound_push(int, VALUE*, VALUE);
 VALUE siren_compound_delete(int, VALUE*, VALUE);

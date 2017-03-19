@@ -122,4 +122,19 @@ VALUE siren_shape_first_datum(int, VALUE*, VALUE);
   sr_c##CLASS = rb_define_class_under(sr_mSiren, #CLASS, sr_cShape); \
   rb_define_alloc_func(sr_c##CLASS, siren_shape_allocate);
 
+#define SR_SHAPE_CHECK(CLASSU, CLASSL) bool siren_##CLASSL##_p(const VALUE& target) \
+  { \
+    return rb_funcall(target, rb_intern("is_a?"), 1, sr_c##CLASSU) == Qtrue; \
+  } \
+  void siren_##CLASSL##_check(const VALUE& target) \
+  { \
+    if (!siren_##CLASSL##_p(target)) { \
+      VALUE type = rb_funcall(target, rb_intern("class"), 0); \
+      VALUE type_str = rb_funcall(type, rb_intern("to_s"), 0); \
+      VALUE etype_str = rb_funcall(sr_c##CLASSU, rb_intern("to_s"), 0); \
+      rb_raise(rb_eTypeError, "wrong argument type %s (expected %s)", \
+          RSTRING_PTR(type_str), RSTRING_PTR(etype_str)); \
+    } \
+  }
+
 #endif
