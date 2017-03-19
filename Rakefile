@@ -11,7 +11,7 @@ require "rake/extensiontask"
 
 task :build => :compile
 
-Rake::ExtensionTask.new("siren") do |ext|
+Rake::ExtensionTask.new("siren2") do |ext|
   ext.lib_dir = "lib/siren2"
 end
 

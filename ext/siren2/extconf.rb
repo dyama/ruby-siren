@@ -59,9 +59,8 @@ $srcs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|f| File.expand_path(f) }
 $srcs.flatten!
 
 $objs = []
-$objs << Dir.glob("#{dir}/src/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
-$objs << Dir.glob("#{dir}/src/*/*.{c,cpp}").map{|n| "#{n.gsub(/\..*$/, '')}.o" }.map{|f| File.expand_path(f) }
+$objs << $srcs.map{ |f| f.gsub(/\.\w+$/, '.o') }
 $objs.flatten!
 
-create_makefile("siren/siren")
+create_makefile("siren2/siren2")
 

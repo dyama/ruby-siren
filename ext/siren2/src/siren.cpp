@@ -38,7 +38,7 @@ VALUE sr_mSiren;
 extern "C" {
 
   // initializer
-  void Init_siren()
+  void Init_siren2()
   {
     // Siren module
     sr_mSiren  = rb_define_module("Siren");
