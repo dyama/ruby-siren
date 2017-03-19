@@ -19,36 +19,19 @@ bool siren_vertex_install()
 
 VALUE siren_vertex_init(int argc, VALUE* argv, VALUE self)
 {
-  VALUE* a;
-  VALUE len;
-  rb_scan_args(argc, argv, "*", &a, &len);
-
-  Standard_Real x = 0.0, y = 0.0, z = 0.0;
-  if (len > 0 && rb_array_p(a[0])) {
-    gp_Pnt p = siren_ary_to_pnt(a[0]);
-    x = p.X(); y = p.Y(); z = p.Z();
+  VALUE a, y, z;
+  rb_scan_args(argc, argv, "12", &a, &y, &z);
+  gp_Pnt pnt;
+  if (argc == 1) {
+    pnt = siren_ary_to_pnt(a);
+  }
+  else if (argc == 3) {
+    pnt = gp_Pnt(NUM2DBL(a), NUM2DBL(y), NUM2DBL(z));
   }
   else {
-    if (len >= 1) {
-      if (FIXNUM_P(a[0]))
-        x = DBL2NUM(a[0]);
-      else if (RB_FLOAT_TYPE_P(a[0]))
-        x = VALUE(a[0]);
-    }
-    if (len >= 2) {
-      if (FIXNUM_P(a[1]))
-        y = DBL2NUM(a[1]);
-      else if (RB_FLOAT_TYPE_P(a[1]))
-        y = VALUE(a[1]);
-    }
-    if (len >= 3) {
-      if (FIXNUM_P(a[2]))
-        z = DBL2NUM(a[2]);
-      else if (RB_FLOAT_TYPE_P(a[2]))
-        z = VALUE(a[2]);
-    }
+    rb_raise(Qnil, "wrong number of arguments specified.");
   }
-  TopoDS_Vertex v = BRepBuilderAPI_MakeVertex(gp_Pnt(x, y, z));
+  TopoDS_Vertex v = BRepBuilderAPI_MakeVertex(pnt);
   auto p = siren_shape_get(self);
   *p = v;
   return self;
