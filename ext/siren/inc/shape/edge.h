@@ -47,6 +47,4 @@ VALUE siren_edge_split(int, VALUE*, VALUE);
 VALUE siren_edge_trim(int, VALUE*, VALUE);
 VALUE siren_edge_extrema(int, VALUE*, VALUE);
 
-VALUE siren_edge_length(int, VALUE*, VALUE);
-
 #endif
