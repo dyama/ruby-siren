@@ -29,27 +29,19 @@ VALUE siren_chunk_obj()
 
 VALUE siren_chunk_init(int argc, VALUE* argv, VALUE self)
 {
-  VALUE* a;
-  rb_scan_args(argc, argv, "1", &a);
-  int len = RARRAY_LEN(a);
-
+  VALUE a;
+  rb_scan_args(argc, argv, "*", &a);
   TopoDS_CompSolid cs;
   TopoDS_Builder builder;
   builder.MakeCompSolid(cs);
-
-  for (int i = 0; i < len; i++) {
-    if (_array_p(a[i])) {
-      for (int j = 0; j < RARRAY_LEN(a[i]); j++) {
-        auto solid = siren_solid_get(RARRAY_AREF(a[i], j));
-        builder.Add(cs, solid);
-      }
-    }
-    else {
-      auto solid = siren_solid_get(a[i]);
+  auto b = rb_funcall(a, rb_intern("flatten"), 0);
+  for (int i = 0; i < RARRAY_LEN(b); i++) {
+    auto item = RARRAY_AREF(b, i);
+    if (siren_solid_p(item)) {
+      auto solid = siren_solid_get(item);
       builder.Add(cs, solid);
     }
   }
-
   auto p = siren_shape_get(self);
   *p = cs;
   return self;
