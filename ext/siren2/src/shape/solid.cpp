@@ -26,16 +26,16 @@ bool siren_solid_install()
 
 VALUE siren_solid_init(int argc, VALUE* argv, VALUE self)
 {
-  VALUE* a;
-  rb_scan_args(argc, argv, "1", &a);
-  int len = RARRAY_LEN(a);
-  if (argc == 0 || len == 0) {
-    rb_raise(Qnil, "No shapes specified.");
-  }
+  VALUE a;
+  rb_scan_args(argc, argv, "*", &a);
+  auto b = rb_funcall(a, rb_intern("flatten"), 0);
   BRepBuilderAPI_MakeSolid solid_maker;
-  for (int i = 0; i < len; i++) {
-    TopoDS_Shell shell = siren_shell_get(a[i]);
-    solid_maker.Add(shell);
+  for (int i = 0; i < RARRAY_LEN(b); i++) {
+    auto item = RARRAY_AREF(b, i);
+    if (siren_shell_p(item)) {
+      TopoDS_Shell shell = siren_shell_get(item);
+      solid_maker.Add(shell);
+    }
   }
   if (!solid_maker.IsDone()) {
     rb_raise(Qnil, "Failed to make a Solid.");
