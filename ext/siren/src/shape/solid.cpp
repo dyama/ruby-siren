@@ -81,7 +81,7 @@ VALUE siren_solid_box(int argc, VALUE* argv, VALUE self)
 VALUE siren_solid_box2p(int argc, VALUE* argv, VALUE self)
 {
   VALUE p1, p2;
-  rb_scan_args(argc, argv, "|AA", &p1, &p2);
+  rb_scan_args(argc, argv, "02", &p1, &p2);
 
   Standard_Real x1 = 0.0, y1 = 0.0, z1 = 0.0;
   Standard_Real x2 = 1.0, y2 = 1.0, z2 = 1.0;
@@ -103,7 +103,7 @@ VALUE siren_solid_box2p(int argc, VALUE* argv, VALUE self)
 VALUE siren_solid_boxax(int argc, VALUE* argv, VALUE self)
 {
   VALUE size, pos, dir;
-  rb_scan_args(argc, argv, "AAA", &size, &pos, &dir);
+  rb_scan_args(argc, argv, "3", &size, &pos, &dir);
 
   Standard_Real sx, sy, sz;
   siren_ary_to_xyz(size, sx, sy, sz);
@@ -124,7 +124,9 @@ VALUE siren_solid_sphere(int argc, VALUE* argv, VALUE self)
 {
   VALUE r = 1.0;
   VALUE pos;
-  rb_scan_args(argc, argv, "|fA", &r, &pos);
+  rb_scan_args(argc, argv, "02", &r, &pos);
+
+  Check_Type(r, T_FLOAT);
 
   gp_Pnt op;
   if (argc == 2) {
@@ -136,12 +138,12 @@ VALUE siren_solid_sphere(int argc, VALUE* argv, VALUE self)
     op = gp_Pnt(0., 0., 0.);
   }
 
-  if (r < 0) {
+  if (NUM2DBL(r) < 0) {
     rb_raise(Qnil, "Failed to make solid."
       " Specified radius value below 0.");
   }
 
-  BRepPrimAPI_MakeSphere api(op, r);
+  BRepPrimAPI_MakeSphere api(op, NUM2DBL(r));
   return siren_shape_new(api.Shape());
 }
 
@@ -149,11 +151,15 @@ VALUE siren_solid_cylinder(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos, norm;
   VALUE r, h, a;
-  rb_scan_args(argc, argv, "AAfff", &pos, &norm, &r, &h, &a);
+  rb_scan_args(argc, argv, "5", &pos, &norm, &r, &h, &a);
+
+  Check_Type(r, T_FLOAT);
+  Check_Type(h, T_FLOAT);
+  Check_Type(a, T_FLOAT);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
-  BRepPrimAPI_MakeCylinder api(ax, r, h, a);
+  BRepPrimAPI_MakeCylinder api(ax, NUM2DBL(r), NUM2DBL(h), NUM2DBL(a));
 
   return siren_shape_new(api.Shape());
 }
@@ -162,11 +168,16 @@ VALUE siren_solid_cone(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos, norm;
   VALUE r1, r2, h, ang;
-  rb_scan_args(argc, argv, "AAffff", &pos, &norm, &r1, &r2, &h, &ang);
+  rb_scan_args(argc, argv, "6", &pos, &norm, &r1, &r2, &h, &ang);
+
+  Check_Type(r1, T_FLOAT);
+  Check_Type(r2, T_FLOAT);
+  Check_Type(h, T_FLOAT);
+  Check_Type(ang, T_FLOAT);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
-  BRepPrimAPI_MakeCone api(ax, r1, r2, h, ang);
+  BRepPrimAPI_MakeCone api(ax, NUM2DBL(r1), NUM2DBL(r2), NUM2DBL(h), NUM2DBL(ang));
   return siren_shape_new(api.Shape());
 }
 
@@ -174,22 +185,26 @@ VALUE siren_solid_torus(int argc, VALUE* argv, VALUE self)
 {
   VALUE r1, r2, ang;
   VALUE pos, norm;
-  rb_scan_args(argc, argv, "AAfff", &pos, &norm, &r1, &r2, &ang);
+  rb_scan_args(argc, argv, "5", &pos, &norm, &r1, &r2, &ang);
+
+  Check_Type(r1, T_FLOAT);
+  Check_Type(r2, T_FLOAT);
+  Check_Type(ang, T_FLOAT);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
 
-  BRepPrimAPI_MakeTorus api(ax, r1, r2, ang);
+  BRepPrimAPI_MakeTorus api(ax, NUM2DBL(r1), NUM2DBL(r2), NUM2DBL(ang));
   return siren_shape_new(api.Shape());
 }
 
 VALUE siren_solid_halfspace(int argc, VALUE* argv, VALUE self)
 {
   VALUE surf, refpnt;
-  rb_scan_args(argc, argv, "oA", &surf, &refpnt);
+  rb_scan_args(argc, argv, "2", &surf, &refpnt);
+
+  siren_shape_check(surf);
+
   TopoDS_Shape* shape = siren_shape_get(surf);
-  if (shape == nullptr || shape->IsNull()) {
-    rb_raise(Qnil, "Specified shape is incorrect.");
-  }
   TopoDS_Solid solid;
   gp_Pnt pnt = siren_ary_to_pnt(refpnt);
   if (shape->ShapeType() == TopAbs_FACE) {
@@ -224,10 +239,12 @@ VALUE siren_solid_revolution(int argc, VALUE* argv, VALUE self)
 
 VALUE siren_solid_wedge(int argc, VALUE* argv, VALUE self)
 {
-  VALUE dx = 1.0, dy = 1.0, dz = 1.0, x = 0.5, z = 0.5, X = 0.5, Z = 0.5;
-  rb_scan_args(argc, argv, "|fffffff", &dx, &dy, &dz, &x, &z, &X, &Z);
+  VALUE dx = DBL2NUM(1.0), dy = DBL2NUM(1.0), dz = DBL2NUM(1.0),
+        x = DBL2NUM(0.5), z = DBL2NUM(0.5), X = DBL2NUM(0.5), Z = DBL2NUM(0.5);
+  rb_scan_args(argc, argv, "07", &dx, &dy, &dz, &x, &z, &X, &Z);
   try {
-    BRepPrimAPI_MakeWedge api(dx, dy, dz, x, z, X, Z);
+    BRepPrimAPI_MakeWedge api(NUM2DBL(dx), NUM2DBL(dy), NUM2DBL(dz),
+        NUM2DBL(x), NUM2DBL(z), NUM2DBL(X), NUM2DBL(Z));
     TopoDS_Shape s = api.Shape();
     return siren_shape_new(s);
   }
