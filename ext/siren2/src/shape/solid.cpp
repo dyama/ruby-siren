@@ -2,8 +2,7 @@
 
 VALUE sr_cSolid;
 
-SR_SHAPE_GET(Solid, solid)
-SR_SHAPE_CHECK(Solid, solid)
+SR_SHAPE_INIT(Solid, solid)
 
 bool siren_solid_install()
 {

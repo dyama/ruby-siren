@@ -6,11 +6,11 @@
 
 VALUE sr_cBSCurve;
 
-SR_CURVE_GET(BSplineCurve, bscurve)
+SR_CURVE_INIT(BSplineCurve, BSCurve, bscurve)
 
 bool siren_bscurve_install()
 {
-  SR_CURVE_INIT(BSCurve)
+  SR_CURVE_DEFINE(BSCurve)
   rb_define_method(sr_cBSCurve, "initialize", RUBY_METHOD_FUNC(siren_bscurve_init),    -1);
   rb_define_method(sr_cBSCurve, "degree",     RUBY_METHOD_FUNC(siren_bscurve_degree),  -1);
   rb_define_method(sr_cBSCurve, "knots",      RUBY_METHOD_FUNC(siren_bscurve_knots),   -1);

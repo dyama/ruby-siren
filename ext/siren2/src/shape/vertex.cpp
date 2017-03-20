@@ -4,8 +4,7 @@
 
 VALUE sr_cVertex;
 
-SR_SHAPE_GET(Vertex, vertex)
-SR_SHAPE_CHECK(Vertex, vertex)
+SR_SHAPE_INIT(Vertex, vertex)
 
 bool siren_vertex_install()
 {

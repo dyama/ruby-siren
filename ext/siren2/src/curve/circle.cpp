@@ -2,11 +2,11 @@
 
 VALUE sr_cCircle;
 
-SR_CURVE_GET(Circle, circle)
+SR_CURVE_INIT(Circle, Circle, circle)
 
 bool siren_circle_install()
 {
-  SR_CURVE_INIT(Circle)
+  SR_CURVE_DEFINE(Circle)
   rb_define_method(sr_cCircle, "initialize", RUBY_METHOD_FUNC(siren_curve_init),        -1);
   rb_define_method(sr_cCircle, "radius",     RUBY_METHOD_FUNC(siren_circle_radius),     -1);
   rb_define_method(sr_cCircle, "radius=",    RUBY_METHOD_FUNC(siren_circle_radius_set), -1);

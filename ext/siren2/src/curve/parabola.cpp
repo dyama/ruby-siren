@@ -7,11 +7,11 @@
 
 VALUE sr_cParabola;
 
-SR_CURVE_GET(Parabola, parabola)
+SR_CURVE_INIT(Parabola, Parabola, parabola)
 
 bool siren_parabola_install()
 {
-  SR_CURVE_INIT(Parabola)
+  SR_CURVE_DEFINE(Parabola)
   rb_define_method(sr_cParabola, "initialize", RUBY_METHOD_FUNC(siren_curve_init), -1);
   return true;
 }

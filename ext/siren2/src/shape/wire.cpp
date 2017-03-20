@@ -3,8 +3,7 @@
 
 VALUE sr_cWire;
 
-SR_SHAPE_GET(Wire, wire)
-SR_SHAPE_CHECK(Wire, wire)
+SR_SHAPE_INIT(Wire, wire)
 
 bool siren_wire_install()
 {

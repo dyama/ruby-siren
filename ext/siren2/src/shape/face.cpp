@@ -2,8 +2,7 @@
 
 VALUE sr_cFace;
 
-SR_SHAPE_GET(Face, face)
-SR_SHAPE_CHECK(Face, face)
+SR_SHAPE_INIT(Face, face)
 
 bool siren_face_install()
 {

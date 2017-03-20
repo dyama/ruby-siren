@@ -7,11 +7,11 @@
 
 VALUE sr_cLine;
 
-SR_CURVE_GET(Line, line)
+SR_CURVE_INIT(Line, Line, line)
 
 bool siren_line_install()
 {
-  SR_CURVE_INIT(Line)
+  SR_CURVE_DEFINE(Line)
   rb_define_method(sr_cLine, "initialize", RUBY_METHOD_FUNC(siren_curve_init), -1);
   rb_define_method(sr_cLine, "dir",        RUBY_METHOD_FUNC(siren_line_dir),   -1);
   return true;

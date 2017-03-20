@@ -137,4 +137,8 @@ VALUE siren_shape_first_datum(int, VALUE*, VALUE);
     } \
   }
 
+#define SR_SHAPE_INIT(O,L) \
+  SR_SHAPE_GET(O,L) \
+  SR_SHAPE_CHECK(O, L)
+
 #endif

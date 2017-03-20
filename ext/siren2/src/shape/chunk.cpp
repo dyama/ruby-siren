@@ -4,8 +4,7 @@
 
 VALUE sr_cChunk;
 
-SR_SHAPE_GET(CompSolid, chunk)
-SR_SHAPE_CHECK(CompSolid, chunk)
+SR_SHAPE_INIT(CompSolid, chunk)
 
 bool siren_chunk_install()
 {

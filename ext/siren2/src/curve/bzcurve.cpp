@@ -6,11 +6,11 @@
 
 VALUE sr_cBzCurve;
 
-SR_CURVE_GET(BezierCurve, bzcurve)
+SR_CURVE_INIT(BezierCurve, BzCurve, bzcurve)
 
 bool siren_bzcurve_install()
 {
-  SR_CURVE_INIT(BzCurve)
+  SR_CURVE_DEFINE(BzCurve)
   rb_define_method(sr_cBzCurve, "initialize", RUBY_METHOD_FUNC(siren_bzcurve_init), -1);
   return true;
 }

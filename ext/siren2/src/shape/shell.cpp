@@ -2,8 +2,7 @@
 
 VALUE sr_cShell;
 
-SR_SHAPE_GET(Shell, shell)
-SR_SHAPE_CHECK(Shell, shell)
+SR_SHAPE_INIT(Shell, shell)
 
 bool siren_shell_install()
 {
