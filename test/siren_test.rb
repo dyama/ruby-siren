@@ -1,9 +1,11 @@
+dir = File.expand_path(File.dirname(__FILE__))
+
 require 'test_helper'
-require 'vec_test'
-require 'bndbox_test'
-require 'solid_test'
-require 'trans_test'
-require 'io_test'
+require "#{dir}/vec"
+require "#{dir}/trans"
+require "#{dir}/bndbox"
+require "#{dir}/shape/solid"
+require "#{dir}/io/io"
 
 class SirenTest < Minitest::Test
 

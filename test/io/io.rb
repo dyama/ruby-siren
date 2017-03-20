@@ -5,7 +5,8 @@
 # I/O methods test module
 #
 
-require 'test_helper'
+dir = File.expand_path(File.dirname(__FILE__))
+require "#{dir}/../test_helper"
 
 module IoTest
 

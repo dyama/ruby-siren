@@ -5,7 +5,8 @@
 # Siren::Solid test module
 #
 
-require 'test_helper'
+dir = File.expand_path(File.dirname(__FILE__))
+require "#{dir}/../test_helper"
 
 module SolidTest
 
@@ -27,10 +28,13 @@ module SolidTest
 
     # surf = plane(Vec.zero, Vec.z, Vec.y, -10, 10, -10, 10)
     # assert Solid.halfspace(surf, [0, 0, 1]).class == Solid
+
+    # not implemented
     # assert Solid.prism.class == Solid
     # assert Solid.revol.class == Solid
     # assert Solid.revolution.class == Solid
     # assert Solid.wedge.class == Solid
+
     assert Solid.box.volume.round(2) == 1.0
   end
 
