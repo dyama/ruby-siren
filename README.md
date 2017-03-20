@@ -9,7 +9,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'siren'
+gem 'siren2'
 ```
 
 And then execute:
@@ -18,11 +18,15 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install siren
+    $ gem install siren2
 
 ## Usage
 
-TODO: Write usage instructions here
+
+```ruby
+require 'siren'
+include Siren
+```
 
 ## Development
 
