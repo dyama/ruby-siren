@@ -6,10 +6,10 @@
 #include <BRepFill_Filling.hxx>
 
 extern VALUE sr_cFiller;
+extern const rb_data_type_t siren_filler_type;
 
 bool siren_filler_install();
 void siren_filler_final(void* p);
-static rb_data_type_t siren_filler_type = { "Filler", siren_filler_final };
 
 BRepFill_Filling* siren_filler_get(VALUE obj);
 

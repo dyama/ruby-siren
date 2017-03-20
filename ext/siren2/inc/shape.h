@@ -11,10 +11,10 @@
 #endif
 
 extern VALUE sr_cShape;
+extern const rb_data_type_t siren_shape_type;
 
 VALUE siren_shape_allocate(VALUE);
 void siren_shape_final(void* p);
-static rb_data_type_t siren_shape_type = { "Shape", siren_shape_final };
 
 #include "shape/vertex.h"
 #include "shape/edge.h"

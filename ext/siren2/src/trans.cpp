@@ -2,6 +2,12 @@
 
 VALUE sr_cTrans;
 
+const rb_data_type_t siren_trans_type = {
+  "Siren::Trans",
+  { 0, siren_trans_final, },
+  0, 0, 0,
+};
+
 gp_Trsf* siren_trans_get(VALUE obj)
 {
   gp_Trsf* m;

@@ -11,10 +11,10 @@
 #include <gp_Trsf.hxx>
 
 extern VALUE sr_cTrans;
+extern const rb_data_type_t siren_trans_type;
 
 bool siren_trans_install();
 void siren_trans_final( void* p);
-static rb_data_type_t siren_trans_type = { "Trans", siren_trans_final };
 gp_Trsf* siren_trans_get( VALUE obj);
 struct RClass* siren_trans_rclass();
 VALUE siren_trans_new( const gp_Trsf& src);

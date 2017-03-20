@@ -2,6 +2,12 @@
 
 VALUE sr_cFiller;
 
+const rb_data_type_t siren_filler_type = {
+  "Siren::Filler",
+  { 0, siren_filler_final, },
+  0, 0, 0,
+};
+
 VALUE siren_filler_allocate(VALUE klass)
 {
   void* p = ruby_xmalloc(sizeof(BRepFill_Filling));

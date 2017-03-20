@@ -2,6 +2,12 @@
 
 VALUE sr_cBndBox;
 
+const rb_data_type_t siren_bndbox_type = {
+  "Siren::BndBox",
+  { 0, siren_bndbox_final, },
+  0, 0, 0,
+};
+
 Bnd_Box* siren_bndbox_get(VALUE obj)
 {
   Bnd_Box* m;

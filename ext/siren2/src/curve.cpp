@@ -7,6 +7,12 @@
 
 VALUE sr_cCurve;
 
+const rb_data_type_t siren_curve_type = {
+  "Siren::Curve",
+  { 0, siren_curve_final, },
+  0, 0, 0,
+};
+
 VALUE siren_curve_allocate(VALUE klass)
 {
   void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
