@@ -9,7 +9,7 @@ SR_SHAPE_CHECK(CompSolid, chunk)
 
 bool siren_chunk_install()
 {
-  SR_SHAPE_INIT(CompSolid)
+  SR_SHAPE_DEFINE(CompSolid)
   rb_define_method(sr_cChunk, "initialize", RUBY_METHOD_FUNC(siren_chunk_init),   -1);
   rb_define_method(sr_cChunk, "to_solid",  RUBY_METHOD_FUNC(siren_chunk_to_solid), -1);
   return true;

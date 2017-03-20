@@ -9,7 +9,7 @@ SR_SHAPE_CHECK(Compound, compound)
 
 bool siren_compound_install()
 {
-  SR_SHAPE_INIT(Compound)
+  SR_SHAPE_DEFINE(Compound)
   rb_define_method(sr_cCompound, "initialize", RUBY_METHOD_FUNC(siren_compound_init),   -1);
   rb_define_method(sr_cCompound, "push",       RUBY_METHOD_FUNC(siren_compound_push),   -1);
   rb_define_method(sr_cCompound, "<<",         RUBY_METHOD_FUNC(siren_compound_push),   -1);

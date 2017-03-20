@@ -7,7 +7,7 @@ SR_SHAPE_CHECK(Shell, shell)
 
 bool siren_shell_install()
 {
-  SR_SHAPE_INIT(Shell)
+  SR_SHAPE_DEFINE(Shell)
   rb_define_method(sr_cShell, "initialize", RUBY_METHOD_FUNC(siren_shape_init),  -1);
   rb_define_singleton_method(sr_cShell, "make", RUBY_METHOD_FUNC(siren_shell_make), -1);
   rb_define_singleton_method(sr_cShell, "sew",  RUBY_METHOD_FUNC(siren_shell_make), -1);

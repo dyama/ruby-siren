@@ -8,7 +8,7 @@ SR_SHAPE_CHECK(Wire, wire)
 
 bool siren_wire_install()
 {
-  SR_SHAPE_INIT(Wire)
+  SR_SHAPE_DEFINE(Wire)
   rb_define_method(sr_cWire, "initialize",    RUBY_METHOD_FUNC(siren_shape_init),         -1);
   rb_define_method(sr_cWire, "ordered_edges", RUBY_METHOD_FUNC(siren_wire_ordered_edges), -1);
   rb_define_singleton_method(sr_cWire, "make", RUBY_METHOD_FUNC(siren_wire_make), -1);

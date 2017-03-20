@@ -41,3 +41,4 @@ void siren_numeric_check(const VALUE& target)
         RSTRING_PTR(type_str), RSTRING_PTR(etype_str));
   }
 }
+

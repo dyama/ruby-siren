@@ -7,7 +7,7 @@ SR_SHAPE_CHECK(Face, face)
 
 bool siren_face_install()
 {
-  SR_SHAPE_INIT(Face)
+  SR_SHAPE_DEFINE(Face)
   rb_define_method(sr_cFace, "initialize", RUBY_METHOD_FUNC(siren_shape_init),     -1);
   rb_define_method(sr_cFace, "normal",     RUBY_METHOD_FUNC(siren_face_normal),    -1);
   rb_define_method(sr_cFace, "to_bezier",  RUBY_METHOD_FUNC(siren_face_to_bezier), -1);

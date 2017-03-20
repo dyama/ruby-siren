@@ -7,7 +7,7 @@ SR_SHAPE_CHECK(Edge, edge)
 
 bool siren_edge_install()
 {
-  SR_SHAPE_INIT(Edge)
+  SR_SHAPE_DEFINE(Edge)
   rb_define_method(sr_cEdge, "initialize", RUBY_METHOD_FUNC(siren_edge_init),      -1);
   rb_define_method(sr_cEdge, "sp",         RUBY_METHOD_FUNC(siren_edge_sp),        -1);
   rb_define_method(sr_cEdge, "tp",         RUBY_METHOD_FUNC(siren_edge_tp),        -1);

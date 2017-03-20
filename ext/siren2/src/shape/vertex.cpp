@@ -9,7 +9,7 @@ SR_SHAPE_CHECK(Vertex, vertex)
 
 bool siren_vertex_install()
 {
-  SR_SHAPE_INIT(Vertex)
+  SR_SHAPE_DEFINE(Vertex)
   rb_define_method(sr_cVertex, "initialize", RUBY_METHOD_FUNC(siren_vertex_init), -1);
   rb_define_method(sr_cVertex, "xyz",        RUBY_METHOD_FUNC(siren_vertex_xyz),  -1);
   rb_define_method(sr_cVertex, "to_a",       RUBY_METHOD_FUNC(siren_vertex_xyz),  -1);

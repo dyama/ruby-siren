@@ -7,7 +7,7 @@ SR_SHAPE_CHECK(Solid, solid)
 
 bool siren_solid_install()
 {
-  SR_SHAPE_INIT(Solid)
+  SR_SHAPE_DEFINE(Solid)
   rb_define_method(sr_cSolid, "initialize", RUBY_METHOD_FUNC(siren_solid_init), -1);
   rb_define_singleton_method(sr_cSolid, "box",        RUBY_METHOD_FUNC(siren_solid_box),        -1);
   rb_define_singleton_method(sr_cSolid, "box2p",      RUBY_METHOD_FUNC(siren_solid_box2p),      -1);
