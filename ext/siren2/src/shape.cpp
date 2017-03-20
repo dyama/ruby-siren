@@ -7,25 +7,7 @@
 
 VALUE sr_cShape;
 
-const rb_data_type_t siren_shape_type = {
-  "Siren::Shape",
-  { 0, siren_shape_final, },
-  0, 0, 0,
-};
-
-VALUE siren_shape_allocate(VALUE klass)
-{
-  void* p = ruby_xmalloc(sizeof(TopoDS_Shape));
-  new(p) TopoDS_Shape();
-  return Data_Wrap_Struct(klass, NULL, siren_shape_final, p);
-}
-
-TopoDS_Shape* siren_shape_get(VALUE obj)
-{
-  TopoDS_Shape* m;
-  Data_Get_Struct(obj, TopoDS_Shape, m);
-  return m;
-}
+SR_CLASS_INIT(TopoDS_Shape, Shape, shape)
 
 VALUE siren_shape_new(const TopoDS_Shape& shape)
 {

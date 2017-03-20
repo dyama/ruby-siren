@@ -2,25 +2,7 @@
 
 VALUE sr_cFiller;
 
-const rb_data_type_t siren_filler_type = {
-  "Siren::Filler",
-  { 0, siren_filler_final, },
-  0, 0, 0,
-};
-
-VALUE siren_filler_allocate(VALUE klass)
-{
-  void* p = ruby_xmalloc(sizeof(BRepFill_Filling));
-  new(p) BRepFill_Filling();
-  return Data_Wrap_Struct(klass, NULL, siren_filler_final, p);
-}
-
-BRepFill_Filling* siren_filler_get(VALUE obj)
-{
-  BRepFill_Filling* m;
-  Data_Get_Struct(obj, BRepFill_Filling, m);
-  return m;
-}
+SR_CLASS_INIT(BRepFill_Filling, Filler, filler)
 
 bool siren_filler_install()
 {

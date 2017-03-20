@@ -2,25 +2,7 @@
 
 VALUE sr_cBndBox;
 
-const rb_data_type_t siren_bndbox_type = {
-  "Siren::BndBox",
-  { 0, siren_bndbox_final, },
-  0, 0, 0,
-};
-
-Bnd_Box* siren_bndbox_get(VALUE obj)
-{
-  Bnd_Box* m;
-  Data_Get_Struct(obj, Bnd_Box, m);
-  return m;
-}
-
-static VALUE siren_bndbox_allocate(VALUE klass)
-{
-  void* p = ruby_xmalloc(sizeof(Bnd_Box));
-  new(p) Bnd_Box();
-  return Data_Wrap_Struct(klass, NULL, siren_bndbox_final, p);
-}
+SR_CLASS_INIT(Bnd_Box, BndBox, bndbox)
 
 bool siren_bndbox_install()
 {

@@ -7,25 +7,7 @@
 
 VALUE sr_cCurve;
 
-const rb_data_type_t siren_curve_type = {
-  "Siren::Curve",
-  { 0, siren_curve_final, },
-  0, 0, 0,
-};
-
-VALUE siren_curve_allocate(VALUE klass)
-{
-  void* p = ruby_xmalloc(sizeof(handle<Geom_Curve>));
-  new(p) handle<Geom_Curve>();
-  return Data_Wrap_Struct(klass, NULL, siren_curve_final, p);
-}
-
-handle<Geom_Curve>* siren_curve_get(VALUE obj)
-{
-  handle<Geom_Curve>* m;
-  Data_Get_Struct(obj, handle<Geom_Curve>, m);
-  return m;
-}
+SR_CLASS_INIT(handle<Geom_Curve>, Curve, curve)
 
 VALUE siren_curve_new(handle<Geom_Curve> curve)
 {

@@ -36,4 +36,25 @@ extern VALUE sr_mSiren;
 
 #include "common.h"
 
+#define SR_CLASS_DATATYPE(U,L) const rb_data_type_t siren_##L##_type \
+  = { "Siren::" # U, { 0, siren_##L##_final, }, 0, 0, 0, };
+
+#define SR_CLASS_ALLOCATE(O,L) VALUE siren_##L##_allocate(VALUE klass) \
+  { \
+    O* p; \
+    return TypedData_Make_Struct(klass, O, &siren_##L##_type, p); \
+  }
+
+#define SR_CLASS_GET(O,L) O* siren_##L##_get(VALUE obj) \
+{ \
+  O* p; \
+  TypedData_Get_Struct(obj, O, &siren_##L##_type, p); \
+  return p; \
+}
+
+#define SR_CLASS_INIT(O,U,L) \
+  SR_CLASS_DATATYPE(U,L) \
+  SR_CLASS_ALLOCATE(O,L) \
+  SR_CLASS_GET(O,L)
+
 #endif

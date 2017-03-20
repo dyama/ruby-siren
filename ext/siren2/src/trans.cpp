@@ -2,25 +2,7 @@
 
 VALUE sr_cTrans;
 
-const rb_data_type_t siren_trans_type = {
-  "Siren::Trans",
-  { 0, siren_trans_final, },
-  0, 0, 0,
-};
-
-gp_Trsf* siren_trans_get(VALUE obj)
-{
-  gp_Trsf* m;
-  Data_Get_Struct(obj, gp_Trsf, m);
-  return m;
-}
-
-static VALUE siren_trans_allocate(VALUE klass)
-{
-  void* p = ruby_xmalloc(sizeof(gp_Trsf));
-  new(p) gp_Trsf();
-  return Data_Wrap_Struct(klass, NULL, siren_trans_final, p);
-}
+SR_CLASS_INIT(gp_Trsf, Trans, trans)
 
 VALUE siren_trans_new(const gp_Trsf& src)
 {
