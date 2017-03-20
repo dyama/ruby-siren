@@ -15,12 +15,6 @@ bool siren_chunk_install()
   return true;
 }
 
-struct RClass* siren_chunk_rclass()
-{
-  struct RClass* sr_mSiren = rb_module_get("Siren");
-  return rb_class_ptr(_const_get(rb_obj_value(sr_mSiren), rb_intern_lit("Chunk")));
-}
-
 VALUE siren_chunk_obj()
 {
   struct RClass* sr_mSiren = rb_module_get("Siren");
