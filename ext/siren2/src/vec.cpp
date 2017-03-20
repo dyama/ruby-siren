@@ -6,10 +6,16 @@
 
 VALUE sr_cVec;
 
+const rb_data_type_t siren_vec_type = {
+  "Siren::Vec",
+  { 0, siren_vec_final, },
+  0, 0, 0,
+};
+
 gp_Vec* siren_vec_get(VALUE obj)
 {
   gp_Vec* m;
-  Data_Get_Struct(obj, gp_Vec, m);
+  TypedData_Get_Struct(obj, gp_Vec, &siren_vec_type, m);
   return m;
 }
 
@@ -29,9 +35,12 @@ VALUE siren_vec_new(const gp_Vec& vec)
 
 static VALUE siren_vec_allocate(VALUE klass)
 {
-  void* p = ruby_xmalloc(sizeof(gp_Vec));
-  new(p) gp_Vec(0., 0., 0.);
-  return Data_Wrap_Struct(klass, NULL, siren_vec_final, p);
+  gp_Vec* p;
+  auto res = TypedData_Make_Struct(klass, gp_Vec, &siren_vec_type, p);
+  p->SetX(0.0);
+  p->SetY(0.0);
+  p->SetZ(0.0);
+  return res;
 }
 
 bool siren_vec_install()
@@ -94,7 +103,7 @@ VALUE siren_vec_init(int argc, VALUE* argv, VALUE self)
   auto b = rb_funcall(a, rb_intern("flatten"), 0);
   auto vec = siren_ary_to_vec(b);
   gp_Vec* p;
-  Data_Get_Struct(self, gp_Vec, p);
+  TypedData_Get_Struct(self, gp_Vec, &siren_vec_type, p);
   *p = vec;
   return self;
 }
