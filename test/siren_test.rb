@@ -15,9 +15,9 @@ class SirenTest < Minitest::Test
 
   include VecTest
   include BndBoxTest
-  include TransTest
-  include IoTest
-  # include SolidTest
+  # include TransTest
+  # include IoTest
+  include SolidTest
 
   def test_classes
     assert Vec.class == Class.class

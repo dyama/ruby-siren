@@ -12,8 +12,14 @@ module SolidTest
   include Siren
 
   def test_solid
-    p Solid.box
-    puts "%0.50f" % box.volume.round(15)
+    assert Solid.box.class == Solid
+    assert Solid.box2p.class == Solid
+    size = [10, 10, 10]
+    pos  = Vec.zero
+    dir  = [1, 0, 0]
+    assert Solid.boxax(size, pos, dir).class == Solid
+    assert Solid.sphere.class == Solid
+    # assert Solid.cylinder.class == Solid
   end
 
 end

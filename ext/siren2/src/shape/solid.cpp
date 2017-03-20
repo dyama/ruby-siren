@@ -122,20 +122,23 @@ VALUE siren_solid_boxax(int argc, VALUE* argv, VALUE self)
 
 VALUE siren_solid_sphere(int argc, VALUE* argv, VALUE self)
 {
-  VALUE r = 1.0;
+  VALUE r;
   VALUE pos;
   rb_scan_args(argc, argv, "02", &r, &pos);
 
-  siren_numeric_check(r);
-
   gp_Pnt op;
-  if (argc == 2) {
-    Standard_Real px, py, pz;
-    siren_ary_to_xyz(pos, px, py, pz);
-    op = gp_Pnt(px, py, pz);
-  }
-  else {
+  switch (argc)
+  {
+  case 0:
+    r = DBL2NUM(1.0);
     op = gp_Pnt(0., 0., 0.);
+    break;
+  case 1:
+    op = gp_Pnt(0., 0., 0.);
+    break;
+  case 2:
+    op = siren_ary_to_pnt(pos);
+    break;
   }
 
   if (NUM2DBL(r) < 0) {
@@ -151,7 +154,7 @@ VALUE siren_solid_cylinder(int argc, VALUE* argv, VALUE self)
 {
   VALUE pos, norm;
   VALUE r, h, a;
-  rb_scan_args(argc, argv, "5", &pos, &norm, &r, &h, &a);
+  rb_scan_args(argc, argv, "05", &pos, &norm, &r, &h, &a);
 
   siren_numeric_check(r);
   siren_numeric_check(h);

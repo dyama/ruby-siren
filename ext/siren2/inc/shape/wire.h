@@ -18,7 +18,6 @@
 
 extern VALUE sr_cWire;
 
-static rb_data_type_t siren_wire_type = { "Wire", siren_shape_final };
 bool siren_wire_install();
 TopoDS_Wire siren_wire_get(VALUE self);
 bool siren_wire_p(const VALUE&);

@@ -45,7 +45,6 @@
 
 extern VALUE sr_cFace;
 
-static rb_data_type_t siren_face_type = { "Face", siren_shape_final };
 bool siren_face_install();
 TopoDS_Face siren_face_get(VALUE self);
 bool siren_face_p(const VALUE&);

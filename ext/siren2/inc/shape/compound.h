@@ -9,7 +9,6 @@
 
 extern VALUE sr_cCompound;
 
-static rb_data_type_t siren_compound_type = { "Compound", siren_shape_final };
 bool siren_compound_install();
 TopoDS_Compound siren_compound_get(VALUE self);
 bool siren_compound_p(const VALUE&);
