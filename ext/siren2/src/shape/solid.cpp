@@ -156,14 +156,41 @@ VALUE siren_solid_cylinder(int argc, VALUE* argv, VALUE self)
   VALUE r, h, a;
   rb_scan_args(argc, argv, "05", &pos, &norm, &r, &h, &a);
 
+  switch (argc)
+  {
+  case 0:
+    pos = siren_vec_new(0., 0., 0.);
+    norm = siren_vec_new(0., 0., 1.);
+    r = DBL2NUM(0.5);
+    h = DBL2NUM(1.0);
+    a = DBL2NUM(M_PI * 2.0);
+    break;
+  case 1:
+    norm = siren_vec_new(0., 0., 1.);
+    r = DBL2NUM(0.5);
+    h = DBL2NUM(1.0);
+    a = DBL2NUM(M_PI * 2.0);
+    break;
+  case 2:
+    r = DBL2NUM(0.5);
+    h = DBL2NUM(1.0);
+    a = DBL2NUM(M_PI * 2.0);
+    break;
+  case 3:
+    h = DBL2NUM(1.0);
+    a = DBL2NUM(M_PI * 2.0);
+    break;
+  case 4:
+    a = DBL2NUM(M_PI * 2.0);
+    break;
+  }
+
   siren_numeric_check(r);
   siren_numeric_check(h);
   siren_numeric_check(a);
 
   gp_Ax2 ax = siren_ary_to_ax2(pos, norm);
-
   BRepPrimAPI_MakeCylinder api(ax, NUM2DBL(r), NUM2DBL(h), NUM2DBL(a));
-
   return siren_shape_new(api.Shape());
 }
 
